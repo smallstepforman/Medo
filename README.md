@@ -18,32 +18,43 @@ ffmpeg development package
 cmake (optional)
 
 # Build Scripts
-1) Clean all object files, remove temporary build directories 
+1. Clean all object files, remove temporary build directories 
 ./clean_all
 
-2a) Build using jam (default primary build method)
+2a. Build using jam (default primary build method)
 jam -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 ./build_addons
 
 2b) Build using cmake + make (optional secondary build method)
 cmake CMakeLists.txt
-make -j16 (
+make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 
-3) Setup attributes, file icon
+3. Setup attributes, file icon
 ./setup_attributes
 
-4) Build HPKG (release), which will build an installer package
+4. Build HPKG (release), which will build an installer package
 ./create_package
 
 # Soure code layout
 3rdparty/   - external 3rd party code
+
 Actor/      - Actor programming model framework
+
 AddOns/     - dynamically loaded add-ons.  Each add-on must be compiled separately.
+
 Docs/       - developer documentation
+
 Editor/     - the core application
+
 Effects/    - bundled effects
+
 Gui/        - custom GUI widgets
+
 Plugins/    - dynamically loaded GLSL plugins.
+
 rapidjson/  - embedded library
+
 Resources/  - application icons etc
+
 Yarra/      - OpenGL based rendering library
+
