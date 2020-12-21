@@ -1,4 +1,5 @@
 # Medo
+![Alt text](/Docs/Medo_Logo.png?raw=true "Medo Logo")
 Medo is a modern Media Editor built exclusively for the open source Haiku OS (aka the Media OS).  Medo allows customisation using OpenGL based GLSL plugins, and allows 3rd party developers to create dynamically loaded Addons and Plugins.
 
 There are many bundled media effects, including:
@@ -14,7 +15,7 @@ There are many bundled media effects, including:
 ![Alt text](/Docs/Medo.jpeg?raw=true "Medo Screenshot")
 
 # Development Requirements
-- Haiku development environment.
+- Haiku development environment, 64 bit (c++17 minimum standard)
 - QtCreator as the IDE for code navigation and code completion
 - ffmpeg development package
 - cmake (optional)
@@ -23,11 +24,13 @@ There are many bundled media effects, including:
 1. Clean all object files, remove temporary build directories 
 ./clean_all
 
-2. a) Build using jam (default primary build method)
+2. Build the source (either with jam or cmake)
+
+a) jam build (default primary build method)
 jam -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 ./build_addons
 
-2. b) Build using cmake + make (optional secondary build method)
+b) cmake + make (optional secondary build method)
 cmake CMakeLists.txt
 make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 
@@ -59,4 +62,15 @@ rapidjson/  - embedded library
 Resources/  - application icons etc
 
 Yarra/      - OpenGL based rendering library
+
+# Software Architecture
+The BeAPI is based on C++ pre-ISO/IEC 14882:1998 standard (published in 1998, ie. pre Standard Template Library).  The API uses the Actor programming model (it's interesting that nowhere in the BeBook do they mention the term Actor, so it's quite likely that they independantly implemented the Actor model).  Each BWindow object runs in its own thread with a dedicated message queue.  Medo also incorporates a proper Actor library for parallel processing (eg. thumbnail generation, OpenGL rendering, audio buffer creation, exporting etc).  
+
+Medo is a 64 bit application, compiled with C++20 gcc compile flag (c++2a). Medo uses OpenGL 3.3 Core profile, with GLSL 1.5 for video effects rendering. An OpenGL wrapper called Yarra is used to abstract the raw OpenGL calls.
+
+Users can implement custom GLSL shader effects by creating their own plugins.  Effects from websites like ShaderToy can easily be converted to work with Medo (please use the developer guide in the Docs/ directory for more information).  Please look at the Plugins/ directory for some simple examples.
+
+Medo also supports external binary addons, which allows 3rd party developers to add complex audio and video effects.  Please use the developer guide (Docs/ directory) and see the examples in the AddOns directory. 
+
+Media decoding uses the native Haiku MediaKit.  As of Dec 2020, the MediaKit encoders still have stability issues, therefore, Medo also provides an ffmpeg Encoder based code path (which is the default encoder).
 
