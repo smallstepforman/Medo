@@ -11,21 +11,23 @@ There are many bundled media effects, including:
 - Spatial tools to transform media (scale/rotate/position/crop)
 - Audio effects (20 band equaliser, fade)
 
+![Alt text](/Docs/Medo.jpeg?raw=true "Medo Screenshot")
+
 # Development Requirements
-Haiku development environment.
-QtCreator as the IDE for code navigation and code completion
-ffmpeg development package
-cmake (optional)
+- Haiku development environment.
+- QtCreator as the IDE for code navigation and code completion
+- ffmpeg development package
+- cmake (optional)
 
 # Build Scripts
 1. Clean all object files, remove temporary build directories 
 ./clean_all
 
-2a. Build using jam (default primary build method)
+2. a) Build using jam (default primary build method)
 jam -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 ./build_addons
 
-2b) Build using cmake + make (optional secondary build method)
+2. b) Build using cmake + make (optional secondary build method)
 cmake CMakeLists.txt
 make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 
