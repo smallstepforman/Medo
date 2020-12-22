@@ -73,11 +73,12 @@ using namespace yrender;
 Effect_Text3D :: Effect_Text3D(BRect frame, const char *filename)
 	: Effect_Text(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
 	fIs3dFont = true;
 
 	fTextView->ResizeTo(frame.Width()-20, 100);
 
-	fSliderDepth = new ValueSlider(BRect(20, 140, 360, 180), "depth", GetText(TXT_EFFECTS_TEXT_3D_DEPTH), nullptr, kMinDepth, kMaxDepth);
+	fSliderDepth = new ValueSlider(BRect(20*kFontFactor, 140, 360*kFontFactor, 180), "depth", GetText(TXT_EFFECTS_TEXT_3D_DEPTH), nullptr, kMinDepth, kMaxDepth);
 	fSliderDepth->SetModificationMessage(new BMessage(eMsgDepth));
 	fSliderDepth->SetValue(kDefaultDepth);
 	fSliderDepth->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -94,6 +95,9 @@ Effect_Text3D :: Effect_Text3D(BRect frame, const char *filename)
 	fSliderDepth->SetBarColor({0, 255, 0, 255});
 	fSliderDepth->UseFillColor(true);
 	mEffectView->AddChild(fSliderDepth);
+
+	rgb_color start_colour = {255, 128, 0, 255};
+	fFontColourControl->SetValue(start_colour);
 
 	fBackgroundTitle->Hide();
 	fBackgroundCheckBox->Hide();
@@ -272,10 +276,12 @@ void Effect_Text3D :: MessageReceived(BMessage *msg)
 	{
 		case eMsgDepth:
 			if (text_3d_data)
+			{
 				text_3d_data->depth = fSliderDepth->Value();
-			fSliderDepth->UpdateTextValue(text_3d_data->depth);
-			fOpenGLPendingUpdate = true;
-			InvalidatePreview();
+				fSliderDepth->UpdateTextValue(text_3d_data->depth);
+				fOpenGLPendingUpdate = true;
+				InvalidatePreview();
+			}
 			break;
 
 		default:

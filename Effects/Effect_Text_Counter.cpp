@@ -97,35 +97,39 @@ using namespace yrender;
 Effect_TextCounter :: Effect_TextCounter(BRect frame, const char *filename)
 	: Effect_Text(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	mEffectView->RemoveChild(fTextView);
 
-	BStringView *title = new BStringView(BRect(20, 10, 200, 40), "title", GetText(TXT_EFFECTS_TEXT_COUNTER_RANGE));
+	BStringView *title = new BStringView(BRect(20*kFontFactor, 10, 200*kFontFactor, 40), "title", GetText(TXT_EFFECTS_TEXT_COUNTER_RANGE));
 	title->SetFont(be_bold_font);
 	mEffectView->AddChild(title);
 
-	fTextRange[0] = new BTextControl(BRect(20, 50, 340, 80), "start", GetText(TXT_EFFECTS_TEXT_COUNTER_START_VALUE), "1", new BMessage(eMsgControlStart));
+	fTextRange[0] = new BTextControl(BRect(20*kFontFactor, 50, 340*kFontFactor, 80), "start", GetText(TXT_EFFECTS_TEXT_COUNTER_START_VALUE), "1", new BMessage(eMsgControlStart));
 	mEffectView->AddChild(fTextRange[0]);
-	fTextRange[1] = new BTextControl(BRect(20, 90, 340, 120), "end", GetText(TXT_EFFECTS_TEXT_COUNTER_END_VALUE), "100", new BMessage(eMsgControlEnd));
+	fTextRange[1] = new BTextControl(BRect(20*kFontFactor, 90, 340*kFontFactor, 120), "end", GetText(TXT_EFFECTS_TEXT_COUNTER_END_VALUE), "100", new BMessage(eMsgControlEnd));
 	mEffectView->AddChild(fTextRange[1]);
 
 	static_assert(sizeof(kRadioButtons)/sizeof(RADIO_BUTTON) == kNumberCounters, "sizeof(kRadioButtons) != kNumberCounters");
 	for (int i=0; i < kNumberCounters; i++)
 	{
-		fRadioControl[i] = new BRadioButton(kRadioButtons[i].position, nullptr, GetText(kRadioButtons[i].text), new BMessage(kRadioButtons[i].message));
+		BRect button_position(kRadioButtons[i].position.left*kFontFactor, kRadioButtons[i].position.top,
+							  kRadioButtons[i].position.right*kFontFactor, kRadioButtons[i].position.bottom);
+		fRadioControl[i] = new BRadioButton(button_position, nullptr, GetText(kRadioButtons[i].text), new BMessage(kRadioButtons[i].message));
 		mEffectView->AddChild(fRadioControl[i]);
 	}
 	//	Disable date for now
 	fRadioControl[kCounterDate]->SetEnabled(false);
 
 	//	Thresholds
-	fSliderThreshold[0] = new BChannelSlider(BRect(20, 140, 360, 180), "threshold", GetText(TXT_EFFECTS_TEXT_COUNTER_LEFT_DELAY), new BMessage(eMsgThresholdLeft));
+	fSliderThreshold[0] = new BChannelSlider(BRect(20*kFontFactor, 140, 360*kFontFactor, 180), "threshold", GetText(TXT_EFFECTS_TEXT_COUNTER_LEFT_DELAY), new BMessage(eMsgThresholdLeft));
 	fSliderThreshold[0]->SetValue(10);
 	mEffectView->AddChild(fSliderThreshold[0]);
-	fSliderThreshold[1] = new BChannelSlider(BRect(20, 180, 360, 220), "threshold", GetText(TXT_EFFECTS_TEXT_COUNTER_RIGHT_DELAY), new BMessage(eMsgThresholdRight));
+	fSliderThreshold[1] = new BChannelSlider(BRect(20*kFontFactor, 180, 360*kFontFactor, 220), "threshold", GetText(TXT_EFFECTS_TEXT_COUNTER_RIGHT_DELAY), new BMessage(eMsgThresholdRight));
 	fSliderThreshold[1]->SetValue(90);
 	mEffectView->AddChild(fSliderThreshold[1]);
 
-	fTextFormat = new BTextControl(BRect(380, 170, 620, 200), "format", GetText(TXT_EFFECTS_TEXT_COUNTER_FORMAT), kRadioButtons[0].format, new BMessage(eMsgControlStart));
+	fTextFormat = new BTextControl(BRect(380*kFontFactor, 170, 620*kFontFactor, 200), "format", GetText(TXT_EFFECTS_TEXT_COUNTER_FORMAT), kRadioButtons[0].format, new BMessage(eMsgControlStart));
 	//printf("fTextFormat->Divider() = %f\n", fTextFormat->Divider());
 	fTextFormat->SetDivider(1.25f*be_plain_font->StringWidth(GetText(TXT_EFFECTS_TEXT_COUNTER_FORMAT)));
 	mEffectView->AddChild(fTextFormat);

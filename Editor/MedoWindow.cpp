@@ -84,7 +84,8 @@ MedoWindow :: MedoWindow()
 
 	new RenderActor(BRect(0, 0, gProject->mResolution.width, gProject->mResolution.height));
 
-	SetSizeLimits(0.5f*(kTimeViewWidth), 3840*1.5f, 0.5f*(kMenuBarHeight + kControlViewHeight + kTimeViewHeight), 3840*1.5f);
+    BScreen screen;
+    SetSizeLimits(0.5f*(kTimeViewWidth), screen.Frame().Width()*1.25f, 0.5f*(kMenuBarHeight + kControlViewHeight + kTimeViewHeight), screen.Frame().Height()*1.25f);
 	
 	//	Menu Bar
 	fMenuBar = new BMenuBar(BRect(0, 0, 0, 0), "MenuBar");
@@ -145,10 +146,11 @@ MedoWindow :: MedoWindow()
 	menu_tools->AddItem(new BMenuItem(GetText(TXT_MENU_TOOLS_AUDIO_MIXER), new BMessage(eMsgMenuToolsAudioMixer)));
 	menu_tools->AddItem(new BMenuItem(GetText(TXT_MENU_TOOLS_SOUND_RECORDER), new BMessage(eMsgMenuToolsSoundRecorder)));
 	
-	BRect control_rect(kTabViewWidth, menu_height, kTabViewWidth+kControlViewWidth, kControlViewHeight+menu_height);
+    const float kFontFactor = be_plain_font->Size()/20.0f;
+    BRect control_rect(kTabViewWidth*kFontFactor, menu_height, kTabViewWidth*kFontFactor + kControlViewWidth, kControlViewHeight+menu_height);
 
 	//	Tab Main view
-	fTabMainView = new TabMainView(BRect(0, menu_height, kTabViewWidth, kTabViewHeight+menu_height));
+    fTabMainView = new TabMainView(BRect(0, menu_height, kTabViewWidth*kFontFactor, kTabViewHeight+menu_height));
 	AddChild(fTabMainView);
 
 	//	Control view
@@ -244,8 +246,8 @@ void MedoWindow :: ResizeWindow()
 {
 	BRect frame = Bounds();
 	const float menu_height = fMenuBar->Frame().Height();
-
-	const float tab_view_width = (frame.Width() > 2*kTabViewWidth) ? kTabViewWidth : 0.5f*frame.Width();
+    const float kFontFactor = be_plain_font->Size()/20.0f;
+    const float tab_view_width = (frame.Width() > 2*kTabViewWidth*kFontFactor) ? kTabViewWidth*kFontFactor : 0.5f*frame.Width();
 	if (fDividerPositionY > 0.75f*frame.Height())
 		fDividerPositionY = 0.75f*frame.Height();
 	if (fDividerPositionY < 0.25f*frame.Height())
@@ -339,7 +341,7 @@ void MedoWindow :: MessageReceived(BMessage *msg)
 		case eMsgMenuMedoAbout:
 		{
 			if (fAboutWindow == nullptr)
-				fAboutWindow = new AboutWindow(BRect(64, 64, 800, 480), GetText(TXT_MENU_MEDO_ABOUT));
+				fAboutWindow = new AboutWindow(BRect(64, 64, 800, 640), GetText(TXT_MENU_MEDO_ABOUT));
 			fAboutWindow->Show();
 			break;	
 		}
@@ -630,11 +632,12 @@ void MedoWindow :: SetUserLayout(int layout)
 {
 	const float font_size = be_plain_font->Size();
 	const float menu_height = fMenuBar->Frame().Height();
+    const float kFontFactor = font_size/20.0f;
 
 	BScreen screen;
 	const float screen_width = screen.Frame().Width();
 	const float screen_height = screen.Frame().Height();
-	const float window_width = screen_width - 740 - 2*4;
+    const float window_width = screen_width - 740*kFontFactor - 2*4;
 	const float window_height = screen_height - (2*font_size + 4);	//	title bar + window_frame
 
 	EffectsWindow *effects_window = EffectsWindow::GetInstance();
@@ -644,7 +647,7 @@ void MedoWindow :: SetUserLayout(int layout)
 		case eMsgMenuViewLayout_1:		//	Large Preview
 		{
 			//	Reverse fDividerAspectY to end up with 16:9 preview
-			float preview_width = window_width - kTabViewWidth;
+            float preview_width = window_width - kTabViewWidth*kFontFactor;
 			float preview_height = preview_width * 9.0f / 16.0f;
 			//	fDividerPositionY = height * fDividerAspectY;
 			fDividerAspectY = preview_height/(window_height - menu_height - 2*kDividerViewHeight);
@@ -654,7 +657,7 @@ void MedoWindow :: SetUserLayout(int layout)
 			FrameResized(window_width, window_height);
 
 			effects_window->MoveTo(2 + window_width + 8, 2*font_size);
-			effects_window->ResizeTo(740-12, 700);
+            effects_window->ResizeTo(740*kFontFactor-12, 700);
 			if (effects_window->IsHidden())
 				effects_window->Show();
 
@@ -676,7 +679,7 @@ void MedoWindow :: SetUserLayout(int layout)
 			FrameResized(window_width, window_height);
 
 			effects_window->MoveTo(2 + window_width + 8, 2*font_size);
-			effects_window->ResizeTo(740-12, 700);
+            effects_window->ResizeTo(740*kFontFactor-12, 700);
 			while (effects_window->IsHidden())
 				effects_window->Show();
 
@@ -690,7 +693,7 @@ void MedoWindow :: SetUserLayout(int layout)
 		case eMsgMenuViewLayout_3:		//	Colour grading
 		{
 			//	Reverse fDividerAspectY to end up with 16:9 preview
-			float preview_width = window_width - kTabViewWidth;
+            float preview_width = window_width - kTabViewWidth*kFontFactor;
 			float preview_height = preview_width * 9.0f / 16.0f;
 			//	fDividerPositionY = height * fDividerAspectY;
 			fDividerAspectY = preview_height/(window_height - menu_height - 2*kDividerViewHeight);
@@ -700,7 +703,7 @@ void MedoWindow :: SetUserLayout(int layout)
 			FrameResized(window_width, window_height);
 
 			effects_window->MoveTo(2 + window_width + 8, 2*font_size);
-			effects_window->ResizeTo(740-12, 700);
+            effects_window->ResizeTo(740*kFontFactor-12, 700);
 			while (effects_window->IsHidden())
 				effects_window->Show();
 
@@ -709,7 +712,7 @@ void MedoWindow :: SetUserLayout(int layout)
 				fColourScope = new ColourScope(BRect(2 + window_width + 8, screen_height - scope_height, 740-12, scope_height), GetText(TXT_MENU_TOOLS_COLOUR_SCOPE));
 
 			fColourScope->MoveTo(2 + window_width + 8, screen_height - scope_height);
-			fColourScope->ResizeTo(740-12, scope_height);
+            fColourScope->ResizeTo(740*kFontFactor-12, scope_height);
 			while (fColourScope->IsHidden())
 				fColourScope->Show();
 
@@ -721,7 +724,7 @@ void MedoWindow :: SetUserLayout(int layout)
 		case eMsgMenuViewLayout_4:		//	Audio editing
 		{
 			//	Reverse fDividerAspectY to end up with 16:9 preview
-			float preview_width = window_width - kTabViewWidth;
+            float preview_width = window_width - kTabViewWidth*kFontFactor;
 			float preview_height = preview_width * 9.0f / 16.0f;
 			//	fDividerPositionY = height * fDividerAspectY;
 			fDividerAspectY = preview_height/(window_height - menu_height - 2*kDividerViewHeight);
@@ -731,7 +734,7 @@ void MedoWindow :: SetUserLayout(int layout)
 			FrameResized(window_width, window_height);
 
 			effects_window->MoveTo(2 + window_width + 8, 2*font_size);
-			effects_window->ResizeTo(740-12, 700);
+            effects_window->ResizeTo(740*kFontFactor-12, 700);
 			while (effects_window->IsHidden())
 				effects_window->Show();
 
@@ -740,7 +743,7 @@ void MedoWindow :: SetUserLayout(int layout)
 				fAudioMixer = new AudioMixer(BRect(2 + window_width + 8, screen_height - mixer_height, 740 - 12, mixer_height), GetText(TXT_MENU_TOOLS_AUDIO_MIXER));
 
 			fAudioMixer->MoveTo(2 + window_width + 8, screen_height - mixer_height);
-			fAudioMixer->ResizeTo(740-12, mixer_height);
+            fAudioMixer->ResizeTo(740*kFontFactor-12, mixer_height);
 			while (fAudioMixer->IsHidden())
 				fAudioMixer->Show();
 

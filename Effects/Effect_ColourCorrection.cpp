@@ -177,37 +177,41 @@ Effect_ColourCorrection :: Effect_ColourCorrection(BRect frame, const char *file
 {
 	fRenderNode = nullptr;
 
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+	const float kScrollBarScale = be_plain_font->Size()/12.0f;
+	const float kFrameRight = frame.right - 10 - kScrollBarScale*B_V_SCROLL_BAR_WIDTH;
+
 	//	Interpolation
-	fOptionInterpolation = new BOptionPopUp(BRect(20, 20, 20+360, 60), "interpolation", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgInterpolation));
+	fOptionInterpolation = new BOptionPopUp(BRect(20*kFontFactor, 20, 20+360*kFontFactor, 60), "interpolation", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgInterpolation));
 	fOptionInterpolation->AddOption("Catmull Rom Spline", 0);
 	fOptionInterpolation->AddOption("Beizer Curve", 1);
 	mEffectView->AddChild(fOptionInterpolation);
 
 	//	Curves
-	fCurvesView = new CurvesView(BRect(10, 70, 10+460, 70+480), this, new BMessage(kMsgCurvesUpdate));
+	fCurvesView = new CurvesView(BRect(10*kFontFactor, 70, 10+480*kFontFactor, (70+480)*kFontFactor), this, new BMessage(kMsgCurvesUpdate));
 	mEffectView->AddChild(fCurvesView);
 
 	//	Colour buttons
 	assert(NUMBER_COLOUR_BUTTONS == 3);
-	fButtonColours[0] = new BRadioButton(BRect(500, 130, 640, 160), nullptr, GetText(TXT_EFFECTS_COMMON_RED), new BMessage(kMsgColourRed));
+	fButtonColours[0] = new BRadioButton(BRect(500*kFontFactor, 130, kFrameRight, 160), nullptr, GetText(TXT_EFFECTS_COMMON_RED), new BMessage(kMsgColourRed));
 	fButtonColours[0]->SetValue(1);
 	mEffectView->AddChild(fButtonColours[0]);
-	fButtonColours[1] = new BRadioButton(BRect(500, 180, 640, 210), nullptr, GetText(TXT_EFFECTS_COMMON_GREEN), new BMessage(kMsgColourGreen));
+	fButtonColours[1] = new BRadioButton(BRect(500*kFontFactor, 180, kFrameRight, 210), nullptr, GetText(TXT_EFFECTS_COMMON_GREEN), new BMessage(kMsgColourGreen));
 	mEffectView->AddChild(fButtonColours[1]);
-	fButtonColours[2] = new BRadioButton(BRect(500, 230, 640, 260), nullptr, GetText(TXT_EFFECTS_COMMON_BLUE), new BMessage(kMsgColourBlue));
+	fButtonColours[2] = new BRadioButton(BRect(500*kFontFactor, 230, kFrameRight, 260), nullptr, GetText(TXT_EFFECTS_COMMON_BLUE), new BMessage(kMsgColourBlue));
 	mEffectView->AddChild(fButtonColours[2]);
 
 	//	Reset
-	fButtonReset = new BButton(BRect(500, 300, 640, 330), "reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
+	fButtonReset = new BButton(BRect(500*kFontFactor, 300, kFrameRight, 330), "reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
 	mEffectView->AddChild(fButtonReset);
 
 	//	White balance sliders
-	BStringView *label = new BStringView(BRect(480, 380, 7000, 420), nullptr, GetText(TXT_EFFECTS_COLOUR_CORRECTION_WHITE_BALANCE));
+	BStringView *label = new BStringView(BRect(500*kFontFactor, 380, 800*kFontFactor, 420), nullptr, GetText(TXT_EFFECTS_COLOUR_CORRECTION_WHITE_BALANCE));
 	label->SetHighColor(ui_color(B_PANEL_TEXT_COLOR));
 	label->SetFont(be_bold_font);
 	mEffectView->AddChild(label);
 
-	fWhiteBalanceSliders[0] = new ValueSlider(BRect(480, 430, 800, 490), "wb_red", GetText(TXT_EFFECTS_COMMON_RED), nullptr, 0, 255);
+	fWhiteBalanceSliders[0] = new ValueSlider(BRect(500*kFontFactor, 430, 800*kFontFactor, 490), "wb_red", GetText(TXT_EFFECTS_COMMON_RED), nullptr, 0, 255);
 	fWhiteBalanceSliders[0]->SetModificationMessage(new BMessage(kMsgWhiteBalance));
 	fWhiteBalanceSliders[0]->SetHashMarks(B_HASH_MARKS_BOTH);
 	fWhiteBalanceSliders[0]->SetFloatingPointPrecision(0);
@@ -216,7 +220,7 @@ Effect_ColourCorrection :: Effect_ColourCorrection(BRect frame, const char *file
 	fWhiteBalanceSliders[0]->SetLowColor(255, 0, 0, 255);
 	mEffectView->AddChild(fWhiteBalanceSliders[0]);
 
-	fWhiteBalanceSliders[1] = new ValueSlider(BRect(480, 490, 800, 550), "wb_green", GetText(TXT_EFFECTS_COMMON_GREEN), nullptr, 0, 255);
+	fWhiteBalanceSliders[1] = new ValueSlider(BRect(500*kFontFactor, 490, 800*kFontFactor, 550), "wb_green", GetText(TXT_EFFECTS_COMMON_GREEN), nullptr, 0, 255);
 	fWhiteBalanceSliders[1]->SetModificationMessage(new BMessage(kMsgWhiteBalance));
 	fWhiteBalanceSliders[1]->SetHashMarks(B_HASH_MARKS_BOTH);
 	fWhiteBalanceSliders[1]->SetFloatingPointPrecision(0);
@@ -225,7 +229,7 @@ Effect_ColourCorrection :: Effect_ColourCorrection(BRect frame, const char *file
 	fWhiteBalanceSliders[1]->SetLowColor(0, 255, 0, 255);
 	mEffectView->AddChild(fWhiteBalanceSliders[1]);
 
-	fWhiteBalanceSliders[2] = new ValueSlider(BRect(480, 550, 800, 610), "wb_blue", GetText(TXT_EFFECTS_COMMON_BLUE), nullptr, 0, 255);
+	fWhiteBalanceSliders[2] = new ValueSlider(BRect(500*kFontFactor, 550, 800*kFontFactor, 610), "wb_blue", GetText(TXT_EFFECTS_COMMON_BLUE), nullptr, 0, 255);
 	fWhiteBalanceSliders[2]->SetModificationMessage(new BMessage(kMsgWhiteBalance));
 	fWhiteBalanceSliders[2]->SetHashMarks(B_HASH_MARKS_BOTH);
 	fWhiteBalanceSliders[2]->SetFloatingPointPrecision(0);
@@ -235,7 +239,7 @@ Effect_ColourCorrection :: Effect_ColourCorrection(BRect frame, const char *file
 	mEffectView->AddChild(fWhiteBalanceSliders[2]);
 
 	//	ColourPicker
-	fColourPickerButton = new BitmapCheckbox(BRect(500, 630, 540, 670), "colour_picker",
+	fColourPickerButton = new BitmapCheckbox(BRect(500*kFontFactor, 630, 540*kFontFactor, 670), "colour_picker",
 											 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_idle.png"),
 											 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_active.png"),
 											 new BMessage(kMsgColourPicker));
@@ -244,7 +248,7 @@ Effect_ColourCorrection :: Effect_ColourCorrection(BRect frame, const char *file
 	fColourPickerWindow = nullptr;
 	fColourPickerMessage = nullptr;
 
-	SetViewIdealSize(840, 700);
+	SetViewIdealSize(840*kFontFactor, 700);
 }
 
 /*	FUNCTION:		Effect_ColourCorrection :: ~Effect_ColourCorrection

@@ -140,20 +140,24 @@ public:
 Effect_Crop :: Effect_Crop(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	for (int i=0; i < 4; i++)
 	{
 		char buffer[32];
 		sprintf(buffer, "%s%s", GetText(kSpinners[i].text), kSpinners[i].label);
-		fSpinners[i] = new Spinner(kSpinners[i].rect, kSpinners[i].name, buffer, new BMessage(kSpinners[i].message));
+		BRect spinner_rect(kSpinners[i].rect.left*kFontFactor, kSpinners[i].rect.top,
+						kSpinners[i].rect.right*kFontFactor, kSpinners[i].rect.bottom);
+		fSpinners[i] = new Spinner(spinner_rect, kSpinners[i].name, buffer, new BMessage(kSpinners[i].message));
 		fSpinners[i]->SetValue(kSpinners[i].value);
 		fSpinners[i]->SetSteps(0.001f);
 		fSpinners[i]->SetRange(kSpinners[i].range_min, kSpinners[i].range_max);
 		mEffectView->AddChild(fSpinners[i]);
 	}
 
-	fStringView[ePixelCenter] = new BStringView(BRect(20, 100, 300, 130), nullptr, "Pixels:");
+	fStringView[ePixelCenter] = new BStringView(BRect(20*kFontFactor, 100, 300*kFontFactor, 130), nullptr, "Pixels:");
 	mEffectView->AddChild(fStringView[ePixelCenter]);
-	fStringView[ePixelSize] = new BStringView(BRect(320, 100, 600, 130), nullptr, "Pixels:");
+	fStringView[ePixelSize] = new BStringView(BRect(320*kFontFactor, 100, 600*kFontFactor, 130), nullptr, "Pixels:");
 	mEffectView->AddChild(fStringView[ePixelSize]);
 
 	char buffer[80];

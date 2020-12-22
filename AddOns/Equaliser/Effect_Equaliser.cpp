@@ -30,11 +30,13 @@ static const char *kEqualiserLanguages[][NUMBER_EQUALISER_LANGUAGE_TEXT] =
 {"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"English (Britian)",
 {"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"English (USA)",
 {"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"Deutsch",
-{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"Français",
-{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"Italiano",
-{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"Русский",
+{"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"Français",
+{"Equalizzatore",	"Equalizzatore",	"Equalizzatore a 20 bande",	"Filtro"},			//	"Italiano",
+{"Эквалайзер",		"Эквалайзер",		"20-полосный эквалайзер",	"Фильтр"},			//	"Русский",
 {"Eквилајзер",		"Eквилајзер",		"20-опсежни еквилајзер",	"Филтер"},			//	"Српски",
 {"Ecualizador",		"Ecualizador",		"Ecualizador de 20 bandas",	"Filtro"},			//	"Español",
+{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"Dutch",
+{"Equalizer",		"Equalizer",		"Equalizer 20 band",		"Saring"},			//	"Indonesia",
 };
 
 EffectNode_Equaliser *instantiate_effect(BRect frame)
@@ -71,6 +73,8 @@ const char *EffectNode_Equaliser :: GetEffectName() const	{return "Equaliser";}
 EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 	: EffectNode(frame, filename, false)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	assert(sizeof(kEqualiserLanguages)/(NUMBER_EQUALISER_LANGUAGE_TEXT*sizeof(char *)) == GetAvailableLanguages().size());
 
 	OrfanidisEq::FrequencyGrid fg;
@@ -86,13 +90,13 @@ EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 	fEqualiser = new OrfanidisEq::Eq(fFrequencyGrid, OrfanidisEq::filter_type::butterworth);
 
 	fRotatedFont = new BFont(be_plain_font);
-	fRotatedFont->SetSize(20);
+	fRotatedFont->SetSize(be_plain_font->Size());
 	fRotatedFont->SetRotation(90);
 
 	char buffer[20];
 	for (int i=0; i < kNumberSliders; i++)
 	{
-		BSlider *slider = new BSlider(BRect(10+i*36, 100, 10+(i+1)*36, 310), nullptr, nullptr, nullptr, 0, 200, orientation::B_VERTICAL);
+		BSlider *slider = new BSlider(BRect(10+i*36*kFontFactor, 100, 10+(i+1)*36*kFontFactor, 310), nullptr, nullptr, nullptr, 0, 200, orientation::B_VERTICAL);
 		slider->SetModificationMessage(new BMessage (kMsgGain));
 		slider->SetHashMarks(B_HASH_MARKS_BOTH);
 		slider->SetHashMarkCount(5);
@@ -110,10 +114,10 @@ EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 		fLabels.push_back(buffer);
 	}
 
-	fButtonReset = new BButton(BRect(20, 340, 200, 380), "reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
+	fButtonReset = new BButton(BRect(20*kFontFactor, 340, 200*kFontFactor, 380), "reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
 	AddChild(fButtonReset);
 
-	fOptionFilter = new BOptionPopUp(BRect(300, 340, 500, 380), "filter", kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_FILTER], new BMessage(kMsgFilter));
+	fOptionFilter = new BOptionPopUp(BRect(300*kFontFactor, 340, 500*kFontFactor, 380), "filter", kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_FILTER], new BMessage(kMsgFilter));
 	//fOptionFilter->AddOption("None", OrfanidisEq::filter_type::none);
 	fOptionFilter->AddOption("Butterworth", OrfanidisEq::filter_type::butterworth);
 	fOptionFilter->AddOption("Chebyshev1", OrfanidisEq::filter_type::chebyshev1);
@@ -149,11 +153,13 @@ void EffectNode_Equaliser :: AttachedToWindow()
 */
 void EffectNode_Equaliser :: Draw(BRect frame)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	SetFont(fRotatedFont);
 	SetHighColor(ui_color(B_PANEL_TEXT_COLOR));
 	for (int i=0; i < kNumberSliders; i++)
 	{
-		MovePenTo(26+i*36, 90);
+		MovePenTo(26+i*36*kFontFactor, 90);
 		DrawString(fLabels[i]);
 	}
 	SetFont(be_plain_font);

@@ -52,12 +52,14 @@ EffectListItem :: ~EffectListItem()
 */
 void EffectListItem :: Update(BView *parent, const BFont *font)
 {
-	SetWidth(EffectNode::kThumbnailWidth + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fEffectNode->GetTextB(0)));
-	SetHeight(EffectNode::kThumbnailHeight + 2*be_control_look->DefaultLabelSpacing());
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
+	SetWidth(EffectNode::kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fEffectNode->GetTextB(0)));
+	SetHeight(EffectNode::kThumbnailHeight*kFontFactor + 2*be_control_look->DefaultLabelSpacing());
 	
 	font_height h;
 	font->GetHeight(&h);
-	fBaselineOffset = 0.5f*EffectNode::kThumbnailHeight;
+	fBaselineOffset = 0.5f*EffectNode::kThumbnailHeight*kFontFactor;
 }
 
 /*	FUNCTION:		EffectListItem :: DrawItem
@@ -69,6 +71,8 @@ void EffectListItem :: Update(BView *parent, const BFont *font)
 */
 void EffectListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	rgb_color lowColor = parent->LowColor();
 	erase_bg = true;
 	
@@ -92,20 +96,20 @@ void EffectListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 	{	
 		parent->DrawBitmap(fBitmap, BRect(frame.left + offset, 
 										frame.top + offset, 
-										frame.left + EffectNode::kThumbnailWidth + offset, 
-										frame.top + EffectNode::kThumbnailHeight + offset));
+										frame.left + EffectNode::kThumbnailWidth*kFontFactor + offset,
+										frame.top + EffectNode::kThumbnailHeight*kFontFactor + offset));
 	}
 
 	parent->SetHighColor(Theme::GetUiColour(UiColour::eListText));
 
     BString text_a(fEffectNode->GetTextA(0));
-    be_plain_font->TruncateString(&text_a, B_TRUNCATE_MIDDLE, frame.Width() - (EffectNode::kThumbnailWidth + 2*offset));
+	be_plain_font->TruncateString(&text_a, B_TRUNCATE_MIDDLE, frame.Width() - (EffectNode::kThumbnailWidth*kFontFactor + 2*offset));
     BString text_b(fEffectNode->GetTextB(0));
-    be_plain_font->TruncateString(&text_b, B_TRUNCATE_MIDDLE, frame.Width() - (EffectNode::kThumbnailWidth + 2*offset));
+	be_plain_font->TruncateString(&text_b, B_TRUNCATE_MIDDLE, frame.Width() - (EffectNode::kThumbnailWidth*kFontFactor + 2*offset));
 
-    parent->MovePenTo(EffectNode::kThumbnailWidth + frame.left + 2*offset, frame.top + offset + fBaselineOffset);
+	parent->MovePenTo(EffectNode::kThumbnailWidth*kFontFactor + frame.left + 2*offset, frame.top + offset + fBaselineOffset);
 	parent->DrawString(text_a);
-	parent->MovePenTo(EffectNode::kThumbnailWidth + frame.left + 2*offset, frame.top + offset + fBaselineOffset + be_plain_font->Size());
+	parent->MovePenTo(EffectNode::kThumbnailWidth*kFontFactor + frame.left + 2*offset, frame.top + offset + fBaselineOffset + be_plain_font->Size());
 	parent->DrawString(text_b);
 	parent->SetLowColor(lowColor);	
 }

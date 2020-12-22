@@ -35,7 +35,9 @@ struct EffectSpeedData
 Effect_Speed :: Effect_Speed(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
-	fSpeedSlider = new ValueSlider(BRect(10, 20, 510, 80), "speed_slider", GetText(TXT_EFFECTS_SPEED), nullptr, kSpeedLimits[0], kSpeedLimits[1]);
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
+	fSpeedSlider = new ValueSlider(BRect(10, 20, frame.right - 30, 80), "speed_slider", GetText(TXT_EFFECTS_SPEED), nullptr, kSpeedLimits[0], kSpeedLimits[1]);
 	fSpeedSlider->SetModificationMessage(new BMessage(kMsgSpeedSlider));
 	fSpeedSlider->SetValue(100);
 	fSpeedSlider->SetHashMarks(B_HASH_MARKS_BOTH);

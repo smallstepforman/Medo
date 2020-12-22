@@ -56,7 +56,7 @@ public:
 	virtual bool		SaveParameters(FILE *file, MediaEffect *media_effect)							override;
 	
 	virtual BBitmap		*GetIcon()									override;
-	const char		*GetTextEffectName(const uint32 language_idx)	override;
+	const char			*GetTextEffectName(const uint32 language_idx) override;
 	virtual const char	*GetTextA(const uint32 language_idx)		override;
 	virtual const char	*GetTextB(const uint32 language_idx)		override;
 	
@@ -99,11 +99,11 @@ protected:
 
 private:
 	FontPanel				*fFontPanel;
-	AlphaColourControl		*fFontColourControl;
 	BButton					*fFontButton;
 	BMessenger				*fFontMessenger;
 
 protected:
+	AlphaColourControl		*fFontColourControl;
 	BStringView				*fBackgroundTitle;
 	BCheckBox				*fBackgroundCheckBox;
 	AlphaColourControl		*fBackgroundColourControl;

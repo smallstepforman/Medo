@@ -422,8 +422,9 @@ Effect_ParticleTrail :: Effect_ParticleTrail(BRect frame, const char *filename)
 	assert(sEffectParticleTrailInstance == nullptr);
 	sEffectParticleTrailInstance = this;
 
-	float width = frame.Width();
-	
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+	const float width = frame.Width();
+
 	//	Velocity
 	char min_label[32], max_label[32];
 	fSliderVelocity = new ValueSlider(BRect(20, 20, width - 20, 110), "Velocity", GetText(TXT_EFFECTS_SPECIAL_PARTICLE_VELOCITY), nullptr, kParticleVelocityRange[0], kParticleVelocityRange[1]);
@@ -531,26 +532,28 @@ Effect_ParticleTrail :: Effect_ParticleTrail(BRect frame, const char *filename)
 	fColorControlDelta->SetValue(kParticleDeltaColour);
 	mEffectView->AddChild(fColorControlDelta);
 
+	float kColourRight = fColorControlDelta->Bounds().right + 20;
+
 	//	Particle position
-	BStringView *title_motion_path = new BStringView(BRect(width - 200, 380, width - 20, 410), "label_motion", GetText(TXT_EFFECTS_SPECIAL_PARTICLE_MOTION_PATH));
+	BStringView *title_motion_path = new BStringView(BRect(kColourRight + 20, 380, kColourRight+20 + 200*kFontFactor, 410), "label_motion", GetText(TXT_EFFECTS_SPECIAL_PARTICLE_MOTION_PATH));
 	title_motion_path->SetFont(be_bold_font);
 	mEffectView->AddChild(title_motion_path);
-	fPathListView = new PathListView(BRect(width - 200, 410, width - (20+B_V_SCROLL_BAR_WIDTH), 540), "list_position", this);
+	fPathListView = new PathListView(BRect(kColourRight + 20, 410, kColourRight+20 + 200*kFontFactor, 540), "list_position", this);
 	fPathListView->SetSelectionMessage(new BMessage(kMsgPathSelected));
 	mEffectView->AddChild(new BScrollView("list_scroll", fPathListView, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0, false, true));
 	//	Spinners
-	fSpinnerPath[0] = new Spinner(BRect(width - 180, 550, width - 20, 580), "spinner_x", "X", new BMessage(kMsgSpinnerPath));
+	fSpinnerPath[0] = new Spinner(BRect(kColourRight + 20, 550, kColourRight+20 + 200*kFontFactor, 580), "spinner_x", "X", new BMessage(kMsgSpinnerPath));
 	fSpinnerPath[0]->SetRange(-1, 2);
 	fSpinnerPath[0]->SetValue(0.5f);
 	fSpinnerPath[0]->SetSteps(0.01f);
 	mEffectView->AddChild(fSpinnerPath[0]);
-	fSpinnerPath[1] = new Spinner(BRect(width - 180, 590, width - 20, 620), "spinner_y", "Y", new BMessage(kMsgSpinnerPath));
+	fSpinnerPath[1] = new Spinner(BRect(kColourRight + 20, 590, kColourRight+20 + 200*kFontFactor, 620), "spinner_y", "Y", new BMessage(kMsgSpinnerPath));
 	fSpinnerPath[1]->SetRange(-1, 2);
 	fSpinnerPath[1]->SetValue(0.5f);
 	fSpinnerPath[1]->SetSteps(0.01f);
 	mEffectView->AddChild(fSpinnerPath[1]);
 	//	Button
-	fButtonAddPath = new BButton(BRect(width - 180, 630, width - 20, 670), "button_pos", GetText(TXT_EFFECTS_SPECIAL_PARTICLE_ADD_POSITION), new BMessage(kMsgButtonAddPath));
+	fButtonAddPath = new BButton(BRect(kColourRight + 20, 630, kColourRight+20 + 200*kFontFactor, 670), "button_pos", GetText(TXT_EFFECTS_SPECIAL_PARTICLE_ADD_POSITION), new BMessage(kMsgButtonAddPath));
 	mEffectView->AddChild(fButtonAddPath);
 
 	//	Populate PathListView
@@ -565,7 +568,7 @@ Effect_ParticleTrail :: Effect_ParticleTrail(BRect frame, const char *filename)
 		idx++;
 	}
 
-	SetViewIdealSize(780, 740);
+	SetViewIdealSize(kColourRight+20 + 200*kFontFactor + 40, 740);
 }
 
 /*	FUNCTION:		Effect_ParticleTrail :: ~Effect_ParticleTrail

@@ -64,7 +64,7 @@ public:
 		y_offset += 25;
 		SetFont(be_bold_font);
 		SetHighColor({0, 0, 128, 255});
-		DrawString("Written by Zenja Solaja", BPoint(x_offset, y_offset));					y_offset += 30;
+		DrawString("Written by Zenja Solaja", BPoint(x_offset, y_offset));						y_offset += 30;
 
 		y_offset += 25;
 		SetHighColor({128, 0, 0, 255});
@@ -72,7 +72,20 @@ public:
 
 		SetFont(be_plain_font);
 		SetHighColor({64, 64, 64, 255});
-		DrawString("Logo by Dave Lewis", BPoint(x_offset, y_offset));							y_offset += 25;
+		DrawString("Logo by Dave Lewis", BPoint(x_offset, y_offset));							y_offset += 40;
+
+		//	Translations
+		SetFont(be_bold_font);
+		DrawString("Translations", BPoint(x_offset, y_offset));									y_offset += 25;
+		SetFont(be_plain_font);
+		DrawString("Dutch:", BPoint(x_offset, y_offset));			DrawString("Begasus", BPoint(x_offset + 160, y_offset));			y_offset += 25;
+		DrawString("French:", BPoint(x_offset, y_offset));			DrawString("Google", BPoint(x_offset + 160, y_offset));				y_offset += 25;
+		DrawString("Indonesia:", BPoint(x_offset, y_offset));		DrawString("Mazbrili", BPoint(x_offset + 160, y_offset));			y_offset += 25;
+		DrawString("Italian:", BPoint(x_offset, y_offset));			DrawString("Forart", BPoint(x_offset + 160, y_offset));				y_offset += 25;
+		DrawString("German:", BPoint(x_offset, y_offset));			DrawString("Lelldorin", BPoint(x_offset + 160, y_offset));			y_offset += 25;
+		DrawString("Russian:", BPoint(x_offset, y_offset));			DrawString("Akuji", BPoint(x_offset + 160, y_offset));				y_offset += 25;
+		DrawString("Serbian:", BPoint(x_offset, y_offset));			DrawString("Zenja Solaja", BPoint(x_offset + 160, y_offset));		y_offset += 25;
+		DrawString("Spanish:", BPoint(x_offset, y_offset));			DrawString("Cafeina", BPoint(x_offset + 160, y_offset));			y_offset += 25;
 	}
 };
 

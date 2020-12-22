@@ -11,12 +11,15 @@ There are many bundled media effects, including:
 - Several bundled transitions
 - Several special effects (Blur, Night Vision, Chroma Key etc)
 - Spatial tools to transform media (scale/rotate/position/crop)
+- Multiple text effects, including 3D extruded fonts.
 - Audio effects (20 band equaliser, fade)
+
+Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised for many CPU-core systems, and has low system resource requirements.
 
 An SDK allows 3rd party developers to create Addons and Plugins"
 
 packager			"Zenja Solaja <solaja.@gmail.com>"
-vendor			"Zen Yes Pty Ltd"
+vendor				"Zen Yes Pty Ltd"
 copyrights			{"Zen Yes Pty Ltd 2019-2021"}
 licenses			{MIT}
 provides			{Medo = R1.0.0~Beta1-1}

@@ -276,6 +276,8 @@ public:
 Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *view_name)
 	: EffectNode(frame, view_name), fPlugin(plugin)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	if (GetEffectGroup() == EffectNode::EFFECT_TRANSITION)
 		InitSwapTexturesCheckbox();
 
@@ -293,7 +295,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 		{
 			case PluginGuiWidget::eSlider:
 			{
-				ValueSlider *slider = new ValueSlider(w.rect, w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), nullptr, 0, (int)kSliderRange);
+				ValueSlider *slider = new ValueSlider(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
+												w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), nullptr, 0, (int)kSliderRange);
 				slider->SetModificationMessage(new BMessage(eMsgGui));
 				slider->SetHashMarks(B_HASH_MARKS_BOTH);
 				slider->SetHashMarkCount(11);
@@ -313,7 +316,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			}
 			case PluginGuiWidget::eCheckbox:
 			{
-				BCheckBox *button = new BCheckBox(w.rect, w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
+				BCheckBox *button = new BCheckBox(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
+												w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
 				if (w.default_value[0] > 0)
 					button->SetValue(1);
 				mEffectView->AddChild(button);
@@ -324,7 +328,9 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			case PluginGuiWidget::eSpinner3:
 			case PluginGuiWidget::eSpinner4:
 			{
-				MultiSpinner *multispinner = new MultiSpinner(PluginGuiWidget::kVecCountElements[w.widget_type], w.rect, w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
+				MultiSpinner *multispinner = new MultiSpinner(PluginGuiWidget::kVecCountElements[w.widget_type],
+						BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
+						w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
 				for (unsigned int i=0; i < PluginGuiWidget::kVecCountElements[w.widget_type]; i++)
 				{
 					multispinner->mSpinners[i]->SetValue(w.default_value[i]);
@@ -336,10 +342,11 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			}
 			case PluginGuiWidget::eColour:
 			{
-				BStringView *title = new BStringView(BRect(w.rect.left, w.rect.top, w.rect.right, w.rect.top + 40), nullptr, w.labels[GetLanguage()].c_str());
+				BStringView *title = new BStringView(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.top + 40),
+													 nullptr, w.labels[GetLanguage()].c_str());
 				title->SetFont(be_bold_font);
 				mEffectView->AddChild(title);
-				BColorControl *colour_control = new BColorControl(BPoint(w.rect.left, w.rect.top + 40), B_CELLS_32x8, 6.0f, w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui), true);
+				BColorControl *colour_control = new BColorControl(BPoint(w.rect.left*kFontFactor, w.rect.top + 40), B_CELLS_32x8, 6.0f, w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui), true);
 				colour_control->SetValue({uint8(255.0f*w.vec4[0]), uint8(255*w.vec4[1]), uint8(255*w.vec4[2]), uint8(255*w.vec4[3])});
 				mEffectView->AddChild(colour_control);
 				fGuiWidgets.push_back(colour_control);
@@ -347,7 +354,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 				//	ColourPicker
 				assert(fColourPickerButton == nullptr);		//	only support a single ColourPicker for now
 				BRect colour_control_bounds = colour_control->Bounds();
-				fColourPickerButton = new BitmapCheckbox(BRect(colour_control_bounds.right + 40, w.rect.top+40, colour_control_bounds.right+80, w.rect.top+80), "colour_picker",
+				fColourPickerButton = new BitmapCheckbox(BRect((colour_control_bounds.right + 80)*kFontFactor, (w.rect.top+40)*kFontFactor,
+															   (colour_control_bounds.right + 120)*kFontFactor, (w.rect.top+80)*kFontFactor), "colour_picker",
 														 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_idle.png"),
 														 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_active.png"),
 														 new BMessage(eMsgColourPicker));
@@ -357,7 +365,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			}
 			case PluginGuiWidget::eText:
 			{
-				BStringView *title = new BStringView(w.rect, w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str());
+				BStringView *title = new BStringView(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
+													 w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str());
 				if (w.uniform_idx == 1)
 					title->SetFont(be_bold_font);
 				mEffectView->AddChild(title);

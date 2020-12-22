@@ -4,9 +4,10 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"colour",
 		"name":	"Levels",
-		"labelA":	["Levels", "Levels", "Levels", "Levels", "Levels", "Levels", "Нивои", "Niveles"],
-		"labelB":	["Photoshop style min/gamma/max levels", "Photoshop style min/gamma/max levels", "Mini- / Gamma- / Max-Pegel im Photoshop-Stil", "Photoshop style min/gamma/max levels",
-							"Photoshop style min/gamma/max levels", "Photoshop style min/gamma/max levels", "Ниво мин / гама / максимум у стилу Photoshop-а", "Niveles del tipo mín/gama/máx de Photoshop"],
+		"labelA":	["Levels", "Levels", "Levels", "Les niveaux", "Livelli", "Уровни", "Нивои", "Niveles", "Levels", "Level"],
+		"labelB":	["Photoshop style min/gamma/max levels", "Photoshop style min/gamma/max levels", "Mini- / Gamma- / Max-Pegel im Photoshop-Stil", "Niveaux min / gamma / max de style Photoshop",
+							"Livelli min/gamma/max in stile Photoshop", "Минимальные/гамма/максимальные уровни в стиле Photoshop", "Ниво мин / гама / максимум у стилу Photoshop-а", "Niveles del tipo mín/gama/máx de Photoshop",
+							"Photoshop stijl min/gamma/max levels", "Tingkat min/gamma/maks gaya Photoshop"],
 		"icon":		"Plugins/Levels/icon.png"
 	},
 	"fragment": {
@@ -36,8 +37,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 600, 100],
-				"label":			["Minimum Input", "Minimum Input", "Minimale Eingabe", "Minimum Input",
-										"Minimum Input", "Minimum Input", "Минимални унос", "Entrada mínima"],
+				"label":			["Minimum Input", "Minimum Input", "Minimale Eingabe", "Entrée minimale",
+										"Ingresso Minimo", "Минимальный ввод", "Минимални унос", "Entrada mínima",
+										"Levels", "Input Minimum"],
 				"label_min": ["0.0"],
 				"label_max": ["1.0"],
 				"default":		0.0,
@@ -47,7 +49,7 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 600, 200],
-				"label":			["Gamma", "Gamma", "Gamma", "Gamma", "Gamma", "Gamma", "Гама", "Gama"],
+				"label":			["Gamma", "Gamma", "Gamma", "Gamma", "Gamma", "Гамма", "Гама", "Gama", "Gama", "Gama"],
 				"label_min": ["0.0"],
 				"label_max": ["3.0"],
 				"default":		1.0,
@@ -57,8 +59,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20,  220, 600, 300],
-				"label":			["Max Input", "Max Input", "Max. Eingabe", "Max Input",
-										"Max Input", "Max Input", "Максимални унос", "Entrada máxima"],
+				"label":			["Max Input", "Max Input", "Max. Eingabe", "Entrée max",
+										"Ingresso Max", "Максимальный ввод", "Максимални унос", "Entrada máxima",
+										"Max", "Masukan Mak"],
 				"label_min":	 ["0.0"],
 				"label_max": ["1.0"],
 				"default":		1.0,

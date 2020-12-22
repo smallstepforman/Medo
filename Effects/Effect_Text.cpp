@@ -130,6 +130,8 @@ public:
 Effect_Text :: Effect_Text(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	fRenderNode = nullptr;
 	fTextScene = nullptr;
 	fOpenGLPendingUpdate = false;
@@ -143,7 +145,7 @@ Effect_Text :: Effect_Text(BRect frame, const char *filename)
 	mEffectView->AddChild(fTextView);
 
 	//	Text
-	BStringView *title = new BStringView(BRect(20, 200, 100, 240), nullptr, GetText(TXT_EFFECTS_TEXT_SIMPLE));
+	BStringView *title = new BStringView(BRect(20*kFontFactor, 200, 100*kFontFactor, 240), nullptr, GetText(TXT_EFFECTS_TEXT_SIMPLE));
 	title->SetHighColor(ui_color(B_PANEL_TEXT_COLOR));
 	title->SetFont(be_bold_font);
 	mEffectView->AddChild(title);
@@ -151,34 +153,34 @@ Effect_Text :: Effect_Text(BRect frame, const char *filename)
 	//	Font panel
 	fFontPanel = nullptr;
 	fFontMessenger = nullptr;
-	fFontButton = new BButton(BRect(20, 240, 100, 270), "font_button", GetText(TXT_EFFECTS_TEXT_SIMPLE_FONT), new BMessage(kMsgFontButton));
+	fFontButton = new BButton(BRect(20*kFontFactor, 240, 100*kFontFactor, 270), "font_button", GetText(TXT_EFFECTS_TEXT_SIMPLE_FONT), new BMessage(kMsgFontButton));
 	mEffectView->AddChild(fFontButton);
 
-	fFontColourControl = new AlphaColourControl(BPoint(240, 240), "TextColourControl", new BMessage(kMsgFontColourControl));
+	fFontColourControl = new AlphaColourControl(BPoint(240*kFontFactor, 240), "TextColourControl", new BMessage(kMsgFontColourControl));
 	mEffectView->AddChild(fFontColourControl);
 	fFontColourControl->SetValue(kDefaultFontColour);
 
 	//	Background
-	fBackgroundTitle = new BStringView(BRect(20, 360, 240, 400), nullptr, GetText(TXT_EFFECTS_TEXT_SIMPLE_BACKGROUND));
+	fBackgroundTitle = new BStringView(BRect(20*kFontFactor, 360, 240*kFontFactor, 400), nullptr, GetText(TXT_EFFECTS_TEXT_SIMPLE_BACKGROUND));
 	fBackgroundTitle->SetHighColor(ui_color(B_PANEL_TEXT_COLOR));
 	fBackgroundTitle->SetFont(be_bold_font);
 	mEffectView->AddChild(fBackgroundTitle);
 
-	fBackgroundCheckBox = new BCheckBox(BRect(20, 400, 220, 440), "background_check", GetText(TXT_EFFECTS_TEXT_SIMPLE_BACKGROUND_ENABLE), new BMessage(kMsgBackgroundCheckBox));
+	fBackgroundCheckBox = new BCheckBox(BRect(20*kFontFactor, 400, 220*kFontFactor, 440), "background_check", GetText(TXT_EFFECTS_TEXT_SIMPLE_BACKGROUND_ENABLE), new BMessage(kMsgBackgroundCheckBox));
 	mEffectView->AddChild(fBackgroundCheckBox);
-	fBackgroundColourControl = new AlphaColourControl(BPoint(240, 400), "TextBackgroundColourControl", new BMessage(kMsgBackgroundColourControl));
+	fBackgroundColourControl = new AlphaColourControl(BPoint(240*kFontFactor, 400), "TextBackgroundColourControl", new BMessage(kMsgBackgroundColourControl));
 	mEffectView->AddChild(fBackgroundColourControl);
 	fBackgroundColourControl->SetValue(kDefaultBackgroundColour);
-	fBackgroundOffset = new Spinner(BRect(10, 460, 150, 500), "background_offset", GetText(TXT_EFFECTS_TEXT_SIMPLE_Y_OFFSET), new BMessage(kMsgBackgroundSpinnerOffset));
+	fBackgroundOffset = new Spinner(BRect(10*kFontFactor, 460, 150*kFontFactor, 500), "background_offset", GetText(TXT_EFFECTS_TEXT_SIMPLE_Y_OFFSET), new BMessage(kMsgBackgroundSpinnerOffset));
 	fBackgroundOffset->SetRange(-200, 200);
 	mEffectView->AddChild(fBackgroundOffset);
 
 	//	Shadow
-	fShadowCheckBox = new BCheckBox(BRect(20, 580, 160, 620), "shadow_check", GetText(TXT_EFFECTS_TEXT_SIMPLE_SHADOW), new BMessage(kMsgShadowCheckBox));
+	fShadowCheckBox = new BCheckBox(BRect(20*kFontFactor, 580, 160*kFontFactor, 620), "shadow_check", GetText(TXT_EFFECTS_TEXT_SIMPLE_SHADOW), new BMessage(kMsgShadowCheckBox));
 	mEffectView->AddChild(fShadowCheckBox);
 
-	fShadowSpinners[0] = new Spinner(BRect(170, 580, 320, 620), "shadow_spinner_x", GetText(TXT_EFFECTS_TEXT_SIMPLE_X_OFFSET), new BMessage(kMsgShadowSpinners));
-	fShadowSpinners[1] = new Spinner(BRect(350, 580, 500, 620), "shadow_spinner_y", GetText(TXT_EFFECTS_TEXT_SIMPLE_Y_OFFSET), new BMessage(kMsgShadowSpinners));
+	fShadowSpinners[0] = new Spinner(BRect(170*kFontFactor, 580, 320*kFontFactor, 620), "shadow_spinner_x", GetText(TXT_EFFECTS_TEXT_SIMPLE_X_OFFSET), new BMessage(kMsgShadowSpinners));
+	fShadowSpinners[1] = new Spinner(BRect(350*kFontFactor, 580, 500*kFontFactor, 620), "shadow_spinner_y", GetText(TXT_EFFECTS_TEXT_SIMPLE_Y_OFFSET), new BMessage(kMsgShadowSpinners));
 	for (int i=0; i < 2; i++)
 	{
 		fShadowSpinners[i]->SetRange(-100, 100);

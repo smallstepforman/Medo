@@ -88,22 +88,26 @@ using namespace yrender;
 Effect_TextTerminal :: Effect_TextTerminal(BRect frame, const char *filename)
 	: Effect_Text(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	fTextView->ResizeTo(frame.Width()-20, 100);
 
 	static_assert(sizeof(kAlignmentButtons)/sizeof(RADIO_BUTTON) == kNumberAlignmentButtons, "sizeof(kAlignmentButtons) != kNumberAlignmentButtons");
 	for (int i=0; i < kNumberAlignmentButtons; i++)
 	{
-		fAlignmentRadioButtons[i] = new BRadioButton(kAlignmentButtons[i].position, nullptr, GetText(kAlignmentButtons[i].text), new BMessage(kAlignmentButtons[i].message));
+	BRect button_position(kAlignmentButtons[i].position.left*kFontFactor, kAlignmentButtons[i].position.top,
+						  kAlignmentButtons[i].position.right*kFontFactor, kAlignmentButtons[i].position.bottom);
+		fAlignmentRadioButtons[i] = new BRadioButton(button_position, nullptr, GetText(kAlignmentButtons[i].text), new BMessage(kAlignmentButtons[i].message));
 		mEffectView->AddChild(fAlignmentRadioButtons[i]);
 	}
 	fAlignment = kAlignmentCenter;
 	fAlignmentRadioButtons[fAlignment]->SetValue(1);
 
 	//	Thresholds
-	fSliderThreshold[0] = new BChannelSlider(BRect(20, 140, 360, 180), "threshold", GetText(TXT_EFFECTS_TEXT_TELETYPE_LEFT_DELAY), new BMessage(eMsgThresholdLeft));
+	fSliderThreshold[0] = new BChannelSlider(BRect(20*kFontFactor, 140, 360*kFontFactor, 180), "threshold", GetText(TXT_EFFECTS_TEXT_TELETYPE_LEFT_DELAY), new BMessage(eMsgThresholdLeft));
 	fSliderThreshold[0]->SetValue(10);
 	mEffectView->AddChild(fSliderThreshold[0]);
-	fSliderThreshold[1] = new BChannelSlider(BRect(20, 180, 360, 220), "threshold", GetText(TXT_EFFECTS_TEXT_TELETYPE_RIGHT_DELAY), new BMessage(eMsgThresholdRight));
+	fSliderThreshold[1] = new BChannelSlider(BRect(20*kFontFactor, 180, 360*kFontFactor, 220), "threshold", GetText(TXT_EFFECTS_TEXT_TELETYPE_RIGHT_DELAY), new BMessage(eMsgThresholdRight));
 	fSliderThreshold[1]->SetValue(90);
 	mEffectView->AddChild(fSliderThreshold[1]);
 }

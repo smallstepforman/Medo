@@ -252,8 +252,10 @@ using namespace yrender;
 Effect_PortraitBlur :: Effect_PortraitBlur(BRect frame, const char *filename)
 	: EffectNode(frame, filename), fBlurRenderNode(nullptr)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	//	Increment Popup
-	BOptionPopUp *increment_popup = new BOptionPopUp(BRect(10, 380, 240, 440), "increment", GetText(TXT_EFFECTS_COMMON_INCREMENT), new BMessage(kMsgIncrement));
+	BOptionPopUp *increment_popup = new BOptionPopUp(BRect(10, 380, 240*kFontFactor, 440), "increment", GetText(TXT_EFFECTS_COMMON_INCREMENT), new BMessage(kMsgIncrement));
 	for (int i=0; i < sizeof(kIncrementPopupValues)/sizeof(float); i++)
 	{
 		char buffer[20];
@@ -265,7 +267,7 @@ Effect_PortraitBlur :: Effect_PortraitBlur(BRect frame, const char *filename)
 	mEffectView->AddChild(increment_popup);
 
 	//	BlurSlider
-	fBlurSlider = new ValueSlider(BRect(10, 440, 480, 500), "blur_slider", GetText(TXT_EFFECTS_IMAGE_PORTRAIT_BLUR_AMOUNT), nullptr, 0, 200);
+	fBlurSlider = new ValueSlider(BRect(10, 440, 480*kFontFactor, 500), "blur_slider", GetText(TXT_EFFECTS_IMAGE_PORTRAIT_BLUR_AMOUNT), nullptr, 0, 200);
 	fBlurSlider->SetModificationMessage(new BMessage(kMsgBlurSlider));
 	fBlurSlider->SetValue(kDefaultBlurDirection*10);
 	fBlurSlider->SetHashMarks(B_HASH_MARKS_BOTTOM);
@@ -275,14 +277,16 @@ Effect_PortraitBlur :: Effect_PortraitBlur(BRect frame, const char *filename)
 	mEffectView->AddChild(fBlurSlider);
 	
 	//	Start transform
-	BBox *start_box = new BBox(BRect(10, 10, 640, 170), "box_start");
+	BBox *start_box = new BBox(BRect(10, 10, 700*kFontFactor, 170), "box_start");
 	start_box->SetLabel(GetText(TXT_EFFECTS_IMAGE_PORTRAIT_BLUR_TRANSFORM));
 	mEffectView->AddChild(start_box);
 	for (int i=0; i < sizeof(kPortraitSpinnerLayouts)/sizeof(SPINNER_LAYOUT); i++)
 	{
 		char buffer[32];
 		sprintf(buffer, "%s%s", GetText(kPortraitSpinnerLayouts[i].text), kPortraitSpinnerLayouts[i].label);
-		Spinner *spinner = new Spinner(kPortraitSpinnerLayouts[i].rect, kPortraitSpinnerLayouts[i].id, buffer,
+		BRect spinner_rect(kPortraitSpinnerLayouts[i].rect.left*kFontFactor, kPortraitSpinnerLayouts[i].rect.top,
+						kPortraitSpinnerLayouts[i].rect.right*kFontFactor, kPortraitSpinnerLayouts[i].rect.bottom);
+		Spinner *spinner = new Spinner(spinner_rect, kPortraitSpinnerLayouts[i].id, buffer,
 										new BMessage(kPortraitSpinnerLayouts[i].message));
 		spinner->SetRange(kPortraitSpinnerLayouts[i].min_value, kPortraitSpinnerLayouts[i].max_value);
 		spinner->SetValue(0);
@@ -291,14 +295,16 @@ Effect_PortraitBlur :: Effect_PortraitBlur(BRect frame, const char *filename)
 		spinner->SetEnabled(kPortraitSpinnerLayouts[i].enabled);
 	}
 	//	Blur transform
-	BBox *blur_box = new BBox(BRect(10, 200, 640, 360), "box_blur");
+	BBox *blur_box = new BBox(BRect(10, 200, 700*kFontFactor, 360), "box_blur");
 	blur_box->SetLabel(GetText(TXT_EFFECTS_IMAGE_PORTRAIT_BLUR_BACKGROUND_TRANSFORM));
 	mEffectView->AddChild(blur_box);
 	for (int i=0; i < sizeof(kBlurSpinnerLayouts)/sizeof(SPINNER_LAYOUT); i++)
 	{
 		char buffer[32];
 		sprintf(buffer, "%s%s", GetText(kBlurSpinnerLayouts[i].text), kBlurSpinnerLayouts[i].label);
-		Spinner *spinner = new Spinner(kBlurSpinnerLayouts[i].rect, kBlurSpinnerLayouts[i].id, buffer,
+		BRect spinner_rect(kBlurSpinnerLayouts[i].rect.left*kFontFactor, kBlurSpinnerLayouts[i].rect.top,
+						kBlurSpinnerLayouts[i].rect.right*kFontFactor, kBlurSpinnerLayouts[i].rect.bottom);
+		Spinner *spinner = new Spinner(spinner_rect, kBlurSpinnerLayouts[i].id, buffer,
 										new BMessage(kBlurSpinnerLayouts[i].message));
 		spinner->SetRange(kBlurSpinnerLayouts[i].min_value, kBlurSpinnerLayouts[i].max_value);
 		spinner->SetValue(0);

@@ -4,10 +4,11 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"transition",
 		"name":	"Blinds",
-		"labelA":	["Blinds", "Blinds", "Jalousie", "Blinds", "Blinds", "Blinds", "Ролетне", "Persianas"],
-		"labelB":	["Window Blinds (slices) transition", "Window Blinds (slices) transition", "Übergang von Jalousien (Scheiben)", "Window Blinds (slices) transition",
-							"Window Blinds (slices) transition", "Window Blinds (slices) transition", "Прелаз ролетне (прореза)", "Transición de persianas (cortes)"],
-		"icon":		"Plugins/Window Blinds/icon.png"
+		"labelA":	["Blinds", "Blinds", "Jalousie", "Stores", "Persiane", "Жалюзи", "Ролетне", "Persianas", "Jaloezieën", "Tirai"],
+		"labelB":	["Window Blinds (slices) transition", "Window Blinds (slices) transition", "Übergang von Jalousien (Scheiben)", "Transition de stores (tranches)",
+							"Transizione a Persiane (sezioni)", "Переход Оконные жалюзи (срезы)", "Прелаз ролетне (прореза)", "Transición de persianas (cortes)",
+							"Venster jaloezieën (schijven) overgang", "Transisi Jendela buta (irisan"],
+		"icon":		"Plugins/WindowBlinds/icon.png"
 	},
 	"fragment": {
 		"uniforms": [
@@ -38,13 +39,13 @@
 		],
 		"source":
 		{
-			"file": "Plugins/Window Blinds/WindowBlinds.frag"
+			"file": "Plugins/WindowBlinds/WindowBlinds.frag"
 		},
 		"gui": [
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Count", "Count", "Anzahl", "Count", "Count", "Count", "Број", "Cantidad"],
+				"label":			["Count", "Count", "Anzahl", "Compter", "Conta", "Счетчик", "Број", "Cantidad", "Aantal", "Menghitung"],
 				"label_min":	 ["10"],
 				"label_max": ["20"],
 				"default":		10.0,
@@ -54,10 +55,11 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 520, 200],
-				"label":			["Smoothness", "Smoothness", "Glätte", "Smoothness",
-										"Smoothness", "Smoothness", "Глаткоћа", "Suavidad"],
-				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
-				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"label":			["Smoothness", "Smoothness", "Glätte", "Douceur",
+										"Levigatezza", "Плавность", "Глаткоћа", "Suavidad",
+										"Zachtheid", "Kehalusan"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Минимум (0%)", "Mínimo (0%)", "Min (0%)", "Min (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Максимум (100%)", "Máximo (100%)", "Max (100%)", "Max (100%)"],
 				"default":		0.5,
 				"range":		[0.0, 1.0],
 				"uniform":		"smoothness",

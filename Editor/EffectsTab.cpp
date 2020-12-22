@@ -129,7 +129,8 @@ EffectsTab :: EffectsTab(BRect tab_frame)
 {
 	BScreen screen;
 
-	fEffectsWindow = new EffectsWindow(BRect(screen.Frame().right - 740, 64, screen.Frame().right, 64 + 700));
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+	fEffectsWindow = new EffectsWindow(BRect(screen.Frame().right - 740*kFontFactor, 64, screen.Frame().right, 64 + 700));
 	fMsgEffectsWindow = new BMessage(EffectsWindow::eMsgShowEffect);
 	fMsgEffectsWindow->AddPointer("EffectNode", nullptr);
 	fMsgEffectsWindow->AddPointer("MediaEffect", nullptr);
@@ -137,7 +138,7 @@ EffectsTab :: EffectsTab(BRect tab_frame)
 	fEffectsWindow->Hide();
 
 	assert(gEffectsManager == nullptr);
-	gEffectsManager = new EffectsManager(BRect(0, 0, be_plain_font->Size() > 16 ? 740 : 640, 700));
+	gEffectsManager = new EffectsManager(BRect(0, 0, 740*kFontFactor, 700));
 	
 	BRect bframe = Bounds();
 	fOutlineListView = new DraggerOutlineListView(BRect(bframe.left, bframe.top, bframe.right, bframe.bottom), "EffectsListView", this);
@@ -209,8 +210,8 @@ EffectsTab :: ~EffectsTab()
 */
 void EffectsTab :: FrameResized(float width, float height)
 {
-	float scale = be_plain_font->Size()/12.0f;
-	fOutlineListView->ResizeTo(width - scale*B_V_SCROLL_BAR_WIDTH - 4, height);
+	const float kScrollBarScale = be_plain_font->Size()/12.0f;
+	fOutlineListView->ResizeTo(width - kScrollBarScale*B_V_SCROLL_BAR_WIDTH - 4, height);
 	fScrollView->ResizeTo(width, height);
 }
 

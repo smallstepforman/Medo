@@ -144,6 +144,8 @@ public:
 Effect_Mask :: Effect_Mask(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	fRenderNode = nullptr;
 	fPathView = nullptr;
 	fPathViewAttachedToWindow = false;
@@ -190,7 +192,7 @@ Effect_Mask :: Effect_Mask(BRect frame, const char *filename)
 	fKeyframeRemoveButton->SetEnabled(false);
 	mEffectView->AddChild(fKeyframeRemoveButton);
 
-	fKeyframeSlider = new KeyframeSlider(BRect(20, 280, 600, 320));
+	fKeyframeSlider = new KeyframeSlider(BRect(20, 280, 600*kFontFactor, 320));
 	mEffectView->AddChild(fKeyframeSlider);
 	fCurrentKeyframe = 0;
 }

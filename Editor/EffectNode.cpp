@@ -113,7 +113,8 @@ EffectNode :: EffectNode(BRect frame, const char *view_name, const bool scroll_v
 		AddChild(fEffectDragDropButton);
 	}
 
-	mEffectViewIdealWidth = frame.Width();
+    const float kFontFactor = be_plain_font->Size()/20.0f;
+    mEffectViewIdealWidth = frame.Width()*kFontFactor;
 	mEffectViewIdealHeight = frame.Height();
 
 	mRenderObjectsInitialised = false;

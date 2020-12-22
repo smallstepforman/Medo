@@ -5,9 +5,11 @@
 		"type":		"special",
 		"name":	"Vignette",
 		"labelA":	["Vignette", "Vignette", "Vignette-Effekt", "Vignette",
-							"Vignette", "Vignette", "Вињета", "Viñeta"],
-		"labelB":	["Vignetting Effect", "Vignetting Effect", "Vignetting Effect", "Vignetting Effect",
-							"Vignetting Effect", "Vignetting Effect", "Ефекат вињете", "Efecto de viñeta"],
+							"Vignetta", "Виньетка", "Вињета", "Viñeta",
+							"Vignet", "Skema"],
+		"labelB":	["Vignetting Effect", "Vignetting Effect", "Vignetting Effect", "Effet de vignettage",
+							"Effetto Vignetta", "Эффект виньетки", "Ефекат вињете", "Efecto de viñeta",
+							"Vignet Effect", "Efek vinyet"],
 		"icon":		"Plugins/Vignette/icon.png"
 	},
 	"fragment": {
@@ -29,9 +31,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Intensity", "Intensity", "Intensivität", "Intensity", "Intensity", "Intensity", "Интензитет", "Intensidad"],
-				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
-				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"label":			["Intensity", "Intensity", "Intensivität", "Intensité", "Intesità", "Интенсивность", "Интензитет", "Intensidad", "Intensiteit", "Intesitas"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Минимум (0%)", "Mínimo (0%)", "Min (0%)", "Min (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Максимум (100%)", "Máximo (100%)", "Max (100%)", "Max (100%)"],
 				"default":		0.25,
 				"range":		[0.0, 2.0],
 				"uniform":		"uIntensity",

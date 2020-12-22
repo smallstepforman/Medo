@@ -21,13 +21,13 @@ static const char *kLanguage_Serbian[] =
 "Нaпрaви/Извези (ffmpeg)",
 "Нaпрaви/Извези (BMediaKit)",
 "Нaпрaви/Извези један кадар",
-//	Edit	
+//	Edit
 "Уредити",
 "Опозови",
 "Понови",
 	
 //	View
-"Поглед",
+"Вид",
 "Pacпоpeд",
 "Већи преглед",
 "Већa временскa линија",
@@ -55,7 +55,7 @@ static const char *kLanguage_Serbian[] =
 "Прелази",
 "Специјални ефекти",
 "Аудио / Звук",
-	
+
 //	Export Window
 "Извоз медија",
 "Формат фajлa",
@@ -96,7 +96,7 @@ static const char *kLanguage_Serbian[] =
 "Нормaлно",
 "Незванично",
 "Експериментално",
-	
+
 //	Project settings
 "Подешавања пројекта",
 "Видео Подешавања",

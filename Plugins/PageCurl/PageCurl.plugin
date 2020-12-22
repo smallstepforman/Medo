@@ -4,9 +4,12 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"transition",
 		"name":	"PageCurl",
-		"labelA":	["Page Curl", "Page Curl", "Page Curl", "Page Curl", "Page Curl", "Page Curl", "Окретање странице", "Cambio de página"],
-		"labelB":	["Page turn (curl) effect", "Page turn (curl) effect", "Page turn (curl) effect", "Page turn (curl) effect",
-							"Page turn (curl) effect", "Page turn (curl) effect", "Ефекат окретања странице (увијања)", "Efecto de cambio de página (curvatura)"],
+		"labelA":	["Page Curl", "Page Curl", "Page Curl", "Curl de page",
+							 "Arriccia Pagina", "Загиб страницы", "Окретање странице", "Cambio de página",
+							 "Pagina Krullen", "Halaman keriting"],
+		"labelB":	["Page turn (curl) effect", "Page turn (curl) effect", "Page turn (curl) effect", "Effet de rotation de page (curl)",
+							"Effetto Volta Pafina (Arriccia)", "Эффект поворота (загиба) страницы", "Ефекат окретања странице (увијања)", "Efecto de cambio de página (curvatura)",
+							"Pagina Draaien (curl) Effect", "Efek pembalikan halaman (keriting)"],
 		"icon":		"Plugins/PageCurl/icon_page_curl.png"
 	},
 	"fragment": {
@@ -44,7 +47,7 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 600, 100],
-				"label":			["Factor", "Factor", "Faktor", "Factor", "Factor", "Factor", "Фактор", "Factor"],
+				"label":			["Factor", "Factor", "Faktor", "Facteur", "Fattore", "Фактор", "Фактор", "Factor", "Factor", "Faktor"],
 				"label_min":	 ["0.0"],
 				"label_max": ["5.0"],
 				"default":		2.5,
@@ -54,7 +57,7 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 600, 200],
-				"label":			["Radius", "Radius", "Radius", "Radius", "Radius", "Radius", "Пречник", "Radio"],
+				"label":			["Radius", "Radius", "Radius", "Rayon", "Raggio", "Радиус", "Пречник", "Radio", "Radius", "Radius"],
 				"label_min":	 ["0.0"],
 				"label_max": ["1.0"],
 				"default":		0.2,

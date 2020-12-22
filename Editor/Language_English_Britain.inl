@@ -269,7 +269,7 @@ static const char *kLanguage_English_Britain[] =
 "Exposure",
 "Temperature",
 "Warmer (CCT 2K)",
-"CCT 20K) Cooler",
+"(CCT 20K) Cooler",
 "Tint",
 "Green",
 "Pink",

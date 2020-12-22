@@ -36,14 +36,16 @@ enum WIPE_LANGUAGE_TEXT
 };
 static const char *kWipeLanguages[][NUMBER_WIPE_LANGUAGE_TEXT] =
 {
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},		//	"English (Britian)",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},		//	"English (USA)",
-{"Wischen",		"Wischen",			"Übergang verwischen zwischen 2 Tracks","Links -> Rechtst",		"Rechts -> Links",		"Kreuz",			"Kreis"},		//	"Deutsch",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},		//	"Français",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},		//	"Italiano",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},		//	"Русский",
+{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},				//	"English (Britian)",
+{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},				//	"English (USA)",
+{"Wischen",		"Wischen",			"Übergang verwischen zwischen 2 Tracks","Links -> Rechtst",		"Rechts -> Links",		"Kreuz",			"Kreis"},				//	"Deutsch",
+{"Effacer",		"Effacer",			"Effacer la transition entre 2 pistes", "Gauche -> Droite",		"Droite -> Gauche",		"Croix",			"Cercle"},				//	"Français",
+{"Pulisci",		"Pulisci",			"Pulisci Transizione fra 2 tracce",		"Sinistra -> Destra",	"Destra -> Sinistra",	"Incrociare",		"Cerchio"},				//	"Italiano",
+{"Вытеснение",	"Вытеснение",		"Плавный переход между 2 треками",		"Слева -> направо",		"Справа -> налево",		"Пересечение",		"Круговое вытеснение"},	//	"Русский",
 {"Прелаз",		"Гладак прелаз",	"Гладак прелаз између 2 траке",			"Лево -> Десно",		"Десно -> Лево",		"Укрштени прелаз",	"Кружни прелаз"},		//	"Српски",
-{"Limpiar",		"Limpiar",			"Limpiar transiciones entre dos pistas","Izquierda -> Derecha",	"Derecha -> Izquierda",	"Cruz",				"Círculo"},		//	"Español",
+{"Limpiar",		"Limpiar",			"Limpiar transiciones entre dos pistas","Izquierda -> Derecha",	"Derecha -> Izquierda",	"Cruz",				"Círculo"},				//	"Español",
+{"Wissen",		"Wissen",			"Wis overgang tussen 2 tracks",			"Links -> Rechts",		"Rechts -> Links",		"Kruis",			"Cirkel",},				//	"Dutch",
+{"Menghapus",	"Menghapus",		"Hapus Transisi antara 2 trek",			"Kiri -> Kanan",		"Kanan -> Kiri",		"Menyeberang",		"Lingkaran"},			//	"Indonesian",
 };
 
 Effect_Wipe *instantiate_effect(BRect frame)

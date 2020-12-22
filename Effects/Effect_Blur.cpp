@@ -264,8 +264,10 @@ Effect_Blur :: Effect_Blur(BRect frame, const char *filename)
 {
 	fRenderNode = nullptr;
 
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	//	Algorithm
-	fMethodPopup = new BOptionPopUp(BRect(20, 20, 340, 60), "method", GetText(TXT_EFFECTS_IMAGE_BLUR_METHOD), new BMessage(kMsgBlurAlgorithm));
+	fMethodPopup = new BOptionPopUp(BRect(20*kFontFactor, 20, 340*kFontFactor, 60), "method", GetText(TXT_EFFECTS_IMAGE_BLUR_METHOD), new BMessage(kMsgBlurAlgorithm));
 	fMethodPopup->AddOption("Box Blur", BlurShader::BLUR_BOX);
 	fMethodPopup->AddOption("Blur 5", BlurShader::BLUR_SHADER_5);
 	fMethodPopup->AddOption("Blur 9", BlurShader::BLUR_SHADER_9);
@@ -274,11 +276,11 @@ Effect_Blur :: Effect_Blur(BRect frame, const char *filename)
 	mEffectView->AddChild(fMethodPopup);
 	fMethodPopup->SetValue(BlurShader::BLUR_GAUSSIAN);
 
-	fCheckboxInterpolate = new BCheckBox(BRect(20, 100, 200, 140), "interpolate", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgBlurInterpolate));
+	fCheckboxInterpolate = new BCheckBox(BRect(20*kFontFactor, 100, 200*kFontFactor, 140), "interpolate", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgBlurInterpolate));
 	fCheckboxInterpolate->SetValue(0);
 	mEffectView->AddChild(fCheckboxInterpolate);
 
-	fBlurSliders[0] = new ValueSlider(BRect(20, 160, 480, 200), "blur_slider_0", GetText(TXT_EFFECTS_IMAGE_BLUR_START), nullptr, 0, 200);
+	fBlurSliders[0] = new ValueSlider(BRect(20*kFontFactor, 160, 480*kFontFactor, 200), "blur_slider_0", GetText(TXT_EFFECTS_IMAGE_BLUR_START), nullptr, 0, 200);
 	fBlurSliders[0]->SetModificationMessage(new BMessage(kMsgBlurSlider0));
 	fBlurSliders[0]->SetValue(kDefaultBlur*10);
 	fBlurSliders[0]->SetHashMarks(B_HASH_MARKS_BOTTOM);
@@ -287,7 +289,7 @@ Effect_Blur :: Effect_Blur(BRect frame, const char *filename)
 	fBlurSliders[0]->UpdateTextValue(kDefaultBlur);
 	mEffectView->AddChild(fBlurSliders[0]);
 
-	fBlurSliders[1] = new ValueSlider(BRect(20, 220, 480, 260), "blur_slider_1", GetText(TXT_EFFECTS_IMAGE_BLUR_END), nullptr, 0, 200);
+	fBlurSliders[1] = new ValueSlider(BRect(20*kFontFactor, 220, 480*kFontFactor, 260), "blur_slider_1", GetText(TXT_EFFECTS_IMAGE_BLUR_END), nullptr, 0, 200);
 	fBlurSliders[1]->SetModificationMessage(new BMessage(kMsgBlurSlider1));
 	fBlurSliders[1]->SetValue(kDefaultBlur*10);
 	fBlurSliders[1]->SetHashMarks(B_HASH_MARKS_BOTTOM);

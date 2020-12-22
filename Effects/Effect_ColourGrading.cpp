@@ -286,7 +286,11 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 {
 	fRenderNode = nullptr;
 
-	fSliderSaturation = new ValueSlider(BRect(10, 10, 630, 80), "saturation_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_SATURATION), nullptr, 0, 200);
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+	const float kScrollBarScale = be_plain_font->Size()/12.0f;
+	const float kFrameRight = frame.right - 10 - kScrollBarScale*B_V_SCROLL_BAR_WIDTH;
+
+	fSliderSaturation = new ValueSlider(BRect(10, 10, kFrameRight, 80), "saturation_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_SATURATION), nullptr, 0, 200);
 	fSliderSaturation->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderSaturation->SetValue(kDefaultSaturation*100);
 	fSliderSaturation->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -300,7 +304,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderSaturation->UseFillColor(true);
 	mEffectView->AddChild(fSliderSaturation);
 
-	fSliderBrightness = new ValueSlider(BRect(10, 100, 630, 170), "brightness_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_BRIGHTNESS), nullptr, 0, 200);
+	fSliderBrightness = new ValueSlider(BRect(10, 100, kFrameRight, 170), "brightness_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_BRIGHTNESS), nullptr, 0, 200);
 	fSliderBrightness->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderBrightness->SetValue(kDefaultBrightness*100);
 	fSliderBrightness->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -314,7 +318,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderBrightness->UseFillColor(true);
 	mEffectView->AddChild(fSliderBrightness);
 
-	fSliderContrast = new ValueSlider(BRect(10, 190, 630, 260), "contrast_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_CONTRAST), nullptr, 0, 200);
+	fSliderContrast = new ValueSlider(BRect(10, 190, kFrameRight, 260), "contrast_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_CONTRAST), nullptr, 0, 200);
 	fSliderContrast->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderContrast->SetValue(kDefaultContrast*100);
 	fSliderContrast->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -328,7 +332,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderContrast->UseFillColor(true);
 	mEffectView->AddChild(fSliderContrast);
 
-	fSliderGamma = new ValueSlider(BRect(10, 280, 630, 350), "gamma_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_GAMMA), nullptr, 0, 200);
+	fSliderGamma = new ValueSlider(BRect(10, 280, kFrameRight, 350), "gamma_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_GAMMA), nullptr, 0, 200);
 	fSliderGamma->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderGamma->SetValue(kDefaultGamma*100);
 	fSliderGamma->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -342,7 +346,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderGamma->UseFillColor(true);
 	mEffectView->AddChild(fSliderGamma);
 
-	fSliderExposure = new ValueSlider(BRect(10, 370, 630, 440), "exposure_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_EXPOSURE), nullptr, -200, 200);
+	fSliderExposure = new ValueSlider(BRect(10, 370, kFrameRight, 440), "exposure_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_EXPOSURE), nullptr, -200, 200);
 	fSliderExposure->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderExposure->SetValue(kDefaultExposure*100);
 	fSliderExposure->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -356,7 +360,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderExposure->UseFillColor(true);
 	mEffectView->AddChild(fSliderExposure);
 
-	fSliderTemperature = new ValueSlider(BRect(10, 460, 630, 530), "temperature_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_TEMPERATURE), nullptr, 0, 200);
+	fSliderTemperature = new ValueSlider(BRect(10, 460, kFrameRight, 530), "temperature_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_TEMPERATURE), nullptr, 0, 200);
 	fSliderTemperature->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderTemperature->SetHashMarks(B_HASH_MARKS_BOTH);
 	fSliderTemperature->SetHashMarkCount(11);
@@ -370,7 +374,7 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderTemperature->UseFillColor(true);
 	mEffectView->AddChild(fSliderTemperature);
 
-	fSliderTint = new ValueSlider(BRect(10, 550, 630, 620), "tint_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_TINT), nullptr, 0, 200);
+	fSliderTint = new ValueSlider(BRect(10, 550, kFrameRight, 620), "tint_slider", GetText(TXT_EFFECTS_COLOUR_GRADING_TINT), nullptr, 0, 200);
 	fSliderTint->SetModificationMessage(new BMessage(kMsgValueChanged));
 	fSliderTint->SetValue(100);
 	fSliderTint->SetHashMarks(B_HASH_MARKS_BOTH);
@@ -384,10 +388,10 @@ Effect_ColourGrading :: Effect_ColourGrading(BRect frame, const char *filename)
 	fSliderTint->UseFillColor(true);
 	mEffectView->AddChild(fSliderTint);
 
-	fButtonReset = new BButton(BRect(430, 650, 630, 690), "button_reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
+	fButtonReset = new BButton(BRect(430*kFontFactor, 650, kFrameRight, 690), "button_reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
 	mEffectView->AddChild(fButtonReset);
 
-	SetViewIdealSize(740, 740);
+	SetViewIdealSize(frame.Width() + 40, 740);
 }
 
 /*	FUNCTION:		Effect_ColourGrading :: ~Effect_ColourGrading

@@ -4,8 +4,10 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"transition",
 		"name":	"Burn",
-		"labelA":	["Burn", "Burn", "Brennen", "Burn", "Burn", "Burn", "Сагоревање", "Quemadura"],
-		"labelB":	["Burn transition", "Burn transition", "Brennen Übergang", "Burn transition", "Burn transition", "Burn transition", "Прелаз ватре", "Transición de quemadura"],
+		"labelA":	["Burn", "Burn", "Brennen", "Brûler", "Bruciatura", "Выжигание", "Сагоревање", "Quemadura", "Brand", "Membakar"],
+		"labelB":	["Burn transition", "Burn transition", "Brennen Übergang", "Transition de brûlure",
+							"Transizione Bruciatura", "Переход выжигания", "Прелаз ватре", "Transición de quemadura",
+							"Brand Overgang", "Transisi pembakaran", ],
 		"icon":		"Plugins/Burn/icon_burn.png"
 	},
 	"fragment": {
@@ -35,9 +37,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Intensity", "Intensity", "Intensivität", "Intensity", "Intensity", "Intensity", "Интензитет", "Intensidad"],
-				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
-				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"label":			["Intensity", "Intensity", "Intensivität", "Intensité", "Intesità", "Интенсивность", "Интензитет", "Intensidad", "Intensiteit", "Intesitas"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Минимум (0%)", "Mínimo (0%)", "Min (0%)", "Min (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Максимум (100%)", "Máximo (100%)", "Max (100%)", "Max (100%)"],
 				"default":		0.47,
 				"range":		[0.0, 1.0],
 				"uniform":		"uIntensity",

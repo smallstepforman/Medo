@@ -4,9 +4,10 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"special",
 		"name":	"Fireworks",
-		"labelA":	["Fireworks", "Fireworks", "Feuerwerk", "Fireworks", "Fireworks", "Fireworks", "Ватромет", "Fuegos artificiales"],
-		"labelB":	["Fireworks Effect", "Fireworks Effect", "Feuerwerk-Effekt", "Fireworks Effect", 
-							"Fireworks Effect", "Fireworks Effect", "Ефекат ватромета", "Efecto de fuegos artificiales"],
+		"labelA":	["Fireworks", "Fireworks", "Feuerwerk", "Feux d'artifice", "Fuochi d'artificio", "Фейерверк", "Ватромет", "Fuegos artificiales", "Vuurwerk", "Kembang api"],
+		"labelB":	["Fireworks Effect", "Fireworks Effect", "Feuerwerk-Effekt", "Effet de feux d'artifice", 
+							"Effetto Fuochi d'artificio", "Эффект фейерверка", "Ефекат ватромета", "Efecto de fuegos artificiales",
+							"Vuurwerk Effect", "Efek Kembang Api"],
 		"icon":		"Plugins/Fireworks/icon.png"
 	},
 	"fragment": {
@@ -40,8 +41,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Number Explosions", "Number Explosions", "Anzahl der Herzen", "Number Explosions",
-										"Number Explosions", "Number Explosions", "Број експлозија", "Número de explosiones"],
+				"label":			["Number Explosions", "Number Explosions", "Anzahl der Herzen", "Nombre d'explosions",
+										"Numero Esplosioni", "Количество взрывов", "Број експлозија", "Número de explosiones",
+										"Aantal Explosies", "Ledakan Angka"],
 				"label_min":	 ["0"],
 				"label_max":	["10"],
 				"default":		8.0,
@@ -51,8 +53,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 520, 200],
-				"label":			["Number Particles", "Number Particles", "Anzahl Partikel", "Number Particles",
-										"Number Particles", "Number Particles", "Број честица", "Número de partículas"],
+				"label":			["Number Particles", "Number Particles", "Anzahl Partikel", "Nombre de particules",
+										"Numero Particelle", "Число частиц", "Број честица", "Número de partículas",
+										"Aantal Deeltjes", "Partikel Nomor"],
 				"label_min":	 ["0"],
 				"label_max":	["100"],
 				"default":		50.0,
@@ -62,8 +65,9 @@
 			{
 				"type":			"text",
 				"rect":			[20, 250, 520, 280],
-				"label":			["Caution: very slow", "Caution: very slow", "Achtung: sehr langsam", "Caution: very slow",
-										"Caution: very slow", "Caution: very slow", "Опрез: врло споро", "Advertencia: es muy lento"],
+				"label":			["Caution: very slow", "Caution: very slow", "Achtung: sehr langsam", "Attention: très lent",
+										"Attenzione: molto lento", "Осторожно: очень медленно", "Опрез: врло споро", "Advertencia: es muy lento",
+										"Waarschuwing: zeer langzaam", "Perhatian: sangat lambat"],
 				"font":			"be_plain_font"
 			}
 		]

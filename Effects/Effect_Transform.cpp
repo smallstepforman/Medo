@@ -83,9 +83,9 @@ static const SPINNER_LAYOUT kStartSpinnerLayouts[] =
 {BRect(230, 30, 410, 60),		"srot_x",		TXT_EFFECTS_COMMON_ROTATION,	" X",	-10000,		10000,	0.0f,	kMsgStartRotX},
 {BRect(230, 70, 410, 100),		"srot_y",		TXT_EFFECTS_COMMON_ROTATION,	" Y",	-10000,		10000,	0.0f,	kMsgStartRotY},
 {BRect(230, 110, 410, 140),		"srot_z",		TXT_EFFECTS_COMMON_ROTATION,	" Z",	-10000,		10000,	0.0f,	kMsgStartRotZ},
-{BRect(440, 30, 620, 60),		"sscale_x",		TXT_EFFECTS_COMMON_SCALE,		" X",		-10000,		10000,	1.0f,	kMsgStartScaleX},
-{BRect(440, 70, 620, 100),		"sscale_y",		TXT_EFFECTS_COMMON_SCALE,		" Y",		-10000,		10000,	1.0f,	kMsgStartScaleY},
-{BRect(440, 110, 620, 140),		"sscale_z",		TXT_EFFECTS_COMMON_SCALE,		" Z",		-10000,		10000,	1.0f,	kMsgStartScaleZ},
+{BRect(440, 30, 620, 60),		"sscale_x",		TXT_EFFECTS_COMMON_SCALE,		" X",	-10000,		10000,	1.0f,	kMsgStartScaleX},
+{BRect(440, 70, 620, 100),		"sscale_y",		TXT_EFFECTS_COMMON_SCALE,		" Y",	-10000,		10000,	1.0f,	kMsgStartScaleY},
+{BRect(440, 110, 620, 140),		"sscale_z",		TXT_EFFECTS_COMMON_SCALE,		" Z",	-10000,		10000,	1.0f,	kMsgStartScaleZ},
 };
 static const SPINNER_LAYOUT kEndSpinnerLayouts[] = 	
 {			
@@ -95,9 +95,9 @@ static const SPINNER_LAYOUT kEndSpinnerLayouts[] =
 {BRect(230, 30, 410, 60),		"erot_x",		TXT_EFFECTS_COMMON_ROTATION,	" X",	-10000,		10000,	0.0f,	kMsgEndRotX},
 {BRect(230, 70, 410, 100),		"erot_y",		TXT_EFFECTS_COMMON_ROTATION,	" Y",	-10000,		10000,	0.0f,	kMsgEndRotY},
 {BRect(230, 110, 410, 140),		"erot_z",		TXT_EFFECTS_COMMON_ROTATION,	" Z",	-10000,		10000,	0.0f,	kMsgEndRotZ},
-{BRect(440, 30, 620, 60),		"escale_x",		TXT_EFFECTS_COMMON_SCALE,		" X",		-10000,		10000,	1.0f,	kMsgEndScaleX},
-{BRect(440, 70, 620, 100),		"escale_y",		TXT_EFFECTS_COMMON_SCALE,		" Y",		-10000,		10000,	1.0f,	kMsgEndScaleY},
-{BRect(440, 110, 620, 140),		"escale_z",		TXT_EFFECTS_COMMON_SCALE,		" Z",		-10000,		10000,	1.0f,	kMsgEndScaleZ},
+{BRect(440, 30, 620, 60),		"escale_x",		TXT_EFFECTS_COMMON_SCALE,		" X",	-10000,		10000,	1.0f,	kMsgEndScaleX},
+{BRect(440, 70, 620, 100),		"escale_y",		TXT_EFFECTS_COMMON_SCALE,		" Y",	-10000,		10000,	1.0f,	kMsgEndScaleY},
+{BRect(440, 110, 620, 140),		"escale_z",		TXT_EFFECTS_COMMON_SCALE,		" Z",	-10000,		10000,	1.0f,	kMsgEndScaleZ},
 };
 static_assert(sizeof(kStartSpinnerLayouts)/sizeof(SPINNER_LAYOUT) == NUMBER_SPINNERS, "sizeof(kStartSpinnerLayouts) != NUMBER_SPINNERS");
 static_assert(sizeof(kEndSpinnerLayouts)/sizeof(SPINNER_LAYOUT) == NUMBER_SPINNERS, "sizeof(kEndSpinnerLayouts) != NUMBER_SPINNERS");
@@ -163,8 +163,10 @@ using namespace yrender;
 Effect_Transform :: Effect_Transform(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	//	Increment Popup
-	BOptionPopUp *increment_popup = new BOptionPopUp(BRect(440, 200, 680, 240), "increment", GetText(TXT_EFFECTS_COMMON_INCREMENT), new BMessage(kMsgIncrement));
+	BOptionPopUp *increment_popup = new BOptionPopUp(BRect(440*kFontFactor, 200, 680*kFontFactor, 240), "increment", GetText(TXT_EFFECTS_COMMON_INCREMENT), new BMessage(kMsgIncrement));
 	for (int i=0; i < sizeof(kIncrementPopupValues)/sizeof(float); i++)
 	{
 		char buffer[20];
@@ -176,14 +178,16 @@ Effect_Transform :: Effect_Transform(BRect frame, const char *filename)
 	mEffectView->AddChild(increment_popup);
 
 	//	Start transform
-	BBox *start_box = new BBox(BRect(10, 10, 640, 170), "box_start");
+	BBox *start_box = new BBox(BRect(10, 10, 680*kFontFactor, 170), "box_start");
 	start_box->SetLabel(GetText(TXT_EFFECTS_COMMON_START));
 	mEffectView->AddChild(start_box);
 	for (int i=0; i < sizeof(kStartSpinnerLayouts)/sizeof(SPINNER_LAYOUT); i++)
 	{
 		char buffer[32];
 		sprintf(buffer, "%s%s", GetText(kStartSpinnerLayouts[i].text), kStartSpinnerLayouts[i].label);
-		Spinner *spinner = new Spinner(kStartSpinnerLayouts[i].rect, kStartSpinnerLayouts[i].id, buffer,
+		BRect spinner_rect(kStartSpinnerLayouts[i].rect.left*kFontFactor, kStartSpinnerLayouts[i].rect.top,
+						kStartSpinnerLayouts[i].rect.right*kFontFactor, kStartSpinnerLayouts[i].rect.bottom);
+		Spinner *spinner = new Spinner(spinner_rect, kStartSpinnerLayouts[i].id, buffer,
 										new BMessage(kStartSpinnerLayouts[i].message));
 		spinner->SetRange(kStartSpinnerLayouts[i].min_value, kStartSpinnerLayouts[i].max_value);
 		spinner->SetValue(kStartSpinnerLayouts[i].default_value);
@@ -191,18 +195,20 @@ Effect_Transform :: Effect_Transform(BRect frame, const char *filename)
 		start_box->AddChild(spinner);
 	}
 	//	Interpolate
-	fCheckboxInterpolate = new BCheckBox(BRect(10, 250, 400, 290), "interpolate", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgInterpolate));
+	fCheckboxInterpolate = new BCheckBox(BRect(10, 250, 400*kFontFactor, 290), "interpolate", GetText(TXT_EFFECTS_COMMON_INTERPOLATE), new BMessage(kMsgInterpolate));
 	mEffectView->AddChild(fCheckboxInterpolate);
 
 	//	End transform
-	BBox *end_box = new BBox(BRect(10, 300, 640, 460), "box_end");
+	BBox *end_box = new BBox(BRect(10, 300, 680*kFontFactor, 460), "box_end");
 	end_box->SetLabel(GetText(TXT_EFFECTS_COMMON_END));
 	mEffectView->AddChild(end_box);
 	for (int i=0; i < sizeof(kEndSpinnerLayouts)/sizeof(SPINNER_LAYOUT); i++)
 	{
 		char buffer[32];
 		sprintf(buffer, "%s%s", GetText(kEndSpinnerLayouts[i].text), kEndSpinnerLayouts[i].label);
-		Spinner *spinner = new Spinner(kEndSpinnerLayouts[i].rect, kEndSpinnerLayouts[i].id, buffer,
+		BRect spinner_rect(kEndSpinnerLayouts[i].rect.left*kFontFactor, kEndSpinnerLayouts[i].rect.top,
+						kEndSpinnerLayouts[i].rect.right*kFontFactor, kEndSpinnerLayouts[i].rect.bottom);
+		Spinner *spinner = new Spinner(spinner_rect, kEndSpinnerLayouts[i].id, buffer,
 										new BMessage(kEndSpinnerLayouts[i].message));
 		spinner->SetRange(kEndSpinnerLayouts[i].min_value, kEndSpinnerLayouts[i].max_value);
 		spinner->SetValue(kEndSpinnerLayouts[i].default_value);
@@ -212,7 +218,7 @@ Effect_Transform :: Effect_Transform(BRect frame, const char *filename)
 	}
 	
 	//	Interpolation type
-	BOptionPopUp *interpolation = new BOptionPopUp(BRect(10, 480, 400, 540), "interpolation_type", GetText(TXT_EFFECTS_COMMON_INTERPOLATION_TYPE), new BMessage(kMsgInterpolationType));
+	BOptionPopUp *interpolation = new BOptionPopUp(BRect(10, 480, 400*kFontFactor, 540), "interpolation_type", GetText(TXT_EFFECTS_COMMON_INTERPOLATION_TYPE), new BMessage(kMsgInterpolationType));
 	for (int i=0; i < sizeof(kInterpolationType)/sizeof(INTERPOLATION_TYPE); i++)
 	{
 		interpolation->AddOption(GetText(kInterpolationType[i].translated_text), i);

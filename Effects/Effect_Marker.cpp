@@ -259,14 +259,16 @@ public:
 Effect_Marker :: Effect_Marker(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	fRenderNode = nullptr;
 
 	//	Colour
-	BStringView *title = new BStringView(BRect(110, 20, 300, 50), nullptr, GetText(TXT_EFFECTS_COMMON_COLOUR));
+	BStringView *title = new BStringView(BRect(110*kFontFactor, 20, 300*kFontFactor, 50), nullptr, GetText(TXT_EFFECTS_COMMON_COLOUR));
 	title->SetHighColor(ui_color(B_PANEL_TEXT_COLOR));
 	title->SetFont(be_bold_font);
 	mEffectView->AddChild(title);
-	fGuiSampleColour = new BView(BRect(10, 30, 100, 50), nullptr, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0);
+	fGuiSampleColour = new BView(BRect(10*kFontFactor, 30, 100*kFontFactor, 50), nullptr, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0);
 	fGuiSampleColour->SetViewColor(255, 255, 0);
 	mEffectView->AddChild(fGuiSampleColour);
 	fGuiColourControl = new AlphaColourControl(BPoint(10, 70), "BackgroundColourControl0", new BMessage(kMsgMarkerColour));
@@ -276,7 +278,9 @@ Effect_Marker :: Effect_Marker(BRect frame, const char *filename)
 	//	Position(s)
 	for (int i=0; i < 4; i++)
 	{
-		fGuiPositionSpinners[i] = new Spinner(kSpinnerLayouts[i].rect, kSpinnerLayouts[i].id, GetText(kSpinnerLayouts[i].text), new BMessage(kSpinnerLayouts[i].message));
+		BRect spinner_rect(kSpinnerLayouts[i].rect.left*kFontFactor, kSpinnerLayouts[i].rect.top,
+						   kSpinnerLayouts[i].rect.right*kFontFactor, kSpinnerLayouts[i].rect.bottom);
+		fGuiPositionSpinners[i] = new Spinner(spinner_rect, kSpinnerLayouts[i].id, GetText(kSpinnerLayouts[i].text), new BMessage(kSpinnerLayouts[i].message));
 		fGuiPositionSpinners[i]->SetRange(kSpinnerLayouts[i].min_value, kSpinnerLayouts[i].max_value);
 		fGuiPositionSpinners[i]->SetValue(kSpinnerLayouts[i].default_value);
 		fGuiPositionSpinners[i]->SetSteps(0.001f);
@@ -284,7 +288,7 @@ Effect_Marker :: Effect_Marker(BRect frame, const char *filename)
 	}
 
 	//	Width
-	fGuiSliderWidth = new ValueSlider(BRect(20, 240, 640, 320), "width_slider", GetText(TXT_EFFECTS_TEXT_MARKER_WIDTH), nullptr, 0, 1000);
+	fGuiSliderWidth = new ValueSlider(BRect(20*kFontFactor, 240, 640*kFontFactor, 320), "width_slider", GetText(TXT_EFFECTS_TEXT_MARKER_WIDTH), nullptr, 0, 1000);
 	fGuiSliderWidth->SetModificationMessage(new BMessage(kMsgMarkerWidth));
 	fGuiSliderWidth->SetValue(kDefaultWidth*kWidthSliderFactor);
 	fGuiSliderWidth->SetHashMarks(B_HASH_MARKS_BOTTOM);
@@ -295,40 +299,40 @@ Effect_Marker :: Effect_Marker(BRect frame, const char *filename)
 	mEffectView->AddChild(fGuiSliderWidth);
 
 	//	Interpolate
-	BBox *interpolate_box = new BBox(BRect(10, 340, 280, 510), "box_interpolate");
+	BBox *interpolate_box = new BBox(BRect(10*kFontFactor, 340, 280*kFontFactor, 510), "box_interpolate");
 	interpolate_box->SetLabel(GetText(TXT_EFFECTS_COMMON_INTERPOLATE));
 	mEffectView->AddChild(interpolate_box);
 
-	fGuiCheckboxInterpolate = new BCheckBox(BRect(10, 30, 260, 60), "interpolate", GetText(TXT_EFFECTS_TEXT_MARKER_USE_INTERPOLATION), new BMessage(kMsgMarkerInterpolate));
+	fGuiCheckboxInterpolate = new BCheckBox(BRect(10*kFontFactor, 30, 260*kFontFactor, 60), "interpolate", GetText(TXT_EFFECTS_TEXT_MARKER_USE_INTERPOLATION), new BMessage(kMsgMarkerInterpolate));
 	interpolate_box->AddChild(fGuiCheckboxInterpolate);
 
 	//	Delay sliders
-	fGuiSlidersDelay[0] = new BChannelSlider(BRect(10, 70, 260, 110), "delay_start", GetText(TXT_EFFECTS_COMMON_START), new BMessage(kMsgMarkerDelayStart));
+	fGuiSlidersDelay[0] = new BChannelSlider(BRect(10*kFontFactor, 70, 260*kFontFactor, 110), "delay_start", GetText(TXT_EFFECTS_COMMON_START), new BMessage(kMsgMarkerDelayStart));
 	fGuiSlidersDelay[0]->SetValue(25);
 	fGuiSlidersDelay[0]->SetEnabled(false);
 	interpolate_box->AddChild(fGuiSlidersDelay[0]);
-	fGuiSlidersDelay[1] = new BChannelSlider(BRect(10, 120, 260, 160), "delay_end", GetText(TXT_EFFECTS_COMMON_END), new BMessage(kMsgMarkerDelayEnd));
+	fGuiSlidersDelay[1] = new BChannelSlider(BRect(10*kFontFactor, 120, 260*kFontFactor, 160), "delay_end", GetText(TXT_EFFECTS_COMMON_END), new BMessage(kMsgMarkerDelayEnd));
 	fGuiSlidersDelay[1]->SetValue(75);
 	fGuiSlidersDelay[1]->SetEnabled(false);
 	interpolate_box->AddChild(fGuiSlidersDelay[1]);
 
 	//	Background
-	BBox *background_box = new BBox(BRect(300, 340, 740, 620), "box_background");
+	BBox *background_box = new BBox(BRect(300*kFontFactor, 340, 800*kFontFactor, 620), "box_background");
 	background_box->SetLabel(GetText(TXT_EFFECTS_TEXT_SIMPLE_BACKGROUND));
 	mEffectView->AddChild(background_box);
 
-	fGuiCheckboxBackground = new BCheckBox(BRect(10, 30, 200, 60), "background", GetText(TXT_EFFECTS_TEXT_MARKER_ENABLE_BACKGROUND), new BMessage(kMsgMarkerBackground));
+	fGuiCheckboxBackground = new BCheckBox(BRect(10*kFontFactor, 30, 200*kFontFactor, 60), "background", GetText(TXT_EFFECTS_TEXT_MARKER_ENABLE_BACKGROUND), new BMessage(kMsgMarkerBackground));
 	background_box->AddChild(fGuiCheckboxBackground);
 
-	fGuiColourMaskColour = new BColorControl(BPoint(10, 60), B_CELLS_32x8, 6.0f, "mask_colour", new BMessage(kMsgMarkerMaskColour), true);
+	fGuiColourMaskColour = new BColorControl(BPoint(10*kFontFactor, 60), B_CELLS_32x8, 6.0f, "mask_colour", new BMessage(kMsgMarkerMaskColour), true);
 	background_box->AddChild(fGuiColourMaskColour);
 
-	fGuiOptionMaskType = new BOptionPopUp(BRect(10, 150, 300, 190), "mask_type", GetText(TXT_EFFECTS_TEXT_MARKER_MASK), new BMessage(kMsgMarkerMaskType));
+	fGuiOptionMaskType = new BOptionPopUp(BRect(10*kFontFactor, 150, 300*kFontFactor, 190), "mask_type", GetText(TXT_EFFECTS_TEXT_MARKER_MASK), new BMessage(kMsgMarkerMaskType));
 	fGuiOptionMaskType->AddOption(GetText(TXT_EFFECTS_TEXT_MARKER_MASK_BACKGROUND), 0);
 	fGuiOptionMaskType->AddOption(GetText(TXT_EFFECTS_TEXT_MARKER_MASK_TEXT), 1);
 	background_box->AddChild(fGuiOptionMaskType);
 
-	fGuiSliderMaskFilter = new ValueSlider(BRect(10, 190, 430, 230), "mask_filter", GetText(TXT_EFFECTS_TEXT_MARKER_FILTER), nullptr, 0, 2000);
+	fGuiSliderMaskFilter = new ValueSlider(BRect(10*kFontFactor, 190, 430*kFontFactor, 230), "mask_filter", GetText(TXT_EFFECTS_TEXT_MARKER_FILTER), nullptr, 0, 2000);
 	fGuiSliderMaskFilter->SetModificationMessage(new BMessage(kMsgMarkerMaskFilter));
 	fGuiSliderMaskFilter->SetValue(500);
 	fGuiSliderMaskFilter->SetHashMarks(B_HASH_MARKS_BOTTOM);
@@ -344,7 +348,7 @@ Effect_Marker :: Effect_Marker(BRect frame, const char *filename)
 	fPreviousWidth = 0.0f;
 	fMouseTrackingIndex = -1;
 
-	SetViewIdealSize(780, 740);
+	SetViewIdealSize(840*kFontFactor, 740);
 }
 
 /*	FUNCTION:		Effect_Marker :: ~Effect_Marker

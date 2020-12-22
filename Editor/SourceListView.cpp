@@ -60,6 +60,8 @@ SourceListItem :: ~SourceListItem()
 */
 void SourceListItem :: CreateBitmap(MediaSource *media_source)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	//	Has video?
 	if ((media_source->GetMediaType() == MediaSource::MEDIA_VIDEO) || (media_source->GetMediaType() == MediaSource::MEDIA_VIDEO_AND_AUDIO))
 	{
@@ -87,7 +89,7 @@ void SourceListItem :: CreateBitmap(MediaSource *media_source)
 				intensity += 0.3f*((colour>>16)&0xff) + 0.59f*((colour>>8)&0xff) + 0.11f*(colour&0xff);
 			}
 			if (intensity / h > 256.0f*0.2f)
-				fBitmap = CreateThumbnail(frame, ceilf(kThumbnailWidth), kThumbnailHeight);
+				fBitmap = CreateThumbnail(frame, ceilf(kThumbnailWidth*kFontFactor), kThumbnailHeight*kFontFactor);
 			else
 			{
 				frame_idx += kFramesSecond;
@@ -98,7 +100,7 @@ void SourceListItem :: CreateBitmap(MediaSource *media_source)
 	}
 
 	if (!fBitmap)
-		fBitmap = CreateThumbnail(media_source->GetBitmap(), ceilf(kThumbnailWidth), kThumbnailHeight);
+		fBitmap = CreateThumbnail(media_source->GetBitmap(), ceilf(kThumbnailWidth*kFontFactor), kThumbnailHeight*kFontFactor);
 }
 
 /*	FUNCTION:		SourceListItem :: Update
@@ -109,12 +111,14 @@ void SourceListItem :: CreateBitmap(MediaSource *media_source)
 */
 void SourceListItem :: Update(BView *parent, const BFont *font)
 {
-	SetWidth(kThumbnailWidth + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fMediaSource->GetFilename()));
-	SetHeight(kThumbnailHeight + 2*be_control_look->DefaultLabelSpacing());
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
+	SetWidth(kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fMediaSource->GetFilename()));
+	SetHeight(kThumbnailHeight*kFontFactor + 2*be_control_look->DefaultLabelSpacing());
 	
 	font_height h;
 	font->GetHeight(&h);
-	fBaselineOffset = 0.5f*kThumbnailHeight;
+	fBaselineOffset = 0.5f*kThumbnailHeight*kFontFactor;
 }
 
 /*	FUNCTION:		SourceListItem :: DrawItem
@@ -126,6 +130,8 @@ void SourceListItem :: Update(BView *parent, const BFont *font)
 */
 void SourceListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 {
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+
 	rgb_color lowColor = parent->LowColor();
 	erase_bg = true;
 	
@@ -145,7 +151,7 @@ void SourceListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 	
 	const float offset = be_control_look->DefaultLabelSpacing();
 	parent->MovePenTo(offset, offset);
-	BRect thumb_rect(frame.left + offset, frame.top + offset, frame.left + kThumbnailWidth + offset, frame.top + kThumbnailHeight + offset);
+	BRect thumb_rect(frame.left + offset, frame.top + offset, frame.left + kThumbnailWidth*kFontFactor + offset, frame.top + kThumbnailHeight*kFontFactor + offset);
 
 	if (fMediaSource->GetMediaType() != MediaSource::MEDIA_AUDIO)
 	{
@@ -175,11 +181,11 @@ void SourceListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 	BString line1(aString.RemoveChars(0, trunc));
 	aString.SetTo(fMediaSource->GetFilename());
 	BString line2(aString.Truncate(trunc));
-	parent->MovePenTo(kThumbnailWidth + frame.left + 3*offset, frame.top + fBaselineOffset);
-	be_plain_font->TruncateString(&line1, B_TRUNCATE_MIDDLE, frame.Width() - (kThumbnailWidth + 3*be_control_look->DefaultLabelSpacing()));
+	parent->MovePenTo(kThumbnailWidth*kFontFactor + frame.left + 3*offset, frame.top + fBaselineOffset);
+	be_plain_font->TruncateString(&line1, B_TRUNCATE_MIDDLE, frame.Width() - (kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing()));
 	parent->DrawString(line1);
-	parent->MovePenTo(kThumbnailWidth + frame.left + 3*offset, frame.top + fBaselineOffset + fh.ascent + fh.descent);
-	be_plain_font->TruncateString(&line2, B_TRUNCATE_BEGINNING, frame.Width() - (kThumbnailWidth + 3*be_control_look->DefaultLabelSpacing()));
+	parent->MovePenTo(kThumbnailWidth*kFontFactor + frame.left + 3*offset, frame.top + fBaselineOffset + fh.ascent + fh.descent);
+	be_plain_font->TruncateString(&line2, B_TRUNCATE_BEGINNING, frame.Width() - (kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing()));
 	parent->DrawString(line2);
 
 	parent->SetLowColor(lowColor);
@@ -343,7 +349,8 @@ bool SourceListView :: InitiateDrag(BPoint point, int32 index, bool wasSelected)
 	fMsgDragDrop->AddPointer("source", media_source);
 	fMsgDragDrop->AddInt64("xoffset", 0);
 
-	DragMessage(fMsgDragDrop, new BBitmap(item->GetBitmap()), BPoint(0.25f*kThumbnailWidth, 0.25f*kThumbnailHeight));
+	const float kFontFactor = be_plain_font->Size()/20.0f;
+	DragMessage(fMsgDragDrop, new BBitmap(item->GetBitmap()), BPoint(0.25f*kThumbnailWidth*kFontFactor, 0.25f*kThumbnailHeight*kFontFactor));
 	return true;
 }
 

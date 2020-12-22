@@ -4,9 +4,10 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"image",
 		"name":	"Chroma Key",
-		"labelA":	["Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Прозирна боја", "Clave de croma"],
-		"labelB":	["Make a colour transparent", "Make a color transparent", "Eine Farbe tansparent machen", "Make a colour transparent",
-							"Make a colour transparent", "Make a colour transparent", "Изаберите прозирну боју", "Hacer transparente a un color"],
+		"labelA":	["Chroma Key", "Chroma Key", "Chroma Key", "Clé Chroma", "Chiave Cromatica", "Хромакей", "Прозирна боја", "Clave de croma", "Chroma Sleutel", "Kunci Chroma"],
+		"labelB":	["Make a colour transparent", "Make a color transparent", "Eine Farbe tansparent machen", "Rendre une couleur transparente",
+							"Rendi Trasparente un Colore", "Сделать цвет прозрачным", "Изаберите прозирну боју", "Hacer transparente a un color",
+							"Maak een kleur transparant", "Jadikan warna transparan"],
 		"icon":		"Plugins/ChromaKey/icon.png"
 	},
 	"fragment": {
@@ -36,7 +37,7 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 620, 100],
-				"label":			["Threshold", "Threshold", "Schwelle", "Threshold", "Threshold", "Threshold", "Праг", "Umbral"],
+				"label":			["Threshold", "Threshold", "Schwelle", "Seuil", "Soglia", "Предел", "Праг", "Umbral", "Verscherpen", "Ambang"],
 				"label_min": ["0"],
 				"label_max":	["100"],
 				"default":		0.05,
@@ -46,7 +47,7 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 620, 200],
-				"label":			["Smoothing", "Smoothing", "Glätten", "Smoothing", "Smoothing", "Smoothing", "Заглађивање", "Suavizado"],
+				"label":			["Smoothing", "Smoothing", "Glätten", "Lissage", "Levigatura", "Сглаживание", "Заглађивање", "Suavizado", "Verzachten", "Menghaluskan"],
 				"label_min":	 ["0.0"],
 				"label_max": ["1.0"],
 				"default":		0.2,
@@ -56,7 +57,7 @@
 			{
 				"type":			"colour",
 				"rect":			[20, 240, 620, 480],
-				"label":			["Chroma Colour", "Chroma Color", "Chroma Farbe", "Chroma Colour", "Chroma Colour", "Chroma Colour", "Прозирна Боја", "Color"],
+				"label":			["Chroma Colour", "Chroma Color", "Chroma Farbe", "Couleur Chroma", "Colore Chroma", "Хромa Цвет", "Прозирна Боја", "Kleur", "Chroma Colour", "Warna"],
 				"default":		[0.0, 1.0, 0.0, 1.0],
 				"uniform":		"uChromaColour",
 			}

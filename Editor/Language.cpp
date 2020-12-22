@@ -11,35 +11,28 @@
 #include "Language.h"
 #include "Language_English_Britain.inl"
 #include "Language_English_USA.inl"
-#include "Language_German.inl"
+#include "Language_Dutch.inl"
 #include "Language_French.inl"
+#include "Language_German.inl"
+#include "Language_Indonesia.inl"
 #include "Language_Italian.inl"
 #include "Language_Russian.inl"
 #include "Language_Serbian.inl"
 #include "Language_Spanish.inl"
 
-static const std::vector<const char *> kAvailableLanguages =
-{
-	"English (Britian)",
-	"English (USA)",
-	"Deutsch",
-	"Français",
-	"Italiano",
-	"Русский",
-	"Српски",
-	"Español",
-};
-
 static_assert(sizeof(kLanguage_English_Britain)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
 static_assert(sizeof(kLanguage_English_USA)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
+static_assert(sizeof(kLanguage_Dutch)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
+static_assert(sizeof(kLanguage_French)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
 static_assert(sizeof(kLanguage_German)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
-//static_assert(sizeof(kLanguage_French)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
-//static_assert(sizeof(kLanguage_Italian)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
-//static_assert(sizeof(kLanguage_Russian)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
+static_assert(sizeof(kLanguage_Indonesia)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
+static_assert(sizeof(kLanguage_Italian)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
+static_assert(sizeof(kLanguage_Russian)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
 static_assert(sizeof(kLanguage_Serbian)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
 static_assert(sizeof(kLanguage_Spanish)/sizeof(char *) == NUMBER_TXT_DEFINITIONS);
 
 
+//	WARNING: Plugins/Addons depend on this order
 static const char **kLanguages[] = 
 {
 	kLanguage_English_Britain,
@@ -50,6 +43,21 @@ static const char **kLanguages[] =
 	kLanguage_Russian,
 	kLanguage_Serbian,
 	kLanguage_Spanish,
+	kLanguage_Dutch,
+	kLanguage_Indonesia,
+};
+static const std::vector<const char *> kAvailableLanguages =
+{
+	"English (Britian)",
+	"English (USA)",
+	"Deutsch",
+	"Français",
+	"Italiano",
+	"Русский",
+	"Српски",
+	"Español",
+	"Nederlands",
+	"Indonesische",
 };
 
 static int sLanguageIndex = 0;

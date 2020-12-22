@@ -36,14 +36,16 @@ enum FADE_LANGUAGE_TEXT
 };
 static const char *kFadeLanguages[][NUMBER_FADE_LANGUAGE_TEXT] =
 {
-{"Fade",		"Fade (Black/Alpha)",				"Fade to Black / Fade Transparency",		"Fade From Black",		"Fade To Black",		"Alpha In (A -> 1)",			"Alpha Out (A -> 0)"},			//	"English (Britian)",
-{"Fade",		"Fade (Black/Alpha)",				"Fade to Black / Fade Transparency",		"Fade From Black",		"Fade To Black",		"Alpha In (A -> 1)",			"Alpha Out (A -> 0)"},			//	"English (USA)",
-{"Verblassen", "Verblassen (Schwarz/Alpha)",		"Richtung Schwarz verblassen / In Transparenz ändern",		"Aus Schwarz aufhellen",		"Nach Schwarz verblassen",		"Alpha Rein (A -> 1)",			"Alpha Raus (A -> 0)"},			//	"Deutsch",
-{"Fade",		"Fade (Black/Alpha)",				"Fade to Black / Fade Transparency",		"Fade From Black",		"Fade To Black",		"Alpha In (A -> 1)",			"Alpha Out (A -> 0)"},			//	"Français",
-{"Fade",		"Fade (Black/Alpha)",				"Fade to Black / Fade Transparency",		"Fade From Black",		"Fade To Black",		"Alpha In (A -> 1)",			"Alpha Out (A -> 0)"},			//	"Italiano",
-{"Fade",		"Fade (Black/Alpha)",				"Fade to Black / Fade Transparency",		"Fade From Black",		"Fade To Black",		"Alpha In (A -> 1)",			"Alpha Out (A -> 0)"},			//	"Русский",
-{"Избледи",		"Избледи (црно / провиднo)",		"Избледи (црна или провидна боја)",			"Избледи од црне боје",	"Поцрни дo црне боје",	"Смањи провидност (A -> 1)",	"Повећај провидност (A -> 0)"},	//	"Српски",
-{"Desvanecimiento",	"Desvanecimiento (negro/alfa))",	"Desvanecer a negro / desvanecer a transparente",	"Desvanecer desde negro",		"Desvanecer a negro",		"Alfa al inicio (A -> 1)",			"Alfa al final (A -> 0"},					//	"Español",
+{"Fade",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alpha In (A -> 1)",		"Alpha Out (A -> 0)"},			//	"English (Britian)",
+{"Fade",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alpha In (A -> 1)",		"Alpha Out (A -> 0)"},			//	"English (USA)",
+{"Verblassen",		"Verblassen (Schwarz/Alpha)",	"Richtung Schwarz verblassen / In Transparenz ändern","Aus Schwarz aufhellen",	"Nach Schwarz verblassen",	"Alpha Rein (A -> 1)",		"Alpha Raus (A -> 0)"},			//	"Deutsch",
+{"Fondu",			"Fondu (Noir / Alpha)",			"Fondu au noir / Transparence fondu",				"Fondu à partir du noir",	"Fondu au noir",			"Entrée alpha (A -> 1)",	 "Sortie alpha (A -> 0) "},		//	"Français",
+{"Dissolvenza",		"Dissolvenza (Nero/Alfa)",		"Dissolvenza a Nero / Trasparenza Dissolvenza",		"Dissolvenza Da Nero",		"Dissolvenza A Nero",		"Alfa In (A -> 1)",			"Alfa Usc (A -> 0)"},			//	"Italiano",
+{"Затемнение",		"Затемнение (Черный/Альфа)",	"Затемнение в черный/Затемнение прозрачности",		"Выведение из черного",		"Затемнение в черный",		"Альфа-вход (A -> 1)",		"Альфа-выход (A -> 0)",},		//	"Русский",
+{"Избледи",			"Избледи (црно / провиднo)",	"Избледи (црна или провидна боја)",					"Избледи од црне боје",		"Поцрни дo црне боје",		"Смањи провидност (A -> 1)","Повећај провидност (A -> 0)"},	//	"Српски",
+{"Desvanecimiento",	"Desvanecimiento (negro/alfa))","Desvanecer a negro / desvanecer a transparente",	"Desvanecer desde negro",	"Desvanecer a negro",		"Alfa al inicio (A -> 1)",	"Alfa al final (A -> 0"},		//	"Español",
+{"Vervagen",		"Vervaag (Black/Alpha)",		"Vervaag Naar Zwart / Vervaag Transparantie",		"Vervaag Van Zwart",		"Vervaag Naar Zwart",		"Alpha In (A -> 1)",		"Alpha Uit (A -> 0)"},			//	"Dutch"
+{"Luntur",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alfa Masuk (A -> 1)",		"Alfa Keluar (A -> 0)"},		//	"Indonesia"
 };
 
 Effect_Fade *instantiate_effect(BRect frame)
