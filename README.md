@@ -32,22 +32,29 @@ Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised f
 
 # Build Scripts
 1. Clean all object files, remove temporary build directories 
+
 ./clean_all
 
 2. Build the source (either with jam or cmake)
 
-a) jam build (default primary build method)
+a) jam build (default primary build method), debug build (-g -O0)
+
 jam -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
+
 ./build_addons
 
-b) cmake + make (optional secondary build method)
+b) cmake + make (optional secondary build method), debug build (-g -O0)
+
 cmake CMakeLists.txt
+
 make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 
 3. Setup attributes, file icon
+
 ./setup_attributes
 
-4. Build HPKG (release), which will build an installer package
+4. Build HPKG (release), which will build an installer package, (no debug code, -03)
+
 ./create_package
 
 # Soure code layout
@@ -76,7 +83,9 @@ Yarra/      - OpenGL based rendering library
 # Software Architecture
 The BeAPI is based on C++ pre-ISO/IEC 14882:1998 standard (published in 1998, ie. pre Standard Template Library).  The API uses the Actor programming model (it's interesting that nowhere in the BeBook do they mention the term Actor, so it's quite likely that they independantly implemented the Actor model).  Each BWindow object runs in its own thread with a dedicated message queue.  Medo also incorporates a proper Actor library for parallel processing (eg. thumbnail generation, OpenGL rendering, audio buffer creation, exporting etc).  
 
-Medo is a 64 bit application, compiled with C++20 gcc compile flag (c++2a). Medo uses OpenGL 3.3 Core profile, with GLSL 1.5 for video effects rendering. An OpenGL wrapper called Yarra is used to abstract the raw OpenGL calls.
+Medo is a 64 bit application, compiled with C++20 gcc compile flag (c++2a).
+Medo uses OpenGL 3.3 Core profile, with GLSL 330 for video effects rendering.
+An OpenGL wrapper called Yarra is used to abstract the raw OpenGL calls.
 
 Users can implement custom GLSL shader effects by creating their own plugins.  Effects from websites like ShaderToy can easily be converted to work with Medo (please use the developer guide in the Docs/ directory for more information).  Please look at the Plugins/ directory for some simple examples.
 
