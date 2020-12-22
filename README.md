@@ -18,9 +18,11 @@ There are many bundled media effects, including:
 - Several bundled transitions
 - Several special effects (Blur, Night Vision, Chroma Key etc)
 - Spatial tools to transform media (scale/rotate/position/crop)
+- Multiple text effects, including 3D extruded fonts.
 - Audio effects (20 band equaliser, fade)
 
-Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised for many CPU-core systems, and has low system resource requirements (the Medo.HPKG (Haiku package file) can  fit on a floppy disk with no external dependancies other than what ships with a default Haiku release).
+Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised for many CPU-core systems, and has low system resource requirements. Medo is multilingual (currently supports 10 user languages), and is themable.  The Medo.HPKG (Haiku package file) can  fit on a floppy disk with no external dependancies other than what ships with a default Haiku release (it's less than 1.44Mb).
+
 
 ![Alt text](/Docs/Medo.jpeg?raw=true "Medo Screenshot")
 
