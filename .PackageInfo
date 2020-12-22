@@ -1,0 +1,23 @@
+name				"Medo"
+version			R1.0.0~Beta1-1
+architecture		x86_64
+summary			"A Media Editor exclusively built for Haiku"
+description		"A modern video editor with customisable OpenGL GLSL plugin based effects.
+There are many bundled media effects, including:
+- Colour grading effects (Saturation/Exposure/Temperature etc)
+- Colour correction curves and white balance.
+- Support for Adobe LUT (Look Up Tables)
+- Create masks and keyframes
+- Several bundled transitions
+- Several special effects (Blur, Night Vision, Chroma Key etc)
+- Spatial tools to transform media (scale/rotate/position/crop)
+- Audio effects (20 band equaliser, fade)
+
+An SDK allows 3rd party developers to create Addons and Plugins"
+
+packager			"Zenja Solaja <solaja.@gmail.com>"
+vendor			"Zen Yes Pty Ltd"
+copyrights			{"Zen Yes Pty Ltd 2019-2021"}
+licenses			{MIT}
+provides			{Medo = R1.0.0~Beta1-1}
+urls				{"https://github.com/smallstepforman/Medo/blob/main/README.md"}

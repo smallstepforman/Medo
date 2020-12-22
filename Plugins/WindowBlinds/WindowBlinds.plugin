@@ -1,0 +1,67 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"Blinds",
+		"labelA":	["Blinds", "Blinds", "Jalousie", "Blinds", "Blinds", "Blinds", "Ролетне", "Persianas"],
+		"labelB":	["Window Blinds (slices) transition", "Window Blinds (slices) transition", "Übergang von Jalousien (Scheiben)", "Window Blinds (slices) transition",
+							"Window Blinds (slices) transition", "Window Blinds (slices) transition", "Прелаз ролетне (прореза)", "Transición de persianas (cortes)"],
+		"icon":		"Plugins/Window Blinds/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit1"
+			},
+			{
+				"type":		"interval",
+				"name":	"iTime",
+			},
+			{
+				"type":		"float",
+				"name":	"count",
+			},
+			{
+				"type":		"float",
+				"name":	"smoothness",
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Window Blinds/WindowBlinds.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Count", "Count", "Anzahl", "Count", "Count", "Count", "Број", "Cantidad"],
+				"label_min":	 ["10"],
+				"label_max": ["20"],
+				"default":		10.0,
+				"range":		[4.0, 20.0],
+				"uniform":		"count",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Smoothness", "Smoothness", "Glätte", "Smoothness",
+										"Smoothness", "Smoothness", "Глаткоћа", "Suavidad"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.5,
+				"range":		[0.0, 1.0],
+				"uniform":		"smoothness",
+			}
+		]
+	}
+}

@@ -1,0 +1,176 @@
+SubDir Medo ;
+
+# Compiler flags
+if $(release)
+{
+	C++FLAGS += -std=c++2a -O3 ;
+}
+else
+{
+	C++FLAGS += -std=c++2a -g -O0 -gno-column-info ;
+}
+C++FLAGS += -I. -IYarra -I/boot/system/develop/headers/private/interface ;
+C++FLAGS += -I/boot/system/develop/headers/freetype2 ;
+
+# Source files needed to build Medo
+# <pe-src>
+Main Medo :
+#Editor
+	Editor/AboutWindow.cpp
+	Editor/AudioCache.cpp
+	Editor/AudioManager.cpp
+	Editor/AudioManager_Output.cpp
+	Editor/AudioManager_Utility.cpp
+	Editor/AudioMixer.cpp
+	Editor/ClipTagWindow.cpp
+	Editor/ColourScope.cpp
+	Editor/ControlSource.cpp
+	Editor/EffectListItem.cpp
+	Editor/EffectNode.cpp
+	Editor/EffectsManager.cpp
+	Editor/EffectsManager_Plugin.cpp
+	Editor/EffectsTab.cpp
+	Editor/EffectsWindow.cpp
+	Editor/ExportMedia_ffmpeg.cpp
+	Editor/ExportMedia_MediaKit.cpp
+	Editor/ExportMediaWindow.cpp
+	Editor/FileUtility.cpp
+	Editor/ImageUtility.cpp
+	Editor/Language.cpp
+	Editor/Main.cpp
+	Editor/MediaUtility.cpp 
+	Editor/MediaSource.cpp
+	Editor/MedoApplication.cpp
+	Editor/MedoWindow.cpp
+	Editor/MedoWindow_ProjectIO.cpp
+	Editor/MonitorControls.cpp
+	Editor/MonitorWindow.cpp
+	Editor/OutputView.cpp
+	Editor/PersistantWindow.cpp
+	Editor/Project.cpp
+	Editor/Project_Json.cpp
+	Editor/Project_Settings.cpp
+	Editor/Project_Snapshot.cpp
+	Editor/RenderActor.cpp
+	Editor/SettingsWindow.cpp
+	Editor/StatusView.cpp
+	Editor/SourceListView.cpp
+	Editor/TabMainView.cpp
+	Editor/TextTab.cpp
+	Editor/Theme.cpp
+	Editor/TimelineEdit.cpp
+	Editor/TimelineEdit_Draw.cpp
+	Editor/TimelineEdit_Find.cpp
+	Editor/TimelineEdit_Move.cpp
+	Editor/TimelinePlayer.cpp
+	Editor/TimelinePosition.cpp
+	Editor/TimelineTrack.cpp
+	Editor/TimelineView.cpp
+	Editor/VideoManager.cpp
+#Gui
+	Gui/AlphaColourControl.cpp
+	Gui/BitmapButton.cpp
+	Gui/BitmapCheckbox.cpp
+	Gui/CurvesView.cpp
+	Gui/DividerView.cpp
+	Gui/DualSlider.cpp
+	Gui/FontPanel.cpp
+	Gui/KeyframeSlider.cpp
+	Gui/LinkedSpinners.cpp
+	Gui/ListViewToolTip.cpp
+	Gui/Magnify.cpp
+	Gui/PathView.cpp
+	Gui/ProgressBar.cpp
+	Gui/Spinner.cpp
+	Gui/ValueSlider.cpp
+# Effects
+	Effects/Effect_AudioGain.cpp
+	Effects/Effect_Blur.cpp
+	Effects/Effect_Colour.cpp
+	Effects/Effect_ColourCorrection.cpp
+	Effects/Effect_ColourGrading.cpp
+	Effects/Effect_ColourLut.cpp
+	Effects/Effect_Crop.cpp
+	Effects/Effect_Marker.cpp
+	Effects/Effect_Mask.cpp
+	Effects/Effect_Mirror.cpp
+	Effects/Effect_Move.cpp
+	Effects/Effect_None.cpp
+	Effects/Effect_ParticleTrail.cpp
+	Effects/Effect_Plugin.cpp
+	Effects/Effect_PortraitBlur.cpp
+	Effects/Effect_Rotate.cpp
+	Effects/Effect_Speed.cpp
+	Effects/Effect_Text.cpp
+	Effects/Effect_Text_3D.cpp
+	Effects/Effect_Text_Counter.cpp
+	Effects/Effect_Text_Terminal.cpp
+	Effects/Effect_Transform.cpp
+# Actor
+	Actor/Actor.cpp
+	Actor/ActorManager.cpp
+	Actor/Platform_Haiku.cpp
+	Actor/Timer.cpp
+	Actor/WorkThread.cpp
+# Yarra
+	Yarra/FileIO/FileManager.cpp
+	Yarra/Math/Interpolation.cpp
+	Yarra/Math/Math.cpp
+	Yarra/Math/Matrix_Software.cpp
+	Yarra/Math/Matrix_x86.cpp
+	Yarra/Math/Matrix3.cpp
+	Yarra/Math/Matrix4.cpp
+	Yarra/Math/Quaternion.cpp
+	Yarra/Math/Vector.cpp
+	Yarra/Platform/Platform_Haiku.cpp
+	Yarra/Render/Camera.cpp
+	Yarra/Render/FontFreetype.cpp
+	Yarra/Render/GeometryNode.cpp
+	Yarra/Render/MatrixStack.cpp
+	Yarra/Render/Picture.cpp
+	Yarra/Render/RenderNode.cpp
+	Yarra/Render/RenderTarget.cpp
+	Yarra/Render/Shader.cpp
+	Yarra/Render/Spatial.cpp
+	Yarra/Render/TextScene.cpp
+	Yarra/Render/Texture.cpp
+#FreeTypeGL
+	Yarra/FreeTypeGL/FTCharmap.cpp
+	Yarra/FreeTypeGL/FTCleanup.cpp
+	Yarra/FreeTypeGL/FTContour.cpp
+	Yarra/FreeTypeGL/FTExtrudeFont.cpp
+	Yarra/FreeTypeGL/FTExtrudeGlyph.cpp
+	Yarra/FreeTypeGL/FTFace.cpp
+	Yarra/FreeTypeGL/FTFont.cpp
+	Yarra/FreeTypeGL/FTGlyph.cpp
+	Yarra/FreeTypeGL/FTGlyphContainer.cpp
+	Yarra/FreeTypeGL/FTLayout.cpp
+	Yarra/FreeTypeGL/FTLibrary.cpp
+	Yarra/FreeTypeGL/FTPoint.cpp
+	Yarra/FreeTypeGL/FTSize.cpp
+	Yarra/FreeTypeGL/FTTextureFont.cpp
+	Yarra/FreeTypeGL/FTTextureGlyph.cpp
+	Yarra/FreeTypeGL/FTVectoriser.cpp
+	Yarra/FreeTypeGL/libtess/libtess_dict.cpp
+	Yarra/FreeTypeGL/libtess/libtess_geom.cpp
+	Yarra/FreeTypeGL/libtess/libtess_memalloc.cpp
+	Yarra/FreeTypeGL/libtess/libtess_mesh.cpp
+	Yarra/FreeTypeGL/libtess/libtess_normal.cpp
+	Yarra/FreeTypeGL/libtess/libtess_priorityq.cpp
+	Yarra/FreeTypeGL/libtess/libtess_render.cpp
+	Yarra/FreeTypeGL/libtess/libtess_sweep.cpp
+	Yarra/FreeTypeGL/libtess/libtess_tess.cpp
+	Yarra/FreeTypeGL/libtess/libtess_tessmono.cpp
+	
+#3rdParty
+	3rdParty/LutCube.cpp
+	3rdParty/stb_image_write.cpp
+		
+# </pe-src>
+;
+
+# Link files
+LinkDependancies = -lbe -lmedia -lstdc++ -lGL -ltracker -ltranslation -lfreetype -lavformat -lavcodec -lswscale -lavutil -lswresample ;
+
+LINKLIBS on Medo = $(LinkDependancies) ;
+

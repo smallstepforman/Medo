@@ -1,0 +1,116 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"ShockWave",
+		"labelA":	["Shock Wave", "Shock Wave", "Schockwelle", "Shock Wave", "Shock Wave", "Shock Wave", "Шок талас", "Onda de choque"],
+		"labelB":	["Shock Wave effect", "Shock Wave effect", "Schockwellen-Effekt", "Shock Wave effect",
+							"Shock Wave effect", "Shock Wave effect", "Ефекат ударног таласа", "Efecto de onda de choque"],
+		"icon":		"Plugins/ShockWave/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"interval",
+				"name":	"iTime"
+			},
+			{
+				"type":		"vec2",
+				"name":	"uPos"
+			},
+			{
+				"type":		"float",
+				"name":	"uWaveX"
+			},
+			{
+				"type":		"float",
+				"name":	"uWaveY"
+			},
+			{
+				"type":		"float",
+				"name":	"uWaveZ"
+			},
+			{
+				"type":		"float",
+				"name":	"uFactorA"
+			},
+			{
+				"type":		"float",
+				"name":	"uFactorB"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/ShockWave/ShockWave.frag"
+		},
+		"gui": [
+			{
+				"type":				"vec2",
+				"rect":				[20, 20, 220, 100],
+				"label":				["Position", "Position", "Position", "Position", "Position", "Position", "Позиција", "Posición"],
+				"default":			[0.5, 0.5],
+				"range":			[0.0, 1.0],
+				"mouse_down":		true,
+				"uniform":		"uPos",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 140, 620, 220],
+				"label":			["Ripple Factor", "Ripple Factor", "Welligkeitsfaktor", "Ripple Factor", "Ripple Factor", "Ripple Factor", "Фактор таласа", "Factor de ondulación"],
+				"label_min":	 ["5.0"],
+				"label_max": ["25.0"],
+				"default":		10.0,
+				"range":		[5.0, 25.0],
+				"uniform":		"uWaveX",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20,240, 300, 320],
+				"label":			["Shock Intensity", "Shock Intensity", "Schock Intensivität", "Shock Intensity",
+										"Shock Intensity", "Shock Intensity", "Интензитет шока", "Intensidad de choque"],
+				"label_min":  ["0.0"],
+				"label_max": ["0.5"],
+				"default":		0.1,
+				"range":		[0.0, 0.5],
+				"uniform":		"uWaveY",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20,340, 300, 420],
+				"label":			["Gravity", "Gravity", "Gravitation", "Gravity", "Gravity", "Gravity", "Гравитација", "Gravedad"],
+				"label_min":	 ["0.0"],
+				"label_max": ["0.2"],
+				"default":		0.1,
+				"range":		[0.0, 0.2],
+				"uniform":		"uWaveZ",
+			},
+			{
+				"type":			"slider",
+				"rect":			[340,240, 620, 320],
+				"label":			["Wave Decay", "Wave Decay", "Wellenzerfall", "Wave Decay",
+										"Wave Decay", "Wave Decay", "Пропадање таласа", "Decaimiento de onda"],
+				"label_min":	 ["10"],
+				"label_max": ["60"],
+				"default":		40.0,
+				"range":		[10.0, 60.0],
+				"uniform":		"uFactorA",
+			},
+			{
+				"type":			"slider",
+				"rect":			[340,340, 620, 420],
+				"label":			["Wave Visibility", "Wave Visibility", "Wellensichtbarkeit", "Wave Visibility",
+										"Wave Visibility", "Wave Visibility", "Таласна видљивост", "Decaimiento de visibilidad"],
+				"label_min":	 ["10"],
+				"label_max":	["400"],
+				"default":		50.0,
+				"range":		[10.0, 400.0],
+				"uniform":		"uFactorB",
+			}
+		]
+	}
+}

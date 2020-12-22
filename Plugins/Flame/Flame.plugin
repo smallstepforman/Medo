@@ -1,0 +1,65 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"Flame",
+		"labelA":	["Flame", "Flame", "Feuer", "Flame",
+							"Flame", "Flame", "Пламен", "Llama"],
+		"labelB":	["Flame effect", "Flame effect", "Feuer-Effekt", "Flame effect",
+							"Flame effect", "Flame effect", "Ефекат пламена", "Efecto de llama"],
+		"icon":		"Plugins/Flame/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"iChannel0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"timestamp",
+				"name":	"iTime",
+			},
+			{
+				"type":		"float",
+				"name":	"uMix",
+			},
+			{
+				"type":		"float",
+				"name":	"uBrightness",
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Flame/Flame.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 600, 100],
+				"label":			["Brightness", "Brightness", "Helligkeit", "Brightness",
+										"Brightness", "Brightness", "Осветљеност", "Brillo"],
+				"label_min":	 ["0.0"],
+				"label_max":	["1.0"],
+				"default":		0.4,
+				"range":		[0.0, 1.0],
+				"uniform":		"uBrightness",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 600, 200],
+				"label":			["Mix", "Mix", "Mischen", "Mix",
+										"Mix", "Mix", "Помешанoст", "Mezcla"],
+				"label_min":	 ["0.0"],
+				"label_max":	["1.0"],
+				"default":		0.8,
+				"range":		[0.0, 1.0],
+				"uniform":		"uMix"
+			}
+		]
+	}
+}

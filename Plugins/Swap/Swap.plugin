@@ -1,0 +1,83 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"Swap",
+		"labelA":	["Swap", "Swap", "Tauschen", "Swap", "Swap", "Swap", "Замена", "Intercambiar"],
+		"labelB":	["Swap from A to B", "Swap from A to B", "Tausche A nach B", "Swap from A to B",
+							"Swap from A to B", "Swap from A to B", "Замените са A на B", "Intercambiar de A a B"],
+		"icon":		"Plugins/Swap/icon_swap.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit1"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"interval",
+				"name":	"iTime",
+			},
+			{
+				"type":		"float",
+				"name":	"reflection",
+			},
+			{
+				"type":		"float",
+				"name":	"project_y1",
+			},
+			{
+				"type":		"float",
+				"name":	"project_y2",
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Swap/Swap.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Reflection Intensity", "Reflection Intensity", "Reflexionsintensität", "Reflection Intensity",
+										"Reflection Intensity", "Reflection Intensity", "Интензитет рефлексије", "Intensidad del reflejo"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.4,
+				"range":		[0.0, 1.0],
+				"uniform":		"reflection",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Reflection Projection", "Reflection Projection", "Reflexionsprojektion", "Reflection Projection",
+										"Reflection Projection", "Reflection Projection", "Пројекција рефлексије", "Proyección del reflejo"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.9,
+				"range":		[0.5, 1.5],
+				"uniform":		"project_y1",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 220, 520, 300],
+				"label":			["Reflection Offset", "Reflection Offset", "Reflexionsversatz", "Reflection Offset",
+										"Reflection Offset", "Reflection Offset", "Помак рефлексије", "Desplazamiento del reflejo"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		-1.00,
+				"range":		[-1.5, -0.5],
+				"uniform":		"project_y2",
+			}
+		]
+	}
+}

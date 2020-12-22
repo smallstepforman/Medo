@@ -1,0 +1,41 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"Vignette",
+		"labelA":	["Vignette", "Vignette", "Vignette-Effekt", "Vignette",
+							"Vignette", "Vignette", "Вињета", "Viñeta"],
+		"labelB":	["Vignetting Effect", "Vignetting Effect", "Vignetting Effect", "Vignetting Effect",
+							"Vignetting Effect", "Vignetting Effect", "Ефекат вињете", "Efecto de viñeta"],
+		"icon":		"Plugins/Vignette/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"float",
+				"name":	"uIntensity"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Vignette/Vignette.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Intensity", "Intensity", "Intensivität", "Intensity", "Intensity", "Intensity", "Интензитет", "Intensidad"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.25,
+				"range":		[0.0, 2.0],
+				"uniform":		"uIntensity",
+			}
+		]
+	}
+}

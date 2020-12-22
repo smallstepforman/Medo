@@ -1,5 +1,13 @@
 # Medo
 ![Alt text](/Docs/Medo_Logo.png?raw=true "Medo Logo")
+
+Haiku Media Editor
+Copyright Zen Yes Pty Ltd 2019-2021
+Melbourne, Australia
+Released under Open Source MIT license.
+
+Written by Zenja Solaja
+
 Medo is a modern Media Editor built exclusively for the open source Haiku OS (aka the Media OS).  Medo allows customisation using OpenGL based GLSL plugins, and allows 3rd party developers to create dynamically loaded Addons and Plugins.
 
 There are many bundled media effects, including:
@@ -12,10 +20,12 @@ There are many bundled media effects, including:
 - Spatial tools to transform media (scale/rotate/position/crop)
 - Audio effects (20 band equaliser, fade)
 
+Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised for many CPU-core systems, and has low system resource requirements (the Medo.HPKG (Haiku package file) can  fit on a floppy disk with no external dependancies other than what ships with a default Haiku release).
+
 ![Alt text](/Docs/Medo.jpeg?raw=true "Medo Screenshot")
 
 # Development Requirements
-- Haiku development environment, 64 bit (c++17 minimum standard)
+- Haiku development environment, 64 bit only (c++17 minimum standard)
 - QtCreator as the IDE for code navigation and code completion
 - ffmpeg development package
 - cmake (optional)

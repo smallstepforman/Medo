@@ -1,0 +1,65 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"image",
+		"name":	"Chroma Key",
+		"labelA":	["Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Chroma Key", "Прозирна боја", "Clave de croma"],
+		"labelB":	["Make a colour transparent", "Make a color transparent", "Eine Farbe tansparent machen", "Make a colour transparent",
+							"Make a colour transparent", "Make a colour transparent", "Изаберите прозирну боју", "Hacer transparente a un color"],
+		"icon":		"Plugins/ChromaKey/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTexture0"
+			},
+			{
+				"type":		"float",
+				"name":	"uThreshold"
+			},
+			{
+				"type":		"float",
+				"name":	"uSmoothing"
+			},
+			{
+				"type":		"colour",
+				"name":	"uChromaColour"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/ChromaKey/ChromaKey.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 620, 100],
+				"label":			["Threshold", "Threshold", "Schwelle", "Threshold", "Threshold", "Threshold", "Праг", "Umbral"],
+				"label_min": ["0"],
+				"label_max":	["100"],
+				"default":		0.05,
+				"range":		[0.0, 0.5],
+				"uniform":		"uThreshold",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 620, 200],
+				"label":			["Smoothing", "Smoothing", "Glätten", "Smoothing", "Smoothing", "Smoothing", "Заглађивање", "Suavizado"],
+				"label_min":	 ["0.0"],
+				"label_max": ["1.0"],
+				"default":		0.2,
+				"range":		[0.0, 1.0],
+				"uniform":		"uSmoothing",
+			},
+			{
+				"type":			"colour",
+				"rect":			[20, 240, 620, 480],
+				"label":			["Chroma Colour", "Chroma Color", "Chroma Farbe", "Chroma Colour", "Chroma Colour", "Chroma Colour", "Прозирна Боја", "Color"],
+				"default":		[0.0, 1.0, 0.0, 1.0],
+				"uniform":		"uChromaColour",
+			}
+		]
+	}
+}

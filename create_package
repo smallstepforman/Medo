@@ -1,0 +1,55 @@
+#!/bin/sh
+
+./clean_all
+release=true jam -j16
+./build_addons
+resattr -o Medo Resources/Icon/Medo_icon.rsrc
+addattr BEOS:APP_SIG application/x-vnd.ZenYes.Medo Medo
+
+mkdir -p Package/apps/Medo
+cp Medo Package/apps/Medo
+resattr -o Package/apps/Medo/Medo Resources/Icon/Medo_icon.rsrc
+addattr BEOS:APP_SIG application/x-vnd.ZenYes.Medo Package/apps/Medo/Medo
+
+mkdir -p Package/data/deskbar/menu/Applications
+(cd Package/data/deskbar/menu/Applications ; ln -s ../../../../apps/Medo/Medo . )
+
+#AddOns
+mkdir Package/apps/Medo/AddOns
+cd AddOns
+for d in */; do
+	cd ${d%/}
+	mkdir ../../Package/apps/Medo/AddOns/${d%/}
+	cp *".so" "../../Package/apps/Medo/AddOns/$d"
+	cp *".png" "../../Package/apps/Medo/AddOns/$d"
+	cd ..
+done
+cd ..
+
+#Plugins
+mkdir Package/apps/Medo/Plugins
+cd Plugins
+for f in */; do
+	cd ${f%/}
+	mkdir ../../Package/apps/Medo/Plugins/${f%/}
+	cp *.* "../../Package/apps/Medo/Plugins/$f"
+	cd ..
+done
+cd ..
+
+#Resources
+mkdir Package/apps/Medo/Resources
+mkdir Package/apps/Medo/Resources/Icon
+cd Resources
+cp *".png" "../Package/apps/Medo/Resources/"
+cp "Icon/Medo_Logo.png" "../Package/apps/Medo/Resources/Icon"
+cd ..
+
+#Package
+cp ".PackageInfo" "Package/"
+cd Package
+package create -b Medo-R1.0.0~Beta1-1.x86_64.hpkg
+package add Medo-R1.0.0~Beta1-1.x86_64.hpkg apps data
+cd ..
+
+

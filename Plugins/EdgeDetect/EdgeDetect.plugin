@@ -1,0 +1,55 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"image",
+		"name":	"EdgeDetect",
+		"labelA":	["Edge Detect", "Edge Detect", "Ecken erkennen", "Edge Detect", "Edge Detect", "Edge Detect", "Ивице", "Detectar bordes"],
+		"labelB":	["Sobel Edge Detection", "Sobel Edge Detection", "Sobel Kantenerkennung", "Sobel Edge Detection",
+							"Sobel Edge Detection", "Sobel Edge Detection", "Откривање ивица Sobel", "Detección de bordes Sobel"],
+		"icon":		"Plugins/EdgeDetect/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"iChannel0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"float",
+				"name":	"uIntesity"
+			},
+			{
+				"type":		"int",
+				"name":	"uColour"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/EdgeDetect/EdgeDetect.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 420, 100],
+				"label":			["Intensity", "Intensity", "Intensivität", "Intensity", "Intensity", "Intensity", "Интензитет", "Intensidad"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		2.0,
+				"range":		[0.0, 5.0],
+				"uniform":		"uIntesity",
+			},
+			{
+				"type":			"checkbox",
+				"rect":			[20, 120, 420, 160],
+				"label":			["Colour", "Color", "Farbe", "Colour", "Colour", "Colour", "Боја", "Color"],
+				"default":		1,
+				"uniform":		"uColour",
+			}
+		]
+	}
+}

@@ -1,0 +1,58 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"image",
+		"name":	"Sketch",
+		"labelA":	["Sketch", "Sketch", "Zeichnung", "Sketch", "Sketch", "Sketch", "Скица", "Bosquejar"],
+		"labelB":	["Cheap outline and Cartoon Effect",  "Cheap outline and Cartoon Effect",  "Günstige Gliederung und Cartoon-Effekt",  "Cheap outline and Cartoon Effect", 
+							"Cheap outline and Cartoon Effect",  "Cheap outline and Cartoon Effect",  "Линије и ефекат цртаног филма", "Efecto sencillo de delineado y de dibujo animado"],
+		"icon":		"Plugins/Sketch/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"tex0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"uResolution"
+			},
+			{
+				"type":		"float",
+				"name":	"uEdgeSlope"
+			},
+			{
+				"type":		"float",
+				"name":	"uPower"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Sketch/Sketch.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Edge Slope", "Edge Slope", "Eckenverstärkung", "Edge Slope", "Edge Slope", "Edge Slope", "Нагиб ивице", "Pendiente del borde"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.25,
+				"range":		[0.0, 1.0],
+				"uniform":		"uEdgeSlope",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Power", "Power", "Stärke", "Power", "Power", "Power", "Јачина", "Potencia"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		2.0,
+				"range":		[1.0, 3.0],
+				"uniform":		"uPower",
+			}
+		]
+	}
+}

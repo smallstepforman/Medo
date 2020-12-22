@@ -1,0 +1,55 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"colour",
+		"name":	"Shadows",
+		"labelA":	["Shadows & Highlights", "Shadows & Highlights", "Schatten & Lichter", "Shadows & Highlights",
+							"Shadows & Highlights", "Shadows & Highlights", "Сенке и Светлост", "Sombras y reflejos"],
+		"labelB":	["Adjust the shadows and highlights", "Adjust the shadows and highlights", "Schatten und Lichter anpassen", "Adjust the shadows and highlights",
+							"Adjust the shadows and highlights", "Adjust the shadows and highlights", "Подесите сенке и светла места", "Ajusta las sombras y reflejos"],
+		"icon":		"Plugins/HighlightsAndShadows/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTexture0"
+			},
+			{
+				"type":		"float",
+				"name":	"uShadow"
+			},
+			{
+				"type":		"float",
+				"name":	"uHighlight"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/HighlightsAndShadows/HighlightsAndShadows.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 600, 100],
+				"label":			["Shadows", "Shadows", "Schatten", "Shadows", "Shadows", "Shadows", "Сенке", "Sombras"],
+				"label_min":	 ["Darker", "Darker", "Dunkler", "Darker", "Darker", "Darker", "Тамније", "Oscuro"],
+				"label_max": ["Lighter", "Lighter", "Heller", "Lighter", "Lighter", "Lighter", "Светлије", "Claro"],
+				"default":		0.0,
+				"range":		[0.0, 1.0],
+				"uniform":		"uShadow",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 600, 200],
+				"label":			["Highlights", "Highlights", "Lichter", "Highlights", "Highlights", "Highlights", "Светлост", "Reflejos"],
+				"label_min":	 ["Darker", "Darker", "Dunkler", "Darker", "Darker", "Darker", "Тамније", "Oscuro"],
+				"label_max": ["Lighter", "Lighter", "Heller", "Lighter", "Lighter", "Lighter", "Светлије", "Claro"],
+				"default":		1.0,
+				"range":		[0.0, 1.0],
+				"uniform":		"uHighlight",
+			}
+		]
+	}
+}

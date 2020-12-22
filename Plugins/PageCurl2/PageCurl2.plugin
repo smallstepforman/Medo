@@ -1,0 +1,62 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"PageCurl2",
+		"labelA":	["Page Curl 2", "Page Curl 2", "Page Curl 2", "Page Curl 2", "Page Curl 2", "Page Curl 2", "Окретање странице 2", "Cambio de página 2"],
+		"labelB":	["Page Curl Effect (cylinder)", "Page Curl Effect (cylinder)",  "Page Curl Effect (cylinder)",  "Page Curl Effect (cylinder)", 
+							"Page Curl Effect (cylinder)",  "Page Curl Effect (cylinder)",  "Ефекат увијања странице (цилиндар)", "Efecto de cambio de página (cilindro)"],
+		"icon":		"Plugins/PageCurl2/icon_page_curl.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"sourceTex"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"targetTex"
+			},
+			{
+				"type":		"interval",
+				"name":	"time"
+			},
+			{
+				"type":		"float",
+				"name":	"uShadow"
+			},
+			{
+				"type":		"float",
+				"name":	"uGrey"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/PageCurl2/PageCurl2.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Shadow", "Shadow", "Schatten", "Shadow", "Shadow", "Shadow", "Сенка", "Sombra"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		30.0,
+				"range":		[0.0, 50.0],
+				"uniform":		"uShadow",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Grey", "Gray", "Grau", "Grey", "Grey", "Grey", "Сива", "Gris"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		15.0,
+				"range":		[3.0, 30.0],
+				"uniform":		"uGrey",
+			}
+		]
+	}
+}

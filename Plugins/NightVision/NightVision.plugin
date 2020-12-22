@@ -1,0 +1,42 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"NightVision",
+		"labelA":	["Night Vision", "Night Vision", "Nachtsicht", "Night Vision",
+							"Night Vision", "Night Vision", "Ноћна визија", "Visión nocturna"],
+		"labelB":	["Green Night Vision shader", "Green Night Vision shader", "Grüne Nachtsicht", "Green Night Vision shader",
+							"Green Night Vision shader", "Green Night Vision shader", "Зелена ноћна визија", "Sombreador de visión nocturna verde"],
+		"icon":		"Plugins/NightVision/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"resolution"
+			},
+			{
+				"type":		"timestamp",
+				"name":	"time"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/NightVision/NightVision.frag"
+		},
+		"gui": [
+			{
+				"type":			"text",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Green Night Vision shader", "Green Night Vision shader", "Grüne Nachtsicht", "Green Night Vision shader",
+										"Green Night Vision shader", "Green Night Vision shader", "Зелена ноћна визија", "Sombreador de visión nocturna verde"],
+				"font":			"be_plain_font"
+			}
+		]
+	}
+}

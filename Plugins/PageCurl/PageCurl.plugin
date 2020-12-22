@@ -1,0 +1,66 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"PageCurl",
+		"labelA":	["Page Curl", "Page Curl", "Page Curl", "Page Curl", "Page Curl", "Page Curl", "Окретање странице", "Cambio de página"],
+		"labelB":	["Page turn (curl) effect", "Page turn (curl) effect", "Page turn (curl) effect", "Page turn (curl) effect",
+							"Page turn (curl) effect", "Page turn (curl) effect", "Ефекат окретања странице (увијања)", "Efecto de cambio de página (curvatura)"],
+		"icon":		"Plugins/PageCurl/icon_page_curl.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"iChannel0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"iChannel1"
+			},
+			{
+				"type":		"interval",
+				"name":	"iTime"
+			},
+			{
+				"type":		"float",
+				"name":	"iFactorY"
+			},
+			{
+				"type":		"float",
+				"name":	"radius"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/PageCurl/PageCurl.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 600, 100],
+				"label":			["Factor", "Factor", "Faktor", "Factor", "Factor", "Factor", "Фактор", "Factor"],
+				"label_min":	 ["0.0"],
+				"label_max": ["5.0"],
+				"default":		2.5,
+				"range":		[0.0, 5.0],
+				"uniform":		"iFactorY",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 600, 200],
+				"label":			["Radius", "Radius", "Radius", "Radius", "Radius", "Radius", "Пречник", "Radio"],
+				"label_min":	 ["0.0"],
+				"label_max": ["1.0"],
+				"default":		0.2,
+				"range":		[0.0, 1.0],
+				"uniform":		"radius",
+			}
+		]
+	}
+}

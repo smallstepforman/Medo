@@ -1,0 +1,71 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"Fireworks",
+		"labelA":	["Fireworks", "Fireworks", "Feuerwerk", "Fireworks", "Fireworks", "Fireworks", "Ватромет", "Fuegos artificiales"],
+		"labelB":	["Fireworks Effect", "Fireworks Effect", "Feuerwerk-Effekt", "Fireworks Effect", 
+							"Fireworks Effect", "Fireworks Effect", "Ефекат ватромета", "Efecto de fuegos artificiales"],
+		"icon":		"Plugins/Fireworks/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"iResolution"
+			},
+			{
+				"type":		"float",
+				"name":	"NUM_EXPLOSIONS"
+			},
+			{
+				"type":		"float",
+				"name":	"NUM_PARTICLES"
+			},
+			{
+				"type":		"timestamp",
+				"name":	"iTime",
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Fireworks/Fireworks.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Number Explosions", "Number Explosions", "Anzahl der Herzen", "Number Explosions",
+										"Number Explosions", "Number Explosions", "Број експлозија", "Número de explosiones"],
+				"label_min":	 ["0"],
+				"label_max":	["10"],
+				"default":		8.0,
+				"range":		[0, 10],
+				"uniform":		"NUM_EXPLOSIONS",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Number Particles", "Number Particles", "Anzahl Partikel", "Number Particles",
+										"Number Particles", "Number Particles", "Број честица", "Número de partículas"],
+				"label_min":	 ["0"],
+				"label_max":	["100"],
+				"default":		50.0,
+				"range":		[0, 100],
+				"uniform":		"NUM_PARTICLES",
+			},
+			{
+				"type":			"text",
+				"rect":			[20, 250, 520, 280],
+				"label":			["Caution: very slow", "Caution: very slow", "Achtung: sehr langsam", "Caution: very slow",
+										"Caution: very slow", "Caution: very slow", "Опрез: врло споро", "Advertencia: es muy lento"],
+				"font":			"be_plain_font"
+			}
+		]
+	}
+}

@@ -1,0 +1,74 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"RadialBlur",
+		"labelA":	["Radial Blur", "Radial Blur", "Kreisförmige Unschärfe", "Radial Blur",
+							"Radial Blur", "Radial Blur", "Кружна замућеност", "Desenfoque radial"],
+		"labelB":	["Radial Blur Effect", "Radial Blur Effect", "Kreisförmiger Unschärfe-Effekt", "Radial Blur Effect",
+							"Radial Blur Effect", "Radial Blur Effect", "Ефекат кружног замућења", "Efecto de desenfoque radial"],
+		"icon":		"Plugins/RadialBlur/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"resolution",
+				"name":	"resolution"
+			},
+			{
+				"type":		"float",
+				"name":	"radial_blur"
+			},
+			{
+				"type":		"float",
+				"name":	"radial_bright"
+			},
+			{
+				"type":		"interval",
+				"name":	"interval"
+			},
+			{
+				"type":		"int",
+				"name":	"interpolate"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/RadialBlur/RadialBlur.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Blur Amount", "Blur Amount", "Unschärfemenge", "Blur Amount", "Blur Amount", "Blur Amount", "Количина замућења", "Cantidad de desenfoque"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		0.1,
+				"range":		[0.0, 0.3],
+				"uniform":		"radial_blur",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 520, 200],
+				"label":			["Brightness", "Brightness", "Helligkeit", "Brightness", "Brightness", "Brightness", "Осветљеност", "Brillo"],
+				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Mínimo (0%)"],
+				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Máximo (100%)"],
+				"default":		1.0,
+				"range":		[0.0, 2.0],
+				"uniform":		"radial_bright",
+			},
+			{
+				"type":			"checkbox",
+				"rect":			[20, 220, 420, 260],
+				"label":			["Interpolate", "Interpolate", "Interpolieren", "Interpolate", "Interpolate", "Interpolate", "Интерполирај", "Interpolar"],
+				"default":		0,
+				"uniform":		"interpolate",
+			}
+		]
+	}
+}

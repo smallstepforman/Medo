@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd AddOns
+for d in */; do
+	cd "$d"
+	clean_all 
+	jam
+	cd ..
+done
+cd ..
+

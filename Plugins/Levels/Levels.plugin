@@ -1,0 +1,70 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"colour",
+		"name":	"Levels",
+		"labelA":	["Levels", "Levels", "Levels", "Levels", "Levels", "Levels", "Нивои", "Niveles"],
+		"labelB":	["Photoshop style min/gamma/max levels", "Photoshop style min/gamma/max levels", "Mini- / Gamma- / Max-Pegel im Photoshop-Stil", "Photoshop style min/gamma/max levels",
+							"Photoshop style min/gamma/max levels", "Photoshop style min/gamma/max levels", "Ниво мин / гама / максимум у стилу Photoshop-а", "Niveles del tipo mín/gama/máx de Photoshop"],
+		"icon":		"Plugins/Levels/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTexture0"
+			},
+			{
+				"type":		"float",
+				"name":	"uMinInput"
+			},
+			{
+				"type":		"float",
+				"name":	"uGamma"
+			},
+			{
+				"type":		"float",
+				"name":	"uMaxInput"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Levels/Levels.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 600, 100],
+				"label":			["Minimum Input", "Minimum Input", "Minimale Eingabe", "Minimum Input",
+										"Minimum Input", "Minimum Input", "Минимални унос", "Entrada mínima"],
+				"label_min": ["0.0"],
+				"label_max": ["1.0"],
+				"default":		0.0,
+				"range":		[0.0, 1.0],
+				"uniform":		"uMinInput",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 600, 200],
+				"label":			["Gamma", "Gamma", "Gamma", "Gamma", "Gamma", "Gamma", "Гама", "Gama"],
+				"label_min": ["0.0"],
+				"label_max": ["3.0"],
+				"default":		1.0,
+				"range":		[0.0, 3.0],
+				"uniform":		"uGamma",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20,  220, 600, 300],
+				"label":			["Max Input", "Max Input", "Max. Eingabe", "Max Input",
+										"Max Input", "Max Input", "Максимални унос", "Entrada máxima"],
+				"label_min":	 ["0.0"],
+				"label_max": ["1.0"],
+				"default":		1.0,
+				"range":		[0.0, 1.0],
+				"uniform":		"uMaxInput",
+			}
+		]
+	}
+}

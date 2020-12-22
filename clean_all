@@ -1,0 +1,25 @@
+#!/bin/sh
+
+rm Medo
+rm *.o
+rm Editor/*.o
+rm Effects/*.o
+rm Gui/*.o
+rm Actor/*.o
+rm Yarra/FileIO/*.o
+rm Yarra/Math/*.o
+rm Yarra/Platform/*.o
+rm Yarra/Render/*.o
+rm Yarra/FreeTypeGL/*.o
+rm Yarra/FreeTypeGL/libtess/*.o
+rm -rf build
+rm -rf Package
+
+rm -rf CMakeFiles
+rm -rf .cmake
+rm CMakeCache.txt
+rm cmake_install.cmake
+rm CMakeLists.txt.user
+rm Makefile
+
+

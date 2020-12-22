@@ -1,0 +1,4 @@
+#!/bin/sh
+
+resattr -o Medo Resources/Icon/Medo_icon.rsrc
+addattr BEOS:APP_SIG application/x-vnd.ZenYes.Medo Medo
