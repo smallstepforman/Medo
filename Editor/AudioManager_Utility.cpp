@@ -8,7 +8,6 @@
 #include <cstdio>
 
 #include <MediaKit.h>
-#include <soxr.h>
 
 #include "AudioManager.h"
 #include "AudioMixer.h"
