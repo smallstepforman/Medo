@@ -34,7 +34,7 @@ Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised f
 # Development Requirements
 - Haiku development environment, 64 bit only (c++17 minimum standard)
 - QtCreator as the IDE for code navigation and code completion
-- ffmpeg development package
+- ffmpeg, soxr and freetype development packages
 - cmake (optional)
 
 # Build Scripts
