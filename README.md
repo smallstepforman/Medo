@@ -67,7 +67,7 @@ make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, e
 The Medo.hpkg file will be created in the Package directory.
 
 
-# Soure code layout
+# Source code layout
 3rdparty/   - external 3rd party code
 
 Actor/      - Actor programming model framework
