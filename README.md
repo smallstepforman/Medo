@@ -38,12 +38,6 @@ Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised f
 - cmake (optional)
 
 # Build Scripts
-0. Set +x permission on the following scripts:
-
-chmod +x clean_all
-chmod +x setup_attributes
-chmod +x create_package
-
 1. Clean all object files, remove temporary build directories 
 
 ./clean_all
