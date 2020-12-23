@@ -1,6 +1,6 @@
 /*	PROJECT:		Medo
  *	AUTHORS:		Zenja Solaja, Melbourne Australia
- *	COPYRIGHT:		Zen Yes Pty Ltd, 2016-2020
+ *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2020
  *	DESCRIPTION:	Persistant window will hide when closed (not quit)
  *					Use Terminate() to actually close the window
  */

@@ -50,8 +50,19 @@ void SaveSettings()
 	BPath config_path;
 	find_directory(B_USER_CONFIG_DIRECTORY, &config_path);
 	BString settings_path(config_path.Path());
-	settings_path.Append("/settings/Medo/medo.json");
 
+	//	Check if settings directory exists?
+	settings_path.Append("/settings/Medo");
+	if (!BEntry(settings_path.String()).Exists())
+	{
+		if (B_OK != create_directory(settings_path.String(), 0777))
+		{
+			printf("SaveSettings(): Cannot create dir: %s\n", settings_path.String());
+			return;
+		}
+	}
+
+	settings_path.Append("/medo.json");
 	FILE *file = fopen(settings_path.String(), "wb");
 	if (file)
 	{

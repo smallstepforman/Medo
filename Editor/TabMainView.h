@@ -1,6 +1,6 @@
 /*	PROJECT:		Medo
  *	AUTHORS:		Zenja Solaja, Melbourne Australia
- *	COPYRIGHT:		Zen Yes Pty Ltd, 2016
+ *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2021
  *	DESCRIPTION:	Tab main view
  */
 
@@ -23,10 +23,10 @@ class TabMainView : public BTabView
 {
 public:
 					TabMainView(BRect tab_frame);
-					~TabMainView() override;
-	void			AttachedToWindow() override;
-	void			FrameResized(float width, float height) override;
-	void			Draw(BRect frame) override;
+					~TabMainView()								override;
+	void			AttachedToWindow()							override;
+	void			FrameResized(float width, float height)		override;
+	void			Draw(BRect frame)							override;
 
 	SourceListView	*GetSourceListView() {return fSourceView;}
 	EffectsTab		*GetEffectsTab() {return fEffectsTab;}

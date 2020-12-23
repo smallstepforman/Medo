@@ -1,6 +1,6 @@
 /*	PROJECT:		Medo
  *	AUTHORS:		Zenja Solaja, Melbourne Australia
- *	COPYRIGHT:		Zen Yes Pty Ltd, 2016-2021
+ *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2021
  *	DESCRIPTION:	Project Snapshot (undo/redo)
  */
 
