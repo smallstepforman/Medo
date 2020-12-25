@@ -354,8 +354,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 				//	ColourPicker
 				assert(fColourPickerButton == nullptr);		//	only support a single ColourPicker for now
 				BRect colour_control_bounds = colour_control->Bounds();
-				fColourPickerButton = new BitmapCheckbox(BRect((colour_control_bounds.right + 80)*kFontFactor, (w.rect.top+40)*kFontFactor,
-															   (colour_control_bounds.right + 120)*kFontFactor, (w.rect.top+80)*kFontFactor), "colour_picker",
+				fColourPickerButton = new BitmapCheckbox(BRect((colour_control_bounds.right + 100)*kFontFactor, (w.rect.top+100)*kFontFactor,
+															   (colour_control_bounds.right + 140)*kFontFactor, (w.rect.top+140)*kFontFactor), "colour_picker",
 														 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_idle.png"),
 														 BTranslationUtils::GetBitmap("Resources/icon_colour_picker_active.png"),
 														 new BMessage(eMsgColourPicker));
