@@ -1,0 +1,39 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"SlotMachine",
+		"labelA":	["Slot Machine"],
+		"labelB":	["Slot Machine Effect"],
+		"icon":		"Plugins/SlotMachine/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit1"
+			},
+			{
+				"type":		"interval",
+				"name":	"uTime"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/SlotMachine/SlotMachine.frag"
+		},
+		"gui": [
+			{
+				"type":			"text",
+				"rect":			[20, 20, 520, 100],
+				"label":			["Recommend 3-4 second duration"],
+				"font":			"be_plain_font"
+			}
+		]
+	}
+}
