@@ -172,13 +172,13 @@ class SettingsView : public BTabView
 
 public:
 	SettingsView(BRect bounds)
-	: BTabView(bounds, "settings_tabs", B_WIDTH_FROM_WIDEST, B_FOLLOW_ALL, B_WILL_DRAW | B_FRAME_EVENTS)
+	: BTabView(bounds, "settings_tabs", B_WIDTH_FROM_WIDEST, B_FOLLOW_ALL)
 	{
 		SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
 		//	Tab Appearance
 		{
-			BView *tab_appearance = new BView(BRect(bounds.left, bounds.top, bounds.right, bounds.bottom - TabHeight()), GetText(TXT_SETTINGS_APPEARANCE), B_FOLLOW_ALL, B_WILL_DRAW | B_FRAME_EVENTS);
+			BView *tab_appearance = new BView(BRect(bounds.left, bounds.top, bounds.right, bounds.bottom - TabHeight()), GetText(TXT_SETTINGS_APPEARANCE), B_FOLLOW_LEFT_TOP, B_WILL_DRAW | B_FRAME_EVENTS);
 
 			//	Theme popup
 			fAppearancePopupTheme = new BOptionPopUp(BRect(20, 20, 320, 60), "theme", GetText(TXT_SETTINGS_APPEARANCE_THEME), new BMessage(eMsgAppearanceTheme));
@@ -208,7 +208,7 @@ public:
 
 		//	Tab Export
 		{
-			BView *tab_export = new BView(BRect(bounds.left, bounds.top, bounds.right, bounds.bottom - TabHeight()), GetText(TXT_SETTINGS_EXPORT), B_FOLLOW_ALL, B_WILL_DRAW | B_FRAME_EVENTS);
+			BView *tab_export = new BView(BRect(bounds.left, bounds.top, bounds.right, bounds.bottom - TabHeight()), GetText(TXT_SETTINGS_EXPORT), B_FOLLOW_LEFT_TOP, B_WILL_DRAW | B_FRAME_EVENTS);
 
 			//	Export BMediaKit
 			fExportCheckboxMediaKit = new BCheckBox(BRect(20, 20, 320, 60), "checkbox_media_kit", GetText(TXT_SETTINGS_EXPORT_USE_BMEDIA_KIT), new BMessage(eMsgExportMediaKit));
@@ -229,6 +229,15 @@ public:
 		fAppearancePopupLanguage->SetTarget(this, Window());
 		fAppearanceButtonApply->SetTarget(this, Window());
 		fExportCheckboxMediaKit->SetTarget(this, Window());
+	}
+	void FrameResized(float width, float height)
+	{
+		int idx=0;
+		while (BTab *tab = TabAt(idx))
+		{
+			tab->View()->ResizeTo(width, height);
+			idx++;
+		}
 	}
 	void MessageReceived(BMessage *msg) override
 	{

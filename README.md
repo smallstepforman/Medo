@@ -56,6 +56,8 @@ cmake CMakeLists.txt
 
 make -j16 (option -j16 is parallel build, replace 16 with number of CPU cores, eg. -j8)
 
+./build_addons
+
 3. Setup attributes, file icon
 
 ./setup_attributes
