@@ -461,7 +461,7 @@ void Effect_Plugin :: InitRenderObjects()
 		if (shader->GetNumberTextureUnits() > 1)
 		{
 			assert(shader->GetNumberTextureUnits() == 2);
-			fTextureUnit1 = new yrender::YTexture(width, height);
+			fTextureUnit1 = new yrender::YTexture(width, height, YTexture::YTF_REPEAT);
 			fTextureUnit1->SetTextureUnitIndex(1);
 		}
 	}

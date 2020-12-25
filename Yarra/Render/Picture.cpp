@@ -60,7 +60,7 @@ YPicture :: YPicture(const char *filename, const bool double_sided, const bool i
 {
 	assert(filename);	
 	
-	mTexture = new YTexture(filename);
+	mTexture = new YTexture(filename, YTexture::YTF_REPEAT);
 	mShaderNode = new YMinimalShader;
 	CreateGeometry(double_sided, inverse_texture_y);	
 	mSpatial.SetScale(ymath::YVector3(0.5f*mTexture->GetWidth(), 0.5f*mTexture->GetHeight(), 0));
@@ -75,7 +75,7 @@ YPicture :: YPicture(const char *filename, const bool double_sided, const bool i
 */
 YPicture :: YPicture(unsigned int width, unsigned int height, const bool double_sided, const bool inverse_texture_y)
 {
-	mTexture = new YTexture(width, height);
+	mTexture = new YTexture(width, height, YTexture::YTF_REPEAT);
 	mShaderNode = new YMinimalShader;
 	CreateGeometry(double_sided, inverse_texture_y);
 	mSpatial.SetScale(ymath::YVector3(0.5f*width, 0.5f*height, 0));
