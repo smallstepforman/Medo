@@ -584,7 +584,7 @@ void Effect_Mask :: MessageReceived(BMessage *msg)
 
 		case kMsgKeyframeSlider:
 		{
-			int selection;
+			int32 selection;
 			if (msg->FindInt32("selection", &selection) == B_OK)
 			{
 				assert((selection >= 0) && (selection < fKeyframeList->CountItems()));

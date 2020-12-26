@@ -456,7 +456,7 @@ bool SourceListView :: AddItem(BListItem* item)
 {
 	if (fInstructionItemVisible)
 	{
-		InstructionListItem *item = (InstructionListItem *)RemoveItem(0);
+		InstructionListItem *item = (InstructionListItem *)RemoveItem(int32(0));
 		delete item;
 		fInstructionItemVisible = false;
 	}
@@ -474,6 +474,6 @@ void SourceListView :: RemoveAllMediaSources()
 	{
 		SourceListItem *item = (SourceListItem *)ItemAt(0);
 		gProject->RemoveMediaSource(item->GetMediaSource());
-		RemoveItem(0);
+		RemoveItem(int32(0));
 	}
 }

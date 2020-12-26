@@ -960,7 +960,7 @@ void Export_ffmpeg :: StopEncode(const bool complete)
 
 /**************************************************************/
 /* WorkThread */
-int Export_ffmpeg :: WorkThread(void *arg)
+status_t Export_ffmpeg :: WorkThread(void *arg)
 {
 	assert(arg != nullptr);
 	Export_ffmpeg *instance = (Export_ffmpeg *) arg;

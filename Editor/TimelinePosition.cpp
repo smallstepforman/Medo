@@ -420,7 +420,7 @@ void TimelinePosition :: Draw(BRect frame)
 		char buffer[20];
 		gProject->CreateTimeString(fCurrentPosition, buffer, true);
 		char *strarray[1] = {buffer};
-		int len[1] = {20};
+		int32 len[1] = {20};
 		float width;
 		GetStringWidths(strarray, len, 1, &width);
 

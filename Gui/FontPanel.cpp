@@ -439,7 +439,7 @@ void FontView :: CreateStyleList(int32 family_idx)
 
 	while (fStyleList->CountItems() > 0)
 	{
-		BStringItem *item = (BStringItem*)fStyleList->RemoveItem(0);
+		BStringItem *item = (BStringItem*)fStyleList->RemoveItem(int32(0));
 		delete item;
 	}
 

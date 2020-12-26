@@ -178,7 +178,7 @@ void Export_MediaKit :: BuildVideoCodecOptions()
 		if (cookie != selected_cookie)
 			continue;
 
-		int cookie2 = 0;
+		int32 cookie2 = 0;
 		memset(&format, 0, sizeof(media_format));
 		format.type = B_MEDIA_RAW_VIDEO;
 		format.u.raw_video = media_raw_video_format::wildcard;
@@ -230,7 +230,7 @@ void Export_MediaKit :: BuildAudioCodecOptions()
 		if (cookie != selected_cookie)
 			continue;
 
-		int cookie2 = 0;
+		int32 cookie2 = 0;
 		memset(&format, 0, sizeof(media_format));
 		format.type = B_MEDIA_RAW_AUDIO;
 		while (get_next_encoder(&cookie2, &mfi, &format, &outfmt, &mci) == B_OK)

@@ -14,6 +14,11 @@
 #include "Shader.h"
 #include "MatrixStack.h"
 
+//	32 bit version of Mesa lacks OpenGL 4.3 definition of GL_PROGRAM
+#ifndef GL_PROGRAM
+#define GL_PROGRAM			0x82E2
+#endif
+
 namespace yrender
 {
 
