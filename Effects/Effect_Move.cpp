@@ -39,28 +39,46 @@ enum MOVE_DIRECTION
 	MOVE_DIR_CENTER_BELOW,
 	MOVE_DIR_CENTER_LEFT,
 	MOVE_DIR_CENTER_RIGHT,
+	MOVE_DIR_CENTER_ABOVE_LEFT,
+	MOVE_DIR_CENTER_ABOVE_RIGHT,
+	MOVE_DIR_CENTER_BELOW_LEFT,
+	MOVE_DIR_CENTER_BELOW_RIGHT,
 	MOVE_DIR_ABOVE_CENTER,
 	MOVE_DIR_BELOW_CENTER,
 	MOVE_DIR_LEFFT_CENTER,
 	MOVE_DIR_RIGHT_CENTER,
+	MOVE_DIR_ABOVE_LEFT_CENTER,
+	MOVE_DIR_ABOVE_RIGHT_CENTER,
+	MOVE_DIR_BELOW_LEFT_CENTER,
+	MOVE_DIR_BELOW_RIGHT_CENTER,
 };
 struct MOVE_PARAMETERS
 {
 	MOVE_DIRECTION		direction;
 	ymath::YVector3		start_offset;
 	ymath::YVector3		end_offset;
+	ymath::YVector3		start_scale;
+	ymath::YVector3		end_scale;
 	LANGUAGE_TEXT		description;
 };
 static const MOVE_PARAMETERS kMoveParameters[] = 
 {
-	{MOVE_DIR_CENTER_ABOVE,		ymath::YVector3(0, 0, 0),		ymath::YVector3(0, -2, 0),		TXT_EFFECTS_MOVE_DIRECTION_CENTRE_ABOVE},
-	{MOVE_DIR_CENTER_BELOW,		ymath::YVector3(0, 0, 0),		ymath::YVector3(0, 2, 0),		TXT_EFFECTS_MOVE_DIRECTION_CENTRE_BELOW},
-	{MOVE_DIR_CENTER_LEFT,		ymath::YVector3(0, 0, 0),		ymath::YVector3(-2, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_CENTRE_LEFT},
-	{MOVE_DIR_CENTER_RIGHT,		ymath::YVector3(0, 0, 0),		ymath::YVector3(2, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_CENTRE_RIGHT},
-	{MOVE_DIR_ABOVE_CENTER,		ymath::YVector3(0, -2, 0),		ymath::YVector3(0, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_ABOVE_CENTRE},
-	{MOVE_DIR_BELOW_CENTER,		ymath::YVector3(0, 2, 0),		ymath::YVector3(0, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_BELOW_CENTRE},
-	{MOVE_DIR_LEFFT_CENTER,		ymath::YVector3(-2, 0, 0),		ymath::YVector3(0, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_LEFT_CENTRE},
-	{MOVE_DIR_RIGHT_CENTER,		ymath::YVector3(2, 0, 0),		ymath::YVector3(0, 0, 0),		TXT_EFFECTS_MOVE_DIRECTION_RIGHT_CENTRE},
+	{MOVE_DIR_CENTER_ABOVE,			ymath::YVector3(0, 0, 0),			ymath::YVector3(0, -2, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_CENTRE_ABOVE},
+	{MOVE_DIR_CENTER_BELOW,			ymath::YVector3(0, 0, 0),			ymath::YVector3(0, 2, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_CENTRE_BELOW},
+	{MOVE_DIR_CENTER_LEFT,			ymath::YVector3(0, 0, 0),			ymath::YVector3(-2, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_CENTRE_LEFT},
+	{MOVE_DIR_CENTER_RIGHT,			ymath::YVector3(0, 0, 0),			ymath::YVector3(2, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_CENTRE_RIGHT},
+	{MOVE_DIR_CENTER_ABOVE_LEFT,	ymath::YVector3(0, 0, 0),			ymath::YVector3(-1.2f, -1.2f, 0),	ymath::YVector3(1, 1, 1),			ymath::YVector3(0.2f, 0.2f, 0.2f),	TXT_EFFECTS_MOVE_DIRECTION_CENTRE_ABOVE_LEFT},
+	{MOVE_DIR_CENTER_ABOVE_RIGHT,	ymath::YVector3(0, 0, 0),			ymath::YVector3(1.2f, -1.2f, 0),	ymath::YVector3(1, 1, 1),			ymath::YVector3(0.2f, 0.2f, 0.2f),	TXT_EFFECTS_MOVE_DIRECTION_CENTRE_ABOVE_RIGHT},
+	{MOVE_DIR_CENTER_BELOW_LEFT,	ymath::YVector3(0, 0, 0),			ymath::YVector3(-1.2f, 1.2f, 0),	ymath::YVector3(1, 1, 1),			ymath::YVector3(0.2f, 0.2f, 0.2f),	TXT_EFFECTS_MOVE_DIRECTION_CENTRE_BELOW_LEFT},
+	{MOVE_DIR_CENTER_BELOW_RIGHT,	ymath::YVector3(0, 0, 0),			ymath::YVector3(1.2f, 1.2f, 0),		ymath::YVector3(1, 1, 1),			ymath::YVector3(0.2f, 0.2f, 0.2f),	TXT_EFFECTS_MOVE_DIRECTION_CENTRE_BELOW_RIGHT},
+	{MOVE_DIR_ABOVE_CENTER,			ymath::YVector3(0, -2, 0),			ymath::YVector3(0, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_ABOVE_CENTRE},
+	{MOVE_DIR_BELOW_CENTER,			ymath::YVector3(0, 2, 0),			ymath::YVector3(0, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_BELOW_CENTRE},
+	{MOVE_DIR_LEFFT_CENTER,			ymath::YVector3(-2, 0, 0),			ymath::YVector3(0, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_LEFT_CENTRE},
+	{MOVE_DIR_RIGHT_CENTER,			ymath::YVector3(2, 0, 0),			ymath::YVector3(0, 0, 0),			ymath::YVector3(1, 1, 1),			ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_RIGHT_CENTRE},
+	{MOVE_DIR_ABOVE_LEFT_CENTER,	ymath::YVector3(-1.2f, -1.2f, 0),	ymath::YVector3(0, 0, 0),			ymath::YVector3(0.2f, 0.2f, 0.2f),	ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_ABOVE_LEFT_CENTER},
+	{MOVE_DIR_ABOVE_RIGHT_CENTER,	ymath::YVector3(1.2f, -1.2f, 0),	ymath::YVector3(0, 0, 0),			ymath::YVector3(0.2f, 0.2f, 0.2f),	ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_ABOVE_RIGHT_CENTER},
+	{MOVE_DIR_BELOW_LEFT_CENTER,	ymath::YVector3(-1.2f, 1.2f, 0),	ymath::YVector3(0, 0, 0),			ymath::YVector3(0.2f, 0.2f, 0.2f),	ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_BELOW_LEFT_CENTER},
+	{MOVE_DIR_BELOW_RIGHT_CENTER,	ymath::YVector3(1.2f, 1.2f, 0),		ymath::YVector3(0, 0, 0),			ymath::YVector3(0.2f, 0.2f, 0.2f),	ymath::YVector3(1, 1, 1),			TXT_EFFECTS_MOVE_DIRECTION_BELOW_RIGHT_CENTER},
 };
 
 enum INTERPOLATION {kInterpolationLinear, kInterpolationCosine, kInterpolationAcceleration, kInterpolationDeceleration};
@@ -114,6 +132,7 @@ Effect_Move :: Effect_Move(BRect frame, const char *filename)
 	{
 		popup_interpolation->AddOption(GetText(kInterpolationType[i].translated_text), i);
 	}
+	popup_interpolation->SelectOptionFor(1);
 	mEffectView->AddChild(popup_interpolation);
 }
 
@@ -231,11 +250,15 @@ void Effect_Move :: ChainedSpatialTransform(MediaEffect *data, int64 frame_idx)
 	const YVector3 center(0.5f*gProject->mResolution.width, 0.5f*gProject->mResolution.height, 0);
 	YVector3 start_position(center);
 	YVector3 end_position(center);
+	YVector3 start_scale;
+	YVector3 end_scale;
 	
 	if (move)
 	{
 		start_position += YVector3(center)*kMoveParameters[move->direction].start_offset;
 		end_position += YVector3(center)*kMoveParameters[move->direction].end_offset;
+		start_scale = kMoveParameters[move->direction].start_scale;
+		end_scale = kMoveParameters[move->direction].end_scale;
 
 		const ymath::YVector3 (*fn)(const ymath::YVector3 &start, const ymath::YVector3 &end, const float t);
 		switch (move->interpolation)
@@ -249,6 +272,7 @@ void Effect_Move :: ChainedSpatialTransform(MediaEffect *data, int64 frame_idx)
 
 		YSpatial spatial;
 		spatial.SetPosition(fn(start_position, end_position, t));
+		spatial.SetScale(fn(start_scale, end_scale, t));
 		spatial.Transform();
 	}
 }
