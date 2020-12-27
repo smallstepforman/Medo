@@ -30,22 +30,23 @@ enum WIPE_LANGUAGE_TEXT
 	TXT_WIPE_TEXT_B,
 	TXT_WIPE_LEFT_RIGHT,
 	TXT_WIPE_RIGHT_LEFT,
+	TXT_WIPE_MIDDLE_OUT,
 	TXT_WIPE_CROSS,
 	TXT_WIPE_CIRCLE,
 	NUMBER_WIPE_LANGUAGE_TEXT
 };
 static const char *kWipeLanguages[][NUMBER_WIPE_LANGUAGE_TEXT] =
 {
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},				//	"English (Britian)",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Cross",			"Circle"},				//	"English (USA)",
-{"Wischen",		"Wischen",			"Übergang verwischen zwischen 2 Tracks","Links -> Rechtst",		"Rechts -> Links",		"Kreuz",			"Kreis"},				//	"Deutsch",
-{"Effacer",		"Effacer",			"Effacer la transition entre 2 pistes", "Gauche -> Droite",		"Droite -> Gauche",		"Croix",			"Cercle"},				//	"Français",
-{"Pulisci",		"Pulisci",			"Pulisci Transizione fra 2 tracce",		"Sinistra -> Destra",	"Destra -> Sinistra",	"Incrociare",		"Cerchio"},				//	"Italiano",
-{"Вытеснение",	"Вытеснение",		"Плавный переход между 2 треками",		"Слева -> направо",		"Справа -> налево",		"Пересечение",		"Круговое вытеснение"},	//	"Русский",
-{"Прелаз",		"Гладак прелаз",	"Гладак прелаз између 2 траке",			"Лево -> Десно",		"Десно -> Лево",		"Укрштени прелаз",	"Кружни прелаз"},		//	"Српски",
-{"Limpiar",		"Limpiar",			"Limpiar transiciones entre dos pistas","Izquierda -> Derecha",	"Derecha -> Izquierda",	"Cruz",				"Círculo"},				//	"Español",
-{"Wissen",		"Wissen",			"Wis overgang tussen 2 tracks",			"Links -> Rechts",		"Rechts -> Links",		"Kruis",			"Cirkel",},				//	"Dutch",
-{"Menghapus",	"Menghapus",		"Hapus Transisi antara 2 trek",			"Kiri -> Kanan",		"Kanan -> Kiri",		"Menyeberang",		"Lingkaran"},			//	"Indonesian",
+{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Middle -> Out",		"Cross",			"Circle"},				//	"English (Britian)",
+{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Middle -> Out",		"Cross",			"Circle"},				//	"English (USA)",
+{"Wischen",		"Wischen",			"Übergang verwischen zwischen 2 Tracks","Links -> Rechtst",		"Rechts -> Links",		"Mitte -> Aus",			"Kreuz",			"Kreis"},				//	"Deutsch",
+{"Effacer",		"Effacer",			"Effacer la transition entre 2 pistes", "Gauche -> Droite",		"Droite -> Gauche",		"Milieu -> Sortie",		"Croix",			"Cercle"},				//	"Français",
+{"Pulisci",		"Pulisci",			"Pulisci Transizione fra 2 tracce",		"Sinistra -> Destra",	"Destra -> Sinistra",	"Al centro -> Fuori",	"Incrociare",		"Cerchio"},				//	"Italiano",
+{"Вытеснение",	"Вытеснение",		"Плавный переход между 2 треками",		"Слева -> направо",		"Справа -> налево",		"Средний -> Из",		"Пересечение",		"Круговое вытеснение"},	//	"Русский",
+{"Прелаз",		"Гладак прелаз",	"Гладак прелаз између 2 траке",			"Лево -> Десно",		"Десно -> Лево",		"Средина -> Страна",	"Укрштени прелаз",	"Кружни прелаз"},		//	"Српски",
+{"Limpiar",		"Limpiar",			"Limpiar transiciones entre dos pistas","Izquierda -> Derecha",	"Derecha -> Izquierda",	"Medio -> Fuera",		"Cruz",				"Círculo"},				//	"Español",
+{"Wissen",		"Wissen",			"Wis overgang tussen 2 tracks",			"Links -> Rechts",		"Rechts -> Links",		"Midden -> Out",		"Kruis",			"Cirkel",},				//	"Dutch",
+{"Menghapus",	"Menghapus",		"Hapus Transisi antara 2 trek",			"Kiri -> Kanan",		"Kanan -> Kiri",		"Tengah -> Keluar",		"Menyeberang",		"Lingkaran"},			//	"Indonesian",
 };
 
 Effect_Wipe *instantiate_effect(BRect frame)
@@ -60,9 +61,26 @@ enum kWipeMessages
 {
 	kMsgWipeLeftRight	= 'ewd0',
 	kMsgWipeRightLeft,
+	kMsgWipeMiddleOut,
 	kMsgWipeCross,
 	kMsgWipeCircle,
 	kNumberWipeMessages = kMsgWipeCircle - kMsgWipeLeftRight + 1,
+};
+
+struct RadioButton
+{
+	BRect				rect;
+	const char			*name;
+	kWipeMessages		msg;
+	WIPE_LANGUAGE_TEXT	text;
+};
+static const RadioButton kRadioButtons[] =
+{
+	{BRect(40, 40, 300, 70),	"left_right",	kMsgWipeLeftRight,	TXT_WIPE_LEFT_RIGHT},
+	{BRect(40, 80, 300, 110),	"right_left",	kMsgWipeRightLeft,	TXT_WIPE_RIGHT_LEFT},
+	{BRect(40, 120, 300, 150),	"middle_out",	kMsgWipeMiddleOut,	TXT_WIPE_MIDDLE_OUT},
+	{BRect(40, 160, 300, 190),	"cross",		kMsgWipeCross,		TXT_WIPE_CROSS},
+	{BRect(40, 200, 300, 230),	"circle",		kMsgWipeCircle,		TXT_WIPE_CIRCLE},
 };
 
 struct EffectWipeData
@@ -126,6 +144,24 @@ static const char *kFragmentShaderRightLeft = "\
 		else\
 			fFragColour.a = mix(0.0, 1.0, choose);\
 	}";
+static const char *kFragmentShaderMiddleOut = "\
+	uniform sampler2D	uTextureUnit0;\
+	uniform float		uTime;\
+	uniform int			uSwap;\
+	in vec2				vTexCoord0;\
+	out vec4			fFragColour;\
+	void main(void) {\
+		fFragColour =texture(uTextureUnit0, vTexCoord0);\
+		float width = 0.05;\
+		float correction = mix(width, -width, uTime);\
+		float t = uTime*0.5;\
+		float d = abs(vTexCoord0.x - 0.5);\
+		float choose = smoothstep(t - width, t + width, d + correction);\
+		if (uSwap > 0)\
+			fFragColour.a = mix(0.0, 1.0, choose);\
+		else\
+			fFragColour.a = mix(1.0, 0.0, choose);\
+	}";
 static const char *kFragmentShaderCross = "\
 	uniform sampler2D	uTextureUnit0;\
 	uniform float		uTime;\
@@ -180,12 +216,13 @@ private:
 	};
 	ShaderData		fShaderLeftRight;
 	ShaderData		fShaderRightLeft;
+	ShaderData		fShaderMiddleOut;
 	ShaderData		fShaderCross;
 	ShaderData		fShaderCircle;
 	float			fTime;
 	
 public:
-	enum Shader {eLeftRight, eRightLeft, eCross, eCircle};
+	enum Shader {eLeftRight, eRightLeft, eMiddleOut, eCross, eCircle};
 	int		mShaderType;
 	int		mSwap;
 
@@ -206,6 +243,12 @@ public:
 		fShaderRightLeft.fLocation_uTextureUnit0 = fShaderRightLeft.fShader->GetUniformLocation("uTextureUnit0");
 		fShaderRightLeft.fLocation_uTime = fShaderRightLeft.fShader->GetUniformLocation("uTime");
 		fShaderRightLeft.fLocation_uSwap = fShaderRightLeft.fShader->GetUniformLocation("uSwap");
+
+		fShaderMiddleOut.fShader = new YShader(&attributes, kVertexShader, kFragmentShaderMiddleOut);
+		fShaderMiddleOut.fLocation_uTransform = fShaderMiddleOut.fShader->GetUniformLocation("uTransform");
+		fShaderMiddleOut.fLocation_uTextureUnit0 = fShaderMiddleOut.fShader->GetUniformLocation("uTextureUnit0");
+		fShaderMiddleOut.fLocation_uTime = fShaderMiddleOut.fShader->GetUniformLocation("uTime");
+		fShaderMiddleOut.fLocation_uSwap = fShaderMiddleOut.fShader->GetUniformLocation("uSwap");
 
 		fShaderCross.fShader = new YShader(&attributes, kVertexShader, kFragmentShaderCross);
 		fShaderCross.fLocation_uTransform = fShaderCross.fShader->GetUniformLocation("uTransform");
@@ -228,6 +271,7 @@ public:
 	{
 		delete fShaderLeftRight.fShader;
 		delete fShaderRightLeft.fShader;
+		delete fShaderMiddleOut.fShader;
 		delete fShaderCross.fShader;
 		delete fShaderCircle.fShader;
 	}
@@ -251,6 +295,13 @@ public:
 				glUniform1i(fShaderRightLeft.fLocation_uTextureUnit0, 0);
 				glUniform1f(fShaderRightLeft.fLocation_uTime, fTime);
 				glUniform1i(fShaderRightLeft.fLocation_uSwap, mSwap);
+				break;
+			case Shader::eMiddleOut:
+				fShaderMiddleOut.fShader->EnableProgram();
+				glUniformMatrix4fv(fShaderMiddleOut.fLocation_uTransform, 1, GL_FALSE, yrender::yMatrixStack.GetMVPMatrix().m);
+				glUniform1i(fShaderMiddleOut.fLocation_uTextureUnit0, 0);
+				glUniform1f(fShaderMiddleOut.fLocation_uTime, fTime);
+				glUniform1i(fShaderMiddleOut.fLocation_uSwap, mSwap);
 				break;
 			case Shader::eCross:
 				fShaderCross.fShader->EnableProgram();
@@ -291,14 +342,13 @@ Effect_Wipe :: Effect_Wipe(BRect frame, const char *filename)
 
 	fRenderNode = nullptr;
 
-	static_assert((int)kNumberWipes == (int)kNumberWipeMessages);
-	fGuiButtons[0] = new BRadioButton(BRect(40, 40, 300, 70), "wipe_1", kWipeLanguages[GetLanguage()][TXT_WIPE_LEFT_RIGHT], new BMessage(kMsgWipeLeftRight));
-	fGuiButtons[1] = new BRadioButton(BRect(40, 80, 300, 110), "wipe_2", kWipeLanguages[GetLanguage()][TXT_WIPE_RIGHT_LEFT], new BMessage(kMsgWipeRightLeft));
-	fGuiButtons[2] = new BRadioButton(BRect(40, 120, 300, 150), "wipe_3", kWipeLanguages[GetLanguage()][TXT_WIPE_CROSS], new BMessage(kMsgWipeCross));
-	fGuiButtons[3] = new BRadioButton(BRect(40, 160, 300, 190), "wipe_4", kWipeLanguages[GetLanguage()][TXT_WIPE_CIRCLE], new BMessage(kMsgWipeCircle));
+	for (std::size_t i=0; i < sizeof(kRadioButtons)/sizeof(RadioButton); i++)
+	{
+		BRadioButton *button = new BRadioButton(kRadioButtons[i].rect, kRadioButtons[i].name, kWipeLanguages[GetLanguage()][kRadioButtons[i].text], new BMessage(kRadioButtons[i].msg));
+		fGuiButtons.push_back(button);
+		mEffectView->AddChild(button);
+	}
 	fGuiButtons[0]->SetValue(1);
-	for (int i=0; i < kNumberWipes; i++)
-		mEffectView->AddChild(fGuiButtons[i]);
 }
 
 /*	FUNCTION:		Effect_Wipe :: ~Effect_Wipe
@@ -316,8 +366,8 @@ Effect_Wipe :: ~Effect_Wipe()
 */
 void Effect_Wipe :: AttachedToWindow()
 {
-	for (int i=0; i < kNumberWipes; i++)
-		fGuiButtons[i]->SetTarget(this, Window());
+	for (auto &i : fGuiButtons)
+		i->SetTarget(this, Window());
 
 	mSwapTexturesCheckbox->SetTarget(this, Window());
 }
@@ -424,7 +474,7 @@ void Effect_Wipe :: MediaEffectSelected(MediaEffect *effect)
 	EffectWipeData *data = (EffectWipeData *)effect->mEffectData;
 
 	//	Update GUI
-	for (int i=0; i < kNumberWipes; i++)
+	for (std::size_t i=0; i < fGuiButtons.size(); i++)
 		fGuiButtons[i]->SetValue(data->direction == i ? 1 : 0);
 
 	mSwapTexturesCheckbox->SetValue(data->swap);
@@ -466,38 +516,6 @@ void Effect_Wipe :: MessageReceived(BMessage *msg)
 {
 	switch (msg->what)
 	{
-		case kMsgWipeLeftRight:
-			if (GetCurrentMediaEffect())
-			{
-				((EffectWipeData *)GetCurrentMediaEffect()->mEffectData)->direction = 0;
-				gProject->InvalidatePreview();
-			}
-			break;
-
-		case kMsgWipeRightLeft:
-			if (GetCurrentMediaEffect())
-			{
-				((EffectWipeData *)GetCurrentMediaEffect()->mEffectData)->direction = 1;
-				gProject->InvalidatePreview();
-			}
-			break;
-				
-		case kMsgWipeCross:
-			if (GetCurrentMediaEffect())
-			{
-				((EffectWipeData *)GetCurrentMediaEffect()->mEffectData)->direction = 2;
-				gProject->InvalidatePreview();
-			}
-			break;
-
-		case kMsgWipeCircle:
-			if (GetCurrentMediaEffect())
-			{
-				((EffectWipeData *)GetCurrentMediaEffect()->mEffectData)->direction = 3;
-				gProject->InvalidatePreview();
-			}
-			break;
-
 		case kMsgSwapTextureUnits:
 			if (GetCurrentMediaEffect())
 			{
@@ -507,7 +525,16 @@ void Effect_Wipe :: MessageReceived(BMessage *msg)
 			break;
 
 		default:
-			EffectNode::MessageReceived(msg);
+			if ((msg->what >= kMsgWipeLeftRight) && (msg->what <= kMsgWipeLeftRight + kNumberWipeMessages))
+			{
+				if (GetCurrentMediaEffect())
+				{
+					((EffectWipeData *)GetCurrentMediaEffect()->mEffectData)->direction = msg->what - kMsgWipeLeftRight;
+					gProject->InvalidatePreview();
+				}
+			}
+			else
+				EffectNode::MessageReceived(msg);
 			break;
 	}
 }	
@@ -526,7 +553,7 @@ bool Effect_Wipe :: LoadParameters(const rapidjson::Value &v, MediaEffect *media
 	if (v.HasMember("direction") && v["direction"].IsUint())
 	{
 		data->direction = v["direction"].GetUint();
-		if (data->direction > 3)
+		if (data->direction >= fGuiButtons.size())
 			data->direction = 0;
 	}
 	else
