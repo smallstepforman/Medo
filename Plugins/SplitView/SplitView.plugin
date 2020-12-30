@@ -1,0 +1,135 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"SplitView",
+		"labelA":	["Split View", "Split View", "Geteilte Ansicht", "Vue divisée", 
+							"Vista divisa", "Разделенный вид", "Подељени поглед", "Vista dividida",
+							"Verdeeld Uitzicht", "Tampilan Terbagi"],
+		"labelB":	["Split View", "Split View", "Geteilte Ansicht", "Vue divisée", 
+							"Vista divisa", "Разделенный вид", "Подељени поглед", "Vista dividida",
+							"Verdeeld Uitzicht", "Tampilan Terbagi"],
+		"icon":		"Plugins/SplitView/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit1"
+			},
+			{
+				"type":		"float",
+				"name":	"uMidPoint"
+			},
+			{
+				"type":		"float",
+				"name":		"uOffsetTex0"
+			},
+			{
+				"type":		"float",
+				"name":		"uOffsetTex1"
+			},
+			{
+				"type":		"int",
+				"name":	"uInterpolateIn"
+			},
+			{
+				"type":		"interval",
+				"name":		"uTime"
+			},
+			{
+				"type":		"float",
+				"name":		"uInterpolateInThreshold"
+			},
+			{
+				"type":		"int",
+				"name":	"uInterpolateOut"
+			},
+			{
+				"type":		"float",
+				"name":		"uInterpolateOutThreshold"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/SplitView/SplitView.frag"
+		},
+		"gui": [
+			{
+				"type":			"slider",
+				"rect":			[20, 20, 620, 100],
+				"label":			["Mid Point", "Mid Point", "Die Mitte", "Le Milieu",
+										"La metà", "Середина", "Средина", "Punto medio",
+										"Middelpunt", "Titik tengah"],
+				"label_min":		["0"],
+				"label_max":	["1"],
+				"default":		0.5,
+				"range":			[0.0, 1.0],
+				"uniform":		"uMidPoint",
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 320, 200],
+				"label":			["Left Offset X", "Left Offset X", "Linkes X", "Décalage gauche X",
+										"X sinistra", "Левый Х", "Леви X", "Izquierda X",
+										"Links X", "Kiri X"],
+				"label_min":		["0"],
+				"label_max":	["1"],
+				"default":		0.25,
+				"range":			[0.0, 1.0],
+				"uniform":		"uOffsetTex0",
+			},
+			{
+				"type":			"slider",
+				"rect":			[340, 120, 640, 200],
+				"label":			["Right Offset X", "Right Offset X", "Richtiges X", "Droite X",
+										"X destra", "Правый Х", "Десни X", "Derecha X",
+										"Rechts X", "Benar X"],
+				"label_min":		["0"],
+				"label_max":	["1"],
+				"default":		0.25,
+				"range":			[0.0, 1.0],
+				"uniform":		"uOffsetTex1",
+			},
+			{
+				"type":			"checkbox",
+				"rect":			[20, 420, 200, 460],
+				"label":			["Interpolate In"],
+				"default":		1,
+				"uniform":		"uInterpolateIn",
+			},
+			{
+				"type":			"slider",
+				"rect":			[220, 400, 620, 480],
+				"label":			["In Threshold"],
+				"label_min":		["0"],
+				"label_max":	["1"],
+				"default":		0.20,
+				"range":			[0.0, 1.0],
+				"uniform":		"uInterpolateInThreshold",
+			},
+			{
+				"type":			"checkbox",
+				"rect":			[20, 520, 200, 560],
+				"label":			["Interpolate Out"],
+				"default":		1,
+				"uniform":	"uInterpolateOut",
+			},
+			{
+				"type":			"slider",
+				"rect":			[220, 500, 620, 580],
+				"label":			["Out Threshold"],
+				"label_min":		["0"],
+				"label_max":	["1"],
+				"default":		0.80,
+				"range":			[0.0, 1.0],
+				"uniform":	"uInterpolateOutThreshold",
+			}
+		]
+	}
+}
