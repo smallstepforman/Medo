@@ -47,9 +47,8 @@ public:
 	void			MessageReceived(BMessage *msg)					override;
 	
 private:
-	yrender::YRenderNode 	*fRenderNode;
-	enum {kNumberWipes = 4};
-	BRadioButton			*fGuiButtons[kNumberWipes];
+	yrender::YRenderNode		*fRenderNode;
+	std::vector<BRadioButton *>	fGuiButtons;
 };
 
 extern "C" __declspec(dllexport) Effect_Wipe *instantiate_effect(BRect frame);
