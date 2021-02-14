@@ -18,6 +18,7 @@ namespace yrender
 	class YRenderNode;
 };
 class BBitmap;
+class LanguageJson;
 
 class Effect_Fade : public EffectNode
 {
@@ -49,6 +50,8 @@ public:
 private:
 	yrender::YRenderNode 	*fRenderNode;
 	BRadioButton			*fGuiButtons[4];
+	LanguageJson			*fLanguage;
+
 };
 
 extern "C" __declspec(dllexport) Effect_Fade *instantiate_effect(BRect frame);

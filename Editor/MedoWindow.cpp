@@ -68,6 +68,8 @@ MedoWindow :: MedoWindow()
 	assert(sMedoWindow == nullptr);
 	sMedoWindow = this;
 
+	gLanguageManager = new LanguageManager;
+
 	LoadSettings();
 	SetTitle(GetText(TXT_MENU_MEDO));
 
@@ -191,10 +193,10 @@ MedoWindow :: MedoWindow()
 */
 MedoWindow :: ~MedoWindow()
 {
-	delete gAudioManager;
-	gAudioManager = nullptr;
-
-	delete gRenderActor;
+	delete gAudioManager;		gAudioManager = nullptr;
+	delete gRenderActor;		gRenderActor = nullptr;
+	delete fProject;			fProject = nullptr;
+	delete gLanguageManager;	gLanguageManager = nullptr;
 
 	DestroyFilePanel();
 
@@ -218,8 +220,6 @@ MedoWindow :: ~MedoWindow()
 		if (i != fControlMode)
 			delete fControlViews[i];
 	}
-	delete fProject;
-	fProject = nullptr;
 
 	//	attached views cleaned up automatically
 	printf("MedoWindow::~MedoWindow()\n");

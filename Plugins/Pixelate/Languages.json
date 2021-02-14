@@ -1,0 +1,144 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Pixelate",
+				"Pixelate",
+				"Size X",
+				"Min (0%)",
+				"Max (100%)",
+				"Size Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpolate"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Pixelate",
+				"Pixelate",
+				"Size X",
+				"Min (0%)",
+				"Max (100%)",
+				"Size Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpolate"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Pixelate",
+				"Pixelate",
+				"Größe X",
+				"Min (0%)",
+				"Max (100%)",
+				"Größe Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpolieren"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Pixéliser",
+				"Pixéliser",
+				"Taille X",
+				"Min (0%)",
+				"Max (100%)",
+				"Taille Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpoler"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Sgrana",
+				"Sgrana",
+				"Dimensione X",
+				"Min (0%)",
+				"Max (100%)",
+				"Dimensione Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpola"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Пикселизация",
+				"Пикселизация",
+				"Размер X",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Размер Y",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Интерполировать"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Тачке",
+				"Тачке",
+				"Величина X",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Величина Y",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Интерполирај"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Pixelar",
+				"Pixelar",
+				"Tamaño de X",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Tamaño de  Y",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Interpolar"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Pixelate",
+				"Pixelate",
+				"Grootte X",
+				"Min (0%)",
+				"Max (100%)",
+				"Grootte Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Interpoleren"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Pixelate",
+				"Pixelate",
+				"Ukuran X",
+				"Min (0%)",
+				"Max (100%)",
+				"Ukuran Y",
+				"Min (0%)",
+				"Max (100%)",
+				"Menambah"
+			]
+		}
+	]
+}

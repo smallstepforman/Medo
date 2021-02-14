@@ -1,0 +1,84 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Night Vision",
+				"Green Night Vision shader",
+				"Green Night Vision shader"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Night Vision",
+				"Green Night Vision shader",
+				"Green Night Vision shader"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Nachtsicht",
+				"Grüne Nachtsicht",
+				"Grüne Nachtsicht"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Vision nocturne",
+				"Shader de vision nocturne verte",
+				"Shader de vision nocturne verte"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Visione Notturna",
+				"Tinta Verde Visione Notturna",
+				"Tinta Verde Visione Notturna"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Ночное видение",
+				"Зеленый шейдер ночного видения",
+				"Зеленый шейдер ночного видения"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ноћна визија",
+				"Зелена ноћна визија",
+				"Зелена ноћна визија"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Visión nocturna",
+				"Sombreador de visión nocturna verde",
+				"Sombreador de visión nocturna verde"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Nachtzicht",
+				"Groene Nachtzicht shader",
+				"Groene Nachtzicht shader"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Night",
+				"Shader Hijau Penglihatan Malam",
+				"Shader Hijau Penglihatan Malam"
+			]
+		}
+	]
+}

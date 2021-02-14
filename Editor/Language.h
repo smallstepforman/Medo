@@ -7,8 +7,16 @@
 #ifndef LANGUAGE_TEXT_H
 #define LANGUAGE_TEXT_H
 
-#ifndef _SUPPORT_DEFS_H
-#include <support/SupportDefs.h>
+#ifndef _GLIBCXX_VECTOR
+#include <vector>
+#endif
+
+#ifndef _B_STRING_H
+#include <support/String.h>
+#endif
+
+#ifndef _PATH_H
+#include <storage/Path.h>
 #endif
 
 enum LANGUAGE_TEXT
@@ -411,10 +419,41 @@ enum LANGUAGE_TEXT
 	NUMBER_TXT_DEFINITIONS,
 };
 
-const char						*GetText(LANGUAGE_TEXT text);
+/****************************
+	LanguageManager
+*****************************/
+class LanguageManager
+{
+public:
+					LanguageManager();
+					~LanguageManager();
 
-void							SetLangauge(const uint32 index);
-int								GetLanguage();
-const std::vector<const char *>	&GetAvailableLanguages();
+	void			SetLanguage(const BString &language);
+	uint32			GetCurrentLanguageIndex() const {return fCurrentLanguageIndex;}	[[deprecated]];
+	const BString	&GetCurrentLanguageName() const;
+	uint32			GetNumberAvailableLanguages() const;
+
+	const char		*GetText(LANGUAGE_TEXT text);
+	void			GetAvailableLanguages(std::vector<BString *> &languages);
+
+private:
+	struct LanguageFile
+	{
+		BString					mName;
+		std::vector<BString>	mText;
+		BString					mFilename;
+
+		LanguageFile() {mText.reserve(NUMBER_TXT_DEFINITIONS);}
+	};
+
+	std::vector<LanguageFile *>				fLanguages;
+	int										fCurrentLanguageIndex;
+
+	void	ParseLanguageDirectory(const BString &path);
+	void	ParseLanguageFile(const BPath &path);
+};
+extern LanguageManager *gLanguageManager;
+
+const char		*GetText(LANGUAGE_TEXT text);
 
 #endif	//	#ifndef LANGUAGE_TEXT_H

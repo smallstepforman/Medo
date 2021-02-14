@@ -1,0 +1,124 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Radial Blur",
+				"Radial Blur Effect",
+				"Blur Amount",
+				"Min (0%)",
+				"Max (100%)",
+				"Brightness",
+				"Interpolate"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Radial Blur",
+				"Radial Blur Effect",
+				"Blur Amount",
+				"Min (0%)",
+				"Max (100%)",
+				"Brightness",
+				"Interpolate"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Kreisförmige Unschärfe",
+				"Kreisförmiger Unschärfe-Effekt",
+				"Unschärfemenge",
+				"Min (0%)",
+				"Max (100%)",
+				"Helligkeit",
+				"Interpolieren"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Flou radial",
+				"Effet de flou radial",
+				"Quantité de flou",
+				"Min (0%)",
+				"Max (100%)",
+				"Luminosité",
+				"Interpoler"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Sfocatura Radiale",
+				"Effetto Sfocatura Radiale",
+				"Quantità Sfocatura",
+				"Min (0%)",
+				"Max (100%)",
+				"Luminosità",
+				"Interpola"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Радиальное размытие",
+				"Эффект радиального размытия",
+				"Степень размытия",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Яркость",
+				"Интерполировать"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Кружна замућеност",
+				"Ефекат кружног замућења",
+				"Количина замућења",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Осветљеност",
+				"Интерполирај"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Desenfoque radial",
+				"Efecto de desenfoque radial",
+				"Cantidad de desenfoque",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Brillo",
+				"Interpolar"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Radiaal Vervagen",
+				"Radiaal Vervagen Effect",
+				"Hoeveelheid Vervagen",
+				"Min (0%)",
+				"Max (100%)",
+				"Helderheid",
+				"Interpoleren"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Radial Blur",
+				"Efek Radial Blur",
+				"Blur Amount",
+				"Min (0%)",
+				"Max (100%)",
+				"Kecerahan",
+				"Menambah"
+			]
+		}
+	]
+}

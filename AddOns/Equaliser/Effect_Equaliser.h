@@ -17,6 +17,7 @@ class BSlider;
 class BButton;
 class BOptionPopUp;
 class BFont;
+class LanguageJson;
 
 class EffectNode_Equaliser : public EffectNode
 {
@@ -47,6 +48,7 @@ public:
 	void			MessageReceived(BMessage *msg)					override;
 
 private:
+	LanguageJson					*fLanguage;
 	std::vector<BSlider *>			fSliders;
 	std::vector<BString>			fLabels;
 	BFont							*fRotatedFont;

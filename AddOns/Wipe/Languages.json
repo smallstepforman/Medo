@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Wipe",
+				"Wipe",
+				"Wipe Transition between 2 tracks",
+				"Left -> Right",
+				"Right -> Left",
+				"Middle -> Out",
+				"Cross",
+				"Circle"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Wipe",
+				"Wipe",
+				"Wipe Transition between 2 tracks",
+				"Left -> Right",
+				"Right -> Left",
+				"Middle -> Out",
+				"Cross",
+				"Circle"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Wischen",
+				"Wischen",
+				"Übergang verwischen zwischen 2 Tracks",
+				"Links -> Rechtst",
+				"Rechts -> Links",
+				"Mitte -> Aus",
+				"Kreuz",
+				"Kreis"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Effacer",
+				"Effacer",
+				"Effacer la transition entre 2 pistes",
+				"Gauche -> Droite",
+				"Droite -> Gauche",
+				"Milieu -> Sortie",
+				"Croix",
+				"Cercle"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Pulisci",
+				"Pulisci",
+				"Pulisci Transizione fra 2 tracce",
+				"Sinistra -> Destra",
+				"Destra -> Sinistra",
+				"Al centro -> Fuori",
+				"Incrociare",
+				"Cerchio"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Вытеснение",
+				"Вытеснение",
+				"Плавный переход между 2 треками",
+				"Слева -> направо",
+				"Справа -> налево",
+				"Средний -> Из",
+				"Пересечение",
+				"Круговое вытеснение"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Прелаз",
+				"Гладак прелаз",
+				"Гладак прелаз између 2 траке",
+				"Лево -> Десно",
+				"Десно -> Лево",
+				"Средина -> Страна",	
+				"Укрштени прелаз",
+				"Кружни прелаз"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Limpiar",
+				"Limpiar",
+				"Limpiar transiciones entre dos pistas",
+				"Izquierda -> Derecha",
+				"Derecha -> Izquierda",
+				"Medio -> Fuera",
+				"Cruz",
+				"Círculo"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Wissen",
+				"Wissen",
+				"Wis overgang tussen 2 tracks",
+				"Links -> Rechts",
+				"Rechts -> Links",
+				"Midden -> Out",
+				"Kruis",
+				"Cirkel"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Menghapus",
+				"Menghapus",
+				"Hapus Transisi antara 2 trek",
+				"Kiri -> Kanan",
+				"Kanan -> Kiri",
+				"Tengah -> Keluar",
+				"Menyeberang",
+				"Lingkaran"
+			]
+		}
+	]
+}

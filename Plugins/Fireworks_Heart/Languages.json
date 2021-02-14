@@ -1,0 +1,144 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Fireworks (Heart)",
+				"Fireworks Effect",
+				"Number Hearts",
+				"1",
+				"100",
+				"Number Particles",
+				"10",
+				"100",
+				"Caution: very slow"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Fireworks (Heart)",
+				"Fireworks Effect",
+				"Number Hearts",
+				"1",
+				"100",
+				"Number Particles",
+				"10",
+				"100",
+				"Caution: very slow"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Feuerwerk (Herzen)",
+				"Feuerwerk Effect",
+				"Anzahl der Herzen",
+				"1",
+				"100",
+				"Anzahl Partikel",
+				"10",
+				"100",
+				"Achtung: sehr langsam"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Feu d'artifice (coeur)",
+				"Effet de feux d'artifice",
+				"Nombre de coeurs",
+				"1",
+				"100",
+				"Nombre de particules",
+				"10",
+				"100",
+				"Attention: très lent"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Fuochi d'artificio (Cuore)",
+				"Effetto Fuochi d'artificio",
+				"Numero Cuori",
+				"1",
+				"100",
+				"Numero Particelle",
+				"10",
+				"100",
+				"Attenzione: molto lento"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Фейерверк (Сердце)",
+				"Эффект фейерверка",
+				"Число сердец",
+				"1",
+				"100",
+				"Число частиц",
+				"10",
+				"100",
+				"Осторожно: очень медленно"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ватромет (Срце)",
+				"Ефекат ватромета",
+				"Број срца",
+				"1",
+				"100",
+				"Број честица",
+				"10",
+				"100",
+				"Опрез: врло споро"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Fuegos artificiales (corazones)",
+				"Efecto de fuegos artificiales",
+				"Número de explosiones",
+				"1",
+				"100",
+				"Número de partículas",
+				"10",
+				"100",
+				"Advertencia: es muy lento"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Vuurwerk (Hart)",
+				"Vuurwerk Effect",
+				"Aantal Harten",
+				"1",
+				"100",
+				"Aantal Deeltjes",
+				"10",
+				"100",
+				"Waarschuwing: zeer langzaam"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Fireworks (Hati)",
+				"Efek Kembang Api",
+				"Jumlah Hati",
+				"1",
+				"100",
+				"Partikel Nomor",
+				"10",
+				"100",
+				"Perhatian: sangat lambat"
+			]
+		}
+	]
+}

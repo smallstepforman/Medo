@@ -1,0 +1,124 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Fade",
+				"Fade (Black/Alpha",
+				"Fade to Black / Fade Transparency",
+				"Fade From Black",
+				"Fade To Black",
+				"Alpha In (A->1)",
+				"Alpha Out (A->0)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Fade",
+				"Fade (Black/Alpha",
+				"Fade to Black / Fade Transparency",
+				"Fade From Black",
+				"Fade To Black",
+				"Alpha In (A->1)",
+				"Alpha Out (A->0)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Verblassen",
+				"Verblassen (Schwarz/Alpha)",
+				"Richtung Schwarz verblassen / In Transparenz ändern",
+				"Aus Schwarz aufhellen",
+				"Nach Schwarz verblassen",
+				"Alpha Rein (A -> 1)",
+				"Alpha Raus (A -> 0)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Fondu",
+				"Fondu (Noir / Alpha)",
+				"Fondu au noir / Transparence fondu",
+				"Fondu à partir du noir",
+				"Fondu au noir",
+				"Entrée alpha (A -> 1)",
+				"Sortie alpha (A -> 0) "
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Dissolvenza",
+				"Dissolvenza (Nero/Alfa)",
+				"Dissolvenza a Nero / Trasparenza Dissolvenza",
+				"Dissolvenza Da Nero",
+				"Dissolvenza A Nero",
+				"Alfa In (A -> 1)",
+				"Alfa Usc (A -> 0)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Затемнение",
+				"Затемнение (Черный/Альфа)",
+				"Затемнение в черный/Затемнение прозрачности",
+				"Выведение из черного",
+				"Затемнение в черный",
+				"Альфа-вход (A -> 1)",
+				"Альфа-выход (A -> 0)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Избледи",
+				"Избледи (црно / провиднo)",
+				"Избледи (црна или провидна боја)",
+				"Избледи од црне боје",
+				"Поцрни дo црне боје",
+				"Смањи провидност (A -> 1)",
+				"Повећај провидност (A -> 0)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Desvanecimiento",
+				"Desvanecimiento (negro/alfa))",
+				"Desvanecer a negro / desvanecer a transparente",
+				"Desvanecer desde negro",
+				"Desvanecer a negro",
+				"Alfa al inicio (A -> 1)",
+				"Alfa al final (A -> 0"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Vervagen",
+				"Vervaag (Black/Alpha)",
+				"Vervaag Naar Zwart / Vervaag Transparantie",
+				"Vervaag Van Zwart",
+				"Vervaag Naar Zwart",
+				"Alpha In (A -> 1)",
+				"Alpha Uit (A -> 0)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Luntur",
+				"Fade (Black/Alpha)",
+				"Fade to Black / Fade Transparency",
+				"Fade From Black",
+				"Fade To Black",
+				"Alfa Masuk (A -> 1)",
+				"Alfa Keluar (A -> 0)"
+			]
+		}
+	]
+}

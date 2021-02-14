@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Flame",
+				"Flame effect",
+				"Brightness",
+				"0.0",
+				"1.0",
+				"Mix",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Flame",
+				"Flame effect",
+				"Brightness",
+				"0.0",
+				"1.0",
+				"Mix",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Feuer",
+				"Feuer-Effekt",
+				"Helligkeit",
+				"0.0",
+				"1.0",
+				"Mischen",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Flamme",
+				"Effet de flamme",
+				"Luminosité",
+				"0.0",
+				"1.0",
+				"Mélanger",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Fiamma",
+				"Effetto Fiamma",
+				"Luminosità",
+				"0.0",
+				"1.0",
+				"Max",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Пламя",
+				"Эффект пламени",
+				"Яркость",
+				"0.0",
+				"1.0",
+				"Смешивание",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Пламен",
+				"Ефекат пламена",
+				"Осветљеност",
+				"0.0",
+				"1.0",
+				"Помешаност",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Llama",
+				"Efecto de llama",
+				"Brillo",
+				"0.0",
+				"1.0",
+				"Mezcla",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Vlam",
+				"Vlam effect",
+				"Helderheid",
+				"0.0",
+				"1.0",
+				"Mix",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Api",
+				"Efek api",
+				"Kecerahan",
+				"0.0",
+				"1.0",
+				"Campuran",
+				"0.0",
+				"1.0"
+			]
+		}
+	]
+}

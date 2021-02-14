@@ -4,12 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"special",
 		"name":	"Vignette",
-		"labelA":	["Vignette", "Vignette", "Vignette-Effekt", "Vignette",
-							"Vignetta", "Виньетка", "Вињета", "Viñeta",
-							"Vignet", "Skema"],
-		"labelB":	["Vignetting Effect", "Vignetting Effect", "Vignetting Effect", "Effet de vignettage",
-							"Effetto Vignetta", "Эффект виньетки", "Ефекат вињете", "Efecto de viñeta",
-							"Vignet Effect", "Efek vinyet"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/Vignette/icon.png"
 	},
 	"fragment": {
@@ -31,9 +27,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Intensity", "Intensity", "Intensivität", "Intensité", "Intesità", "Интенсивность", "Интензитет", "Intensidad", "Intensiteit", "Intesitas"],
-				"label_min":	 ["Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Min (0%)", "Минимум (0%)", "Минимум (0%)", "Mínimo (0%)", "Min (0%)", "Min (0%)"],
-				"label_max":	["Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Max (100%)", "Максимум (100%)", "Максимум (100%)", "Máximo (100%)", "Max (100%)", "Max (100%)"],
+				"label":			2,
+				"label_min":	 3,
+				"label_max":	4,
 				"default":		0.25,
 				"range":		[0.0, 2.0],
 				"uniform":		"uIntensity",

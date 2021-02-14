@@ -22,6 +22,7 @@ for d in */; do
 	mkdir ../../Package/apps/Medo/AddOns/${d%/}
 	cp *".so" "../../Package/apps/Medo/AddOns/$d"
 	cp *".png" "../../Package/apps/Medo/AddOns/$d"
+	cp *".json" "../../Package/apps/Medo/AddOns/$d"
 	cd ..
 done
 cd ..
@@ -37,6 +38,12 @@ for f in */; do
 done
 cd ..
 
+#Languages
+mkdir Package/apps/Medo/Languages
+cd Languages
+cp *".lang" "../Package/apps/Medo/Languages/"
+cd ..
+
 #Resources
 mkdir Package/apps/Medo/Resources
 mkdir Package/apps/Medo/Resources/Icon
@@ -48,8 +55,8 @@ cd ..
 #Package
 cp ".PackageInfo" "Package/"
 cd Package
-package create -b Medo-R1.0.0~Beta1-1.x86_64.hpkg
-package add Medo-R1.0.0~Beta1-1.x86_64.hpkg apps data
+package create -b Medo-R1.0.0~Beta1-2.x86_64.hpkg
+package add Medo-R1.0.0~Beta1-2.x86_64.hpkg apps data
 cd ..
 
 

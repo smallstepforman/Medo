@@ -1,0 +1,132 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Split View",
+				"Split View",
+				"Mid Point",
+				"0",
+				"1",
+				"Left Offset X",
+				"Right Offset X",
+				"Interpolate In",
+				"In Threshold",
+				"Interpolate Out",
+				"Out Threshold"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Split View",
+				"Split View",
+				"Mid Point",
+				"0",
+				"1",
+				"Left Offset X",
+				"Right Offset X",
+				"Interpolate In",
+				"In Threshold",
+				"Interpolate Out",
+				"Out Threshold"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Geteilte Ansicht",
+				"Geteilte Ansicht",
+				"Die Mitte",
+				"0",
+				"1",
+				"Linkes X",
+				"Richtiges X"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Vue divisée",
+				"Vue divisée",
+				"Le Milieu",
+				"0",
+				"1",
+				"Décalage gauche X",
+				"Droite X"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Vista divisa",
+				"Vista divisa",
+				"La metà",
+				"0",
+				"1",
+				"X sinistra",
+				"X destra"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Разделенный вид",
+				"Разделенный вид",
+				"Середина",
+				"0",
+				"1",
+				"Левый Х",
+				"Правый Х"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Подељени поглед",
+				"Подељени поглед",
+				"Средина",
+				"0",
+				"1",
+				"Леви X",
+				"Десни X"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Vista dividida",
+				"Vista dividida",
+				"Punto medio",
+				"0",
+				"1",
+				"Izquierda X",
+				"Derecha X"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Verdeeld Uitzicht",
+				"Verdeeld Uitzicht",
+				"Middelpunt",
+				"0",
+				"1",
+				"Links X",
+				"Rechts X"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Tampilan Terbagi",
+				"Tampilan Terbagi",
+				"Titik tengah",
+				"0",
+				"1",
+				"Kiri X",
+				"Benar X"
+			]
+		}
+	]
+}

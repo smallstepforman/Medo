@@ -1,0 +1,94 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Equaliser",
+				"Equaliser",
+				"20 band Equaliser",
+				"Filter"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Equalizer",
+				"Equalizer",
+				"20 band Equalizer",
+				"Filter"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Equalizer",
+				"Equalizer",
+				"20 band Equalizer",
+				"Filter"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Equalizer",
+				"Equalizer",
+				"20 band Equalizer",
+				"Filter"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Equalizzatore",
+				"Equalizzatore",
+				"Equalizzatore a 20 bande",
+				"Filtro"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Эквалайзер",
+				"Эквалайзер",
+				"20-полосный эквалайзер",
+				"Фильтр"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Eквилајзер",
+				"Eквилајзер",
+				"20-опсежни еквилајзер",
+				"Филтер"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Ecualizador",
+				"Ecualizador",
+				"Ecualizador de 20 bandas",
+				"Filtro"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Equaliser",
+				"Equaliser",
+				"20 band Equaliser",
+				"Filter"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Equalizer",
+				"Equalizer",
+				"Equalizer 20 band",
+				"Saring"
+			]
+		}
+	]
+}

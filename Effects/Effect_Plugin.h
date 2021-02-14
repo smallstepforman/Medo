@@ -15,6 +15,8 @@ class BBitmap;
 class BScrollView;
 class BitmapCheckbox;
 
+class LanguageJson;
+
 namespace yrender
 {
 	class YRenderNode;
@@ -26,8 +28,8 @@ struct PluginHeader
 {
 	std::string					vendor;
 	std::string					name;
-	std::vector<std::string>	labelsA;
-	std::vector<std::string>	labelsB;
+	uint32						txt_labelA;
+	uint32						txt_labelB;
 	std::string					icon;
 	EffectNode::EFFECT_GROUP	type;
 };
@@ -44,7 +46,7 @@ struct PluginGuiWidget
 
 	GuiWidget					widget_type;
 	BRect						rect;
-	std::vector<std::string>	labels;
+	uint32						txt_label;
 	std::string					uniform;
 	int							uniform_idx;
 
@@ -53,8 +55,8 @@ struct PluginGuiWidget
 	float						default_value[4];
 	float						vec4[4];			//	eFloat, eVec2, eVec3, eVec4, eColour
 	//	Slider
-	std::vector<std::string>	slider_labels_min;
-	std::vector<std::string>	slider_labels_max;
+	uint32						txt_slider_min;
+	uint32						txt_slider_max;
 };
 
 struct PluginShader
@@ -70,6 +72,9 @@ struct EffectPlugin
 {
 	PluginHeader					mHeader;
 	PluginShader					mFragmentShader;
+	LanguageJson					*mLanguage;
+
+	EffectPlugin() : mLanguage(nullptr) { }
 };
 
 /*********************************

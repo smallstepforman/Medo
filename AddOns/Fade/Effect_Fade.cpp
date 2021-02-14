@@ -18,6 +18,7 @@
 
 #include "Editor/EffectNode.h"
 #include "Editor/Language.h"
+#include "Editor/LanguageJson.h"
 #include "Editor/Project.h"
 #include "Editor/RenderActor.h"
 
@@ -33,19 +34,6 @@ enum FADE_LANGUAGE_TEXT
 	TXT_FADE_ALPHA_IN,
 	TXT_FADE_ALPHA_OUT,
 	NUMBER_FADE_LANGUAGE_TEXT
-};
-static const char *kFadeLanguages[][NUMBER_FADE_LANGUAGE_TEXT] =
-{
-{"Fade",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alpha In (A -> 1)",		"Alpha Out (A -> 0)"},			//	"English (Britian)",
-{"Fade",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alpha In (A -> 1)",		"Alpha Out (A -> 0)"},			//	"English (USA)",
-{"Verblassen",		"Verblassen (Schwarz/Alpha)",	"Richtung Schwarz verblassen / In Transparenz ändern","Aus Schwarz aufhellen",	"Nach Schwarz verblassen",	"Alpha Rein (A -> 1)",		"Alpha Raus (A -> 0)"},			//	"Deutsch",
-{"Fondu",			"Fondu (Noir / Alpha)",			"Fondu au noir / Transparence fondu",				"Fondu à partir du noir",	"Fondu au noir",			"Entrée alpha (A -> 1)",	 "Sortie alpha (A -> 0) "},		//	"Français",
-{"Dissolvenza",		"Dissolvenza (Nero/Alfa)",		"Dissolvenza a Nero / Trasparenza Dissolvenza",		"Dissolvenza Da Nero",		"Dissolvenza A Nero",		"Alfa In (A -> 1)",			"Alfa Usc (A -> 0)"},			//	"Italiano",
-{"Затемнение",		"Затемнение (Черный/Альфа)",	"Затемнение в черный/Затемнение прозрачности",		"Выведение из черного",		"Затемнение в черный",		"Альфа-вход (A -> 1)",		"Альфа-выход (A -> 0)",},		//	"Русский",
-{"Избледи",			"Избледи (црно / провиднo)",	"Избледи (црна или провидна боја)",					"Избледи од црне боје",		"Поцрни дo црне боје",		"Смањи провидност (A -> 1)","Повећај провидност (A -> 0)"},	//	"Српски",
-{"Desvanecimiento",	"Desvanecimiento (negro/alfa))","Desvanecer a negro / desvanecer a transparente",	"Desvanecer desde negro",	"Desvanecer a negro",		"Alfa al inicio (A -> 1)",	"Alfa al final (A -> 0"},		//	"Español",
-{"Vervagen",		"Vervaag (Black/Alpha)",		"Vervaag Naar Zwart / Vervaag Transparantie",		"Vervaag Van Zwart",		"Vervaag Naar Zwart",		"Alpha In (A -> 1)",		"Alpha Uit (A -> 0)"},			//	"Dutch"
-{"Luntur",			"Fade (Black/Alpha)",			"Fade to Black / Fade Transparency",				"Fade From Black",			"Fade To Black",			"Alfa Masuk (A -> 1)",		"Alfa Keluar (A -> 0)"},		//	"Indonesia"
 };
 
 Effect_Fade *instantiate_effect(BRect frame)
@@ -152,14 +140,19 @@ public:
 Effect_Fade :: Effect_Fade(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
-	assert(sizeof(kFadeLanguages)/(NUMBER_FADE_LANGUAGE_TEXT*sizeof(char *)) == GetAvailableLanguages().size());
-
 	fRenderNode = nullptr;
 
-	fGuiButtons[0]= new BRadioButton(BRect(40, 40, 300, 70), "fade_1", kFadeLanguages[GetLanguage()][TXT_FADE_FROM_BLACK], new BMessage(kMsgFadeFromBlack));
-	fGuiButtons[1] = new BRadioButton(BRect(40, 80, 300, 110), "fade_2", kFadeLanguages[GetLanguage()][TXT_FADE_TO_BLACK], new BMessage(kMsgFadeToBlack));
-	fGuiButtons[2] = new BRadioButton(BRect(40, 120, 300, 150), "fade_3", kFadeLanguages[GetLanguage()][TXT_FADE_ALPHA_IN], new BMessage(kMsgFadeAlphaIn));
-	fGuiButtons[3] = new BRadioButton(BRect(40, 160, 300, 190), "fade_4", kFadeLanguages[GetLanguage()][TXT_FADE_ALPHA_OUT], new BMessage(kMsgFadeAlphaOut));
+	fLanguage = new LanguageJson("AddOns/Fade/Languages.json");
+	if (fLanguage->GetTextCount() == 0)
+	{
+		printf("Effect_Fade() Error - cannot load \"Languages.json\"\n");
+		return;
+	}
+	
+	fGuiButtons[0]= new BRadioButton(BRect(40, 40, 300, 70), "fade_1", fLanguage->GetText(TXT_FADE_FROM_BLACK), new BMessage(kMsgFadeFromBlack));
+	fGuiButtons[1] = new BRadioButton(BRect(40, 80, 300, 110), "fade_2", fLanguage->GetText(TXT_FADE_TO_BLACK), new BMessage(kMsgFadeToBlack));
+	fGuiButtons[2] = new BRadioButton(BRect(40, 120, 300, 150), "fade_3", fLanguage->GetText(TXT_FADE_ALPHA_IN), new BMessage(kMsgFadeAlphaIn));
+	fGuiButtons[3] = new BRadioButton(BRect(40, 160, 300, 190), "fade_4", fLanguage->GetText(TXT_FADE_ALPHA_OUT), new BMessage(kMsgFadeAlphaOut));
 	fGuiButtons[0]->SetValue(1);
 	for (int i=0; i < 4; i++)
 		mEffectView->AddChild(fGuiButtons[i]);
@@ -171,7 +164,9 @@ Effect_Fade :: Effect_Fade(BRect frame, const char *filename)
 	DESCRIPTION:	Destructor
 */
 Effect_Fade :: ~Effect_Fade()
-{ }
+{
+	delete fLanguage;
+}
 
 /*	FUNCTION:		Effect_Fade :: AttachedToWindow
 	ARGS:			none
@@ -234,7 +229,7 @@ BBitmap * Effect_Fade :: GetIcon()
 */
 const char * Effect_Fade :: GetTextEffectName(const uint32 language_idx)
 {
-	return kFadeLanguages[GetLanguage()][TXT_FADE_NAME];
+	return fLanguage->GetText(TXT_FADE_NAME);
 }
 
 /*	FUNCTION:		Effect_Fade :: GetTextA
@@ -244,7 +239,7 @@ const char * Effect_Fade :: GetTextEffectName(const uint32 language_idx)
 */	
 const char * Effect_Fade :: GetTextA(const uint32 language_idx)
 {
-	return kFadeLanguages[GetLanguage()][TXT_FADE_TEXT_A];
+	return fLanguage->GetText(TXT_FADE_TEXT_A);
 }
 
 /*	FUNCTION:		Effect_Fade :: GetTextB
@@ -254,7 +249,7 @@ const char * Effect_Fade :: GetTextA(const uint32 language_idx)
 */
 const char * Effect_Fade :: GetTextB(const uint32 language_idx)
 {
-	return kFadeLanguages[GetLanguage()][TXT_FADE_TEXT_B];
+	return fLanguage->GetText(TXT_FADE_TEXT_B);
 }
 
 /*	FUNCTION:		Effect_Fade :: CreateMediaEffect

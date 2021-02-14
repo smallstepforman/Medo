@@ -137,7 +137,7 @@ void TimelineEdit :: DrawTrackEffects(TimelineTrack *track, BRect frame)
 		}
 		
 		SetHighColor(255, 255, 255);
-		BString label(i->mEffectNode->GetTextEffectName(GetLanguage()));
+		BString label(i->mEffectNode->GetTextEffectName(gLanguageManager->GetCurrentLanguageIndex()));
 		TruncateString(&label, B_TRUNCATE_MIDDLE, clip_frame.Width() - 2);
 		float text_width = StringWidth(label.String());
 		float text_xpos = (mid - fLeftFrameIndex)/fFramesPixel - 0.5f*text_width;

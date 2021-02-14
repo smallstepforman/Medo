@@ -1,0 +1,144 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Fireworks",
+				"Fireworks Effect",
+				"Number Explosions",
+				"0",
+				"10",
+				"Number Particles",
+				"0",
+				"100",
+				"Caution: very slow"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Fireworks",
+				"Fireworks Effect",
+				"Number Explosions",
+				"0",
+				"10",
+				"Number Particles",
+				"0",
+				"100",
+				"Caution: very slow"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Feuerwerk",
+				"Feuerwerk-Effekt",
+				"Anzahl der Herzen",
+				"0",
+				"10",
+				"Anzahl Partikel",
+				"0",
+				"100",
+				"Achtung: sehr langsam"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Feux d'artifice",
+				"Effet de feux d'artifice",
+				"Nombre d'explosions",
+				"0",
+				"10",
+				"Nombre de particules",
+				"0",
+				"100",
+				"Attention: très lent"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Fuochi d'artificio",
+				"Effetto Fuochi d'artificio",
+				"Numero Esplosioni",
+				"0",
+				"10",
+				"Numero Particelle",
+				"0",
+				"100",
+				"Attenzione: molto lento"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Фейерверк",
+				"Эффект фейерверка",
+				"Количество взрывов",
+				"0",
+				"10",
+				"Число частиц",
+				"0",
+				"100",
+				"Осторожно: очень медленно"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ватромет",
+				"Ефекат ватромета",
+				"Број експлозија",
+				"0",
+				"10",
+				"Број честица",
+				"0",
+				"100",
+				"Опрез: врло споро"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Fuegos artificiales",
+				"Efecto de fuegos artificiales",
+				"Número de explosiones",
+				"0",
+				"10",
+				"Número de partículas",
+				"0",
+				"100",
+				"Advertencia: es muy lento"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Vuurwerk",
+				"Vuurwerk Effect",
+				"Aantal Explosies",
+				"0",
+				"10",
+				"Aantal Deeltjes",
+				"0",
+				"100",
+				"Waarschuwing: zeer langzaam"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Kembang api",
+				"Efek Kembang Api",
+				"Ledakan Angka",
+				"0",
+				"10",
+				"Partikel Nomor",
+				"0",
+				"100",
+				"Perhatian: sangat lambat"
+			]
+		}
+	]
+}

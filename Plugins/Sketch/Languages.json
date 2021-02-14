@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Sketch",
+				"Cheap outline and Cartoon Effect",
+				"Edge Slope",
+				"Min (0%)",
+				"Max (100%)",
+				"Power",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Sketch",
+				"Cheap outline and Cartoon Effect",
+				"Edge Slope",
+				"Min (0%)",
+				"Max (100%)",
+				"Power",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Zeichnung",
+				"Günstige Gliederung und Cartoon-Effekt",
+				"Eckenverstärkung",
+				"Min (0%)",
+				"Max (100%)",
+				"Stärke",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Esquisser",
+				"Contour bon marché et effet de dessin animé",
+				"Pente du bord",
+				"Min (0%)",
+				"Max (100%)",
+				"Puissance",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Schizzo",
+				"Contorno semplice ed effetto Cartone animato",
+				"Pendenza del Bordo",
+				"Min (0%)",
+				"Max (100%)",
+				"Potenza",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Эскиз",
+				"Дешевый набросок и мультяшный эффект",
+				"Наклон края",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Сила",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Скица",
+				"Линије и ефекат цртаног филма",
+				"Нагиб ивице",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Јачина",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Bosquejar",
+				"Efecto sencillo de delineado y de dibujo animado",
+				"Pendiente del borde",
+				"Min (0%)",
+				"Max (100%)",
+				"Potencia",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Sketch",
+				"Goedkoop Overzicht en Cartoon-effect",
+				"Randversterking",
+				"Min (0%)",
+				"Max (100%)",
+				"Sterkte",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Sketsa",
+				"Garis besar murah dan Efek Kartun",
+				"Kemiringan Tepi",
+				"Min (0%)",
+				"Max (100%)",
+				"Kekuasaan",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		}
+	]
+}

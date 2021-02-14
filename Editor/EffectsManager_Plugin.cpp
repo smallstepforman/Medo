@@ -15,10 +15,12 @@
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
 
-#include "FileUtility.h"
-#include "EffectNode.h"
-#include "Language.h"
 #include "EffectsManager.h"
+#include "EffectNode.h"
+#include "FileUtility.h"
+#include "Language.h"
+#include "LanguageJson.h"
+
 #include "Effects/Effect_Plugin.h"
 
 static const std::vector<const char *>	kUniformTypes = {"sampler2D", "float", "vec2", "vec3", "vec4", "colour", "int", "timestamp", "interval", "resolution"};		//	Must match PluginUniform::UniformType
@@ -74,7 +76,10 @@ void EffectsManager :: LoadPlugins(const char *plugin_path)
 void EffectsManager :: DestroyPlugins()
 {
 	for (auto &p : fEffectPlugins)
+	{
+		delete p->mLanguage;
 		delete p;
+	}
 }
 
 /*	FUNCTION:		EffectsManager :: LoadPlugin
@@ -88,7 +93,7 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 	if (!data)
 		return false;
 
-	const size_t kCountAvailableLanguages = GetAvailableLanguages().size();
+	const uint32 kCountAvailableLanguages = gLanguageManager->GetNumberAvailableLanguages();
 
 	EffectPlugin *aPlugin = new EffectPlugin;
 
@@ -105,7 +110,20 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 		printf("\n");
 
 		ERROR_EXIT("Invalid JSON");
+	}
 
+/****************************
+	Load language file
+*****************************/
+	BString languages_path(path->Path());
+	int32 languages_idx = languages_path.FindLast("/");
+	languages_path.Remove(languages_idx, languages_path.Length() - languages_idx);
+	languages_path.Append("/Languages.json");
+	aPlugin->mLanguage = new LanguageJson(languages_path.String());
+	if (aPlugin->mLanguage->GetTextCount() == 0)
+	{
+		printf("Missing file \"%s\"\n", languages_path.String());
+		return false;
 	}
 
 /****************************
@@ -150,36 +168,26 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 		header.name.assign(plugin["name"].GetString());
 
 		//	labelA
-		if (plugin.HasMember("labelA") && plugin["labelA"].IsArray())
+		if (plugin.HasMember("labelA") && plugin["labelA"].IsUint())
 		{
-			const rapidjson::Value &arr = plugin["labelA"];
-			rapidjson::SizeType num_elems = arr.GetArray().Size();
-			if (num_elems > kCountAvailableLanguages)
-				ERROR_EXIT("too many languages attribute plugin::labelA");
-			for (rapidjson::SizeType i = 0; i < num_elems; i++)
-				header.labelsA.push_back(arr.GetArray()[i].GetString());
-			while (num_elems < kCountAvailableLanguages)
+			header.txt_labelA = plugin["labelA"].GetUint();
+			if (header.txt_labelA >= aPlugin->mLanguage->GetTextCount())
 			{
-				header.labelsA.push_back(header.labelsA[0]);
-				num_elems++;
+				printf("plugin::labelA(%d) out of bounds\n", header.txt_labelA);
+				ERROR_EXIT("plugin::labelA > Languages.json::text count");
 			}
 		}
 		else
 			ERROR_EXIT("Missing attribute plugin::labelA");
 
 		//	labelB
-		if (plugin.HasMember("labelB") && plugin["labelB"].IsArray())
+		if (plugin.HasMember("labelB") && plugin["labelB"].IsUint())
 		{
-			const rapidjson::Value &arr = plugin["labelB"];
-			rapidjson::SizeType num_elems = arr.GetArray().Size();
-			if (num_elems > kCountAvailableLanguages)
-				ERROR_EXIT("too many languages attribute plugin::labelB");
-			for (rapidjson::SizeType i = 0; i < num_elems; i++)
-				header.labelsB.push_back(arr.GetArray()[i].GetString());
-			while (num_elems < kCountAvailableLanguages)
+			header.txt_labelB = plugin["labelB"].GetUint();
+			if (header.txt_labelB >= aPlugin->mLanguage->GetTextCount())
 			{
-				header.labelsB.push_back(header.labelsB[0]);
-				num_elems++;
+				printf("plugin::labelB(%d) out of bounds\n", header.txt_labelB);
+				ERROR_EXIT("plugin::labelB > Languages.json::text count");
 			}
 		}
 		else
@@ -227,7 +235,7 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 			if (!v.HasMember("type") || !v["type"].IsString())
 				ERROR_EXIT("Missing attribute uniforms::type");
 			std::string uniform_type(v["type"].GetString());
-			size_t uniform_idx = 0;
+			std::size_t uniform_idx = 0;
 			while (uniform_idx < kUniformTypes.size())
 			{
 				if (uniform_type.compare(kUniformTypes[uniform_idx]) == 0)
@@ -345,7 +353,7 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 			if (!v.HasMember("type") || !v["type"].IsString())
 				ERROR_EXIT("Missing attribute fragment::gui::type");
 			std::string gui_type(v["type"].GetString());
-			size_t widget_idx = 0;
+			std::size_t widget_idx = 0;
 			while (widget_idx < kGuiWidgets.size())
 			{
 				if (gui_type.compare(kGuiWidgets[widget_idx]) == 0)
@@ -377,18 +385,13 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 				ERROR_EXIT("Invalid attribute fragment::gui::rect");
 
 			//	gui::label
-			if (v.HasMember("label") && v["label"].IsArray())
+			if (v.HasMember("label") && v["label"].IsUint())
 			{
-				const rapidjson::Value &arr = v["label"];
-				rapidjson::SizeType num_elems = arr.GetArray().Size();
-				if (num_elems > kCountAvailableLanguages)
-					ERROR_EXIT("too many languages attribute fragment::gui::label");
-				for (rapidjson::SizeType i = 0; i < num_elems; i++)
-					aWidget.labels.push_back(arr.GetArray()[i].GetString());
-				while (num_elems < kCountAvailableLanguages)
+				aWidget.txt_label = v["label"].GetUint();
+				if (aWidget.txt_label >= aPlugin->mLanguage->GetTextCount())
 				{
-					aWidget.labels.push_back(aWidget.labels[0]);
-					num_elems++;
+					printf("plugin::label(%d) out of bounds\n", aWidget.txt_label);
+					ERROR_EXIT("fragment::gui::label > Languages.json::text count");
 				}
 			}
 			else
@@ -420,37 +423,21 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 				case PluginGuiWidget::eSlider:
 				{
 					//	label_min
-					if (v.HasMember("label_min") && v["label_min"].IsArray())
+					if (v.HasMember("label_min") && v["label_min"].IsUint())
 					{
-						const rapidjson::Value &arr = v["label_min"];
-						rapidjson::SizeType num_elems = arr.GetArray().Size();
-						if (num_elems > kCountAvailableLanguages)
-							ERROR_EXIT("too many languages attribute fragment::gui::slider::label_min");
-						for (rapidjson::SizeType i = 0; i < num_elems; i++)
-							aWidget.slider_labels_min.push_back(arr.GetArray()[i].GetString());
-						while (num_elems < kCountAvailableLanguages)
-						{
-							aWidget.slider_labels_min.push_back(aWidget.slider_labels_min[0]);
-							num_elems++;
-						}
+						aWidget.txt_slider_min = v["label_min"].GetUint();
+						if (aWidget.txt_slider_min >= aPlugin->mLanguage->GetTextCount())
+							ERROR_EXIT("fragment::gui::slider::label_min > Languages.json::text count");
 					}
 					else
 						ERROR_EXIT("Corrupt attribute fragment::gui::slider::label_min");
 
 					//	label_max
-					if (v.HasMember("label_max") && v["label_max"].IsArray())
+					if (v.HasMember("label_max") && v["label_max"].IsUint())
 					{
-						const rapidjson::Value &arr = v["label_max"];
-						rapidjson::SizeType num_elems = arr.GetArray().Size();
-						if (num_elems > kCountAvailableLanguages)
-							ERROR_EXIT("too many languages attribute fragment::gui::slider::label_max");
-						for (rapidjson::SizeType i = 0; i < num_elems; i++)
-							aWidget.slider_labels_max.push_back(arr.GetArray()[i].GetString());
-						while (num_elems < kCountAvailableLanguages)
-						{
-							aWidget.slider_labels_max.push_back(aWidget.slider_labels_max[0]);
-							num_elems++;
-						}
+						aWidget.txt_slider_max = v["label_max"].GetUint();
+						if (aWidget.txt_slider_max >= aPlugin->mLanguage->GetTextCount())
+							ERROR_EXIT("fragment::gui::slider::label_max > Languages.json::text count");
 					}
 					else
 						ERROR_EXIT("Corrupt attribute fragment::gui::slider::label_max");
@@ -545,7 +532,7 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 					rapidjson::SizeType num_elems = arr.GetArray().Size();
 					if ((num_elems >=3) && (num_elems <= 4))
 					{
-						for (int i=0; i < num_elems; i++)
+						for (uint32 i=0; i < num_elems; i++)
 						{
 							aWidget.vec4[i] = arr.GetArray()[i].GetFloat();
 							aWidget.default_value[i] = aWidget.vec4[i];
@@ -600,6 +587,7 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 #endif
 	}
 	delete [] data;
+
 	fEffectPlugins.push_back(aPlugin);
 	printf("Plugin(%s)\n", path->Path());
 	return true;

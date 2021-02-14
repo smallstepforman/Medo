@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
 	"Editor/FileUtility.cpp"
 	"Editor/ImageUtility.cpp"
 	"Editor/Language.cpp"
+	"Editor/LanguageJson.cpp"
 	"Editor/Main.cpp"
 	"Editor/MediaUtility.cpp"
 	"Editor/MediaSource.cpp"

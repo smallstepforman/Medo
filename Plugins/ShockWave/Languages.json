@@ -1,0 +1,144 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Shock Wave",
+				"Shock Wave effect",
+				"Position",
+				"Ripple Factor",
+				"Shock Intensity",
+				"Gravity",
+				"Wave Decay",
+				"Wave Visibility",
+				"5.0",
+				"25.0",
+				"0.0",
+				"0.5",
+				"0.0",
+				"0.2",
+				"10",
+				"60",
+				"10",
+				"400"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Shock Wave",
+				"Shock Wave effect",
+				"Position",
+				"Ripple Factor",
+				"Shock Intensity",
+				"Gravity",
+				"Wave Decay",
+				"Wave Visibility"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Schockwelle",
+				"Schockwellen-Effekt",
+				"Position",
+				"Welligkeitsfaktor",
+				"Schock Intensivität",
+				"Gravitation",
+				"Wellenzerfall",
+				"Wellensichtbarkeit"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Onde de choc",
+				"Effet d'onde de choc",
+				"Position",
+				"Facteur d'ondulation",
+				"Intensité des chocs",
+				"La gravité",
+				"Décomposition des vagues",
+				"Visibilité des vagues"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Onda d'Urto",
+				"Effetto Onda d'Urto",
+				"Posizione",
+				"Fattore di Ondulazione",
+				"Intensità d'Urto",
+				"Gravità",
+				"Decadimento dell'Onda",
+				"Visibilità dell'Onda"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Ударная волна",
+				"Эффект ударной волны",
+				"Позиция",
+				"Фактор пульсации",
+				"Интенсивность удара",
+				"Сила тяжести",
+				"Распад волны",
+				"Видимость волны"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ударни талас",
+				"Ефекат ударног таласа",
+				"Позиција",
+				"Фактор таласа",
+				"Интензитет шока",
+				"Гравитација",
+				"Пропадање таласа",
+				"Таласна видљивост"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Onda de choque",
+				"Efecto de onda de choque",
+				"Posición",
+				"Factor de ondulación",
+				"Intensidad de choque",
+				"Gravedad",
+				"Decaimiento de onda",
+				"Decaimiento de visibilidad"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Shock Golf",
+				"Shock Golf effect",
+				"Positie",
+				"Rimpeling Factor",
+				"Shock Intensiteit",
+				"Zwaartekracht",
+				"Golfverval",
+				"Zichtbaarheid Golf"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Gelombang Kejut",
+				"Efek Gelombang Kejut",
+				"Posisi",
+				"Faktor Riak",
+				"Shock Intensity",
+				"Gravitasi",
+				"Gelombang Peluruhan",
+				"Visibilitas Gelombang"
+			]
+		}
+	]
+}

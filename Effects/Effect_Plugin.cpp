@@ -22,6 +22,7 @@
 
 #include "Editor/RenderActor.h"
 #include "Editor/Language.h"
+#include "Editor/LanguageJson.h"
 #include "Editor/Project.h"
 #include "Editor/MedoWindow.h"
 #include "Editor/OutputView.h"
@@ -296,11 +297,12 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			case PluginGuiWidget::eSlider:
 			{
 				ValueSlider *slider = new ValueSlider(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
-												w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), nullptr, 0, (int)kSliderRange);
+													  plugin->mLanguage->GetText(w.txt_label), plugin->mLanguage->GetText(w.txt_label),
+													  nullptr, 0, (int)kSliderRange);
 				slider->SetModificationMessage(new BMessage(eMsgGui));
 				slider->SetHashMarks(B_HASH_MARKS_BOTH);
 				slider->SetHashMarkCount(11);
-				slider->SetLimitLabels(w.slider_labels_min[GetLanguage()].c_str(), w.slider_labels_max[GetLanguage()].c_str());
+				slider->SetLimitLabels(plugin->mLanguage->GetText(w.txt_slider_min), plugin->mLanguage->GetText(w.txt_slider_max));
 				slider->SetStyle(B_BLOCK_THUMB);
 				slider->SetFloatingPointPrecision(2);
 				float f = (w.default_value[0] - w.range[0]) / (w.range[1] - w.range[0]);
@@ -317,7 +319,7 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			case PluginGuiWidget::eCheckbox:
 			{
 				BCheckBox *button = new BCheckBox(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
-												w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
+												  plugin->mLanguage->GetText(w.txt_label), plugin->mLanguage->GetText(w.txt_label), new BMessage(eMsgGui));
 				if (w.default_value[0] > 0)
 					button->SetValue(1);
 				mEffectView->AddChild(button);
@@ -330,7 +332,7 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			{
 				MultiSpinner *multispinner = new MultiSpinner(PluginGuiWidget::kVecCountElements[w.widget_type],
 						BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
-						w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui));
+						plugin->mLanguage->GetText(w.txt_label), new BMessage(eMsgGui));
 				for (unsigned int i=0; i < PluginGuiWidget::kVecCountElements[w.widget_type]; i++)
 				{
 					multispinner->mSpinners[i]->SetValue(w.default_value[i]);
@@ -343,13 +345,21 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			case PluginGuiWidget::eColour:
 			{
 				BStringView *title = new BStringView(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.top + 40),
-													 nullptr, w.labels[GetLanguage()].c_str());
+													 nullptr, plugin->mLanguage->GetText(w.txt_label));
 				title->SetFont(be_bold_font);
 				mEffectView->AddChild(title);
-				BColorControl *colour_control = new BColorControl(BPoint(w.rect.left*kFontFactor, w.rect.top + 40), B_CELLS_32x8, 6.0f, w.labels[GetLanguage()].c_str(), new BMessage(eMsgGui), true);
+				BColorControl *colour_control = new BColorControl(BPoint(w.rect.left*kFontFactor, w.rect.top + 40), B_CELLS_32x8, 6.0f, plugin->mLanguage->GetText(w.txt_label), new BMessage(eMsgGui), true);
 				colour_control->SetValue({uint8(255.0f*w.vec4[0]), uint8(255*w.vec4[1]), uint8(255*w.vec4[2]), uint8(255*w.vec4[3])});
 				mEffectView->AddChild(colour_control);
 				fGuiWidgets.push_back(colour_control);
+
+				//	Colour labels
+				BView *view_red = colour_control->FindView("_red");
+				BView *view_green = colour_control->FindView("_green");
+				BView *view_blue = colour_control->FindView("_blue");
+				if (view_red)		((BTextControl *)view_red)->SetLabel(GetText(TXT_EFFECTS_COMMON_RED));
+				if (view_green)		((BTextControl *)view_green)->SetLabel(GetText(TXT_EFFECTS_COMMON_GREEN));
+				if (view_blue)		((BTextControl *)view_blue)->SetLabel(GetText(TXT_EFFECTS_COMMON_BLUE));
 
 				//	ColourPicker
 				assert(fColourPickerButton == nullptr);		//	only support a single ColourPicker for now
@@ -366,7 +376,7 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 			case PluginGuiWidget::eText:
 			{
 				BStringView *title = new BStringView(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
-													 w.labels[GetLanguage()].c_str(), w.labels[GetLanguage()].c_str());
+													 nullptr, plugin->mLanguage->GetText(w.txt_label));
 				if (w.uniform_idx == 1)
 					title->SetFont(be_bold_font);
 				mEffectView->AddChild(title);
@@ -497,9 +507,9 @@ BBitmap * Effect_Plugin :: GetIcon()
 	return icon;
 }
 
-const char * Effect_Plugin :: GetTextEffectName(const uint32 language_idx)	{return fPlugin->mHeader.labelsA[GetLanguage()].c_str();}
-const char * Effect_Plugin :: GetTextA(const uint32 language_idx)			{return fPlugin->mHeader.labelsA[GetLanguage()].c_str();}
-const char * Effect_Plugin :: GetTextB(const uint32 language_idx)			{return fPlugin->mHeader.labelsB[GetLanguage()].c_str();}
+const char * Effect_Plugin :: GetTextEffectName(const uint32 language_idx)	{return fPlugin->mLanguage->GetText(fPlugin->mHeader.txt_labelA);}
+const char * Effect_Plugin :: GetTextA(const uint32 language_idx)			{return fPlugin->mLanguage->GetText(fPlugin->mHeader.txt_labelA);}
+const char * Effect_Plugin :: GetTextB(const uint32 language_idx)			{return fPlugin->mLanguage->GetText(fPlugin->mHeader.txt_labelB);}
 
 
 /*	FUNCTION:		Effect_Plugin :: CreateMediaEffect
@@ -706,7 +716,7 @@ void Effect_Plugin :: MediaEffectSelected(MediaEffect *effect)
 			case PluginGuiWidget::eText:
 			{
 				BStringView *string_view = (BStringView *)fGuiWidgets[gui_idx];
-				string_view->SetText(w.labels[GetLanguage()].c_str());
+				string_view->SetText(fPlugin->mLanguage->GetText(w.txt_label));
 				break;
 			}
 			default:
@@ -801,7 +811,7 @@ void Effect_Plugin :: MessageReceived(BMessage *msg)
 				{
 					if (w.widget_type == PluginGuiWidget::eColour)
 					{
-						fColourPickerWindow->SetTitle(w.labels[GetLanguage()].c_str());
+						fColourPickerWindow->SetTitle(fPlugin->mLanguage->GetText(w.txt_label));
 					}
 				}
 			}
@@ -936,9 +946,9 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 		switch (w.widget_type)
 		{
 			case PluginGuiWidget::eSlider:
-				if (v.HasMember(w.labels[GetLanguage()].c_str()) && v[w.labels[0].c_str()].IsFloat())
+				if (v.HasMember(w.uniform.c_str()) && v[w.uniform.c_str()].IsFloat())
 				{
-					effect_data->uniforms[w.uniform_idx].mFloat = v[w.labels[0].c_str()].GetFloat();
+					effect_data->uniforms[w.uniform_idx].mFloat = v[w.uniform.c_str()].GetFloat();
 					if (effect_data->uniforms[w.uniform_idx].mFloat < w.range[0])
 						effect_data->uniforms[w.uniform_idx].mFloat = w.range[0];
 					if (effect_data->uniforms[w.uniform_idx].mFloat > w.range[1])
@@ -946,15 +956,15 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 				}
 				else
 				{
-					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eSlider parameter %s\n", fPlugin->mHeader.name.c_str(), w.labels[0].c_str());
+					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eSlider parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
 					valid = false;
 				}
 				break;
 
 			case PluginGuiWidget::eCheckbox:
-				if (v.HasMember(w.labels[0].c_str()) && v[w.labels[0].c_str()].IsInt())
+				if (v.HasMember(w.uniform.c_str()) && v[w.uniform.c_str()].IsInt())
 				{
-					effect_data->uniforms[w.uniform_idx].mInt = v[w.labels[0].c_str()].GetInt();
+					effect_data->uniforms[w.uniform_idx].mInt = v[w.uniform.c_str()].GetInt();
 					if (effect_data->uniforms[w.uniform_idx].mInt < 0)
 						effect_data->uniforms[w.uniform_idx].mInt =0;
 					if (effect_data->uniforms[w.uniform_idx].mInt > 1)
@@ -962,7 +972,7 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 				}
 				else
 				{
-					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eCheckbox parameter %s\n", fPlugin->mHeader.name.c_str(), w.labels[0].c_str());
+					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eCheckbox parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
 					valid = false;
 				}
 				break;
@@ -971,18 +981,18 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 			case PluginGuiWidget::eSpinner3:
 			case PluginGuiWidget::eSpinner4:
 			case PluginGuiWidget::eColour:
-				if (v.HasMember(w.labels[0].c_str()) && v[w.labels[0].c_str()].IsArray())
+				if (v.HasMember(w.uniform.c_str()) && v[w.uniform.c_str()].IsArray())
 				{
-					const rapidjson::Value &array = v[w.labels[0].c_str()];
+					const rapidjson::Value &array = v[w.uniform.c_str()];
 					if (!fnReadArray(array, PluginGuiWidget::kVecCountElements[w.widget_type], w.uniform_idx))
 					{
-						printf("[Effect_Plugin::LoadParameters(%s)] - invalid eVec parameter %s\n", fPlugin->mHeader.name.c_str(), w.labels[0].c_str());
+						printf("[Effect_Plugin::LoadParameters(%s)] - invalid eVec parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
 						valid = false;
 					}
 				}
 				else
 				{
-					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eVec parameter %s\n", fPlugin->mHeader.name.c_str(), w.labels[0].c_str());
+					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eVec parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
 					valid = false;
 				}
 				break;
@@ -1016,12 +1026,12 @@ bool Effect_Plugin :: SaveParameters(FILE *file, MediaEffect *media_effect)
 		switch (w.widget_type)
 		{
 			case PluginGuiWidget::eSlider:
-				sprintf(buffer, "\t\t\t\t\"%s\": %f,\n", w.labels[0].c_str(), data->uniforms[w.uniform_idx].mFloat);
+				sprintf(buffer, "\t\t\t\t\"%s\": %f,\n", w.uniform.c_str(), data->uniforms[w.uniform_idx].mFloat);
 				fwrite(buffer, strlen(buffer), 1, file);
 				break;
 
 			case PluginGuiWidget::eCheckbox:
-				sprintf(buffer, "\t\t\t\t\"%s\": %d,\n", w.labels[0].c_str(), data->uniforms[w.uniform_idx].mInt);
+				sprintf(buffer, "\t\t\t\t\"%s\": %d,\n", w.uniform.c_str(), data->uniforms[w.uniform_idx].mInt);
 				fwrite(buffer, strlen(buffer), 1, file);
 				break;
 
@@ -1030,7 +1040,7 @@ bool Effect_Plugin :: SaveParameters(FILE *file, MediaEffect *media_effect)
 			case PluginGuiWidget::eSpinner4:
 			case PluginGuiWidget::eColour:
 			{
-				sprintf(buffer, "\t\t\t\t\"%s\": [", w.labels[0].c_str());
+				sprintf(buffer, "\t\t\t\t\"%s\": [", w.uniform.c_str());
 				fwrite(buffer, strlen(buffer), 1, file);
 				for (unsigned int idx=0; idx < PluginGuiWidget::kVecCountElements[w.widget_type]; idx++)
 				{

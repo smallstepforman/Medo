@@ -75,7 +75,7 @@ void SaveSettings()
 		fwrite(buffer, strlen(buffer), 1, file);
 			sprintf(buffer, "\t\t\"theme\": %d,\n", Theme::GetTheme());
 			fwrite(buffer, strlen(buffer), 1, file);
-			sprintf(buffer, "\t\t\"language\": %d,\n", GetLanguage());
+			sprintf(buffer, "\t\t\"language\": \"%s\",\n", gLanguageManager->GetCurrentLanguageName().String());
 			fwrite(buffer, strlen(buffer), 1, file);
 			sprintf(buffer, "\t\t\"menu_export_media_kit\": %s\n", sGlobalSettings.export_enable_media_kit ? "true" : "false");
 			fwrite(buffer, strlen(buffer), 1, file);
@@ -107,7 +107,7 @@ void LoadSettings()
 	char *data = ReadFileToBuffer(settings_path.String());
 	if (data)
 	{
-#define ERROR_EXIT(a) {printf("LoadSettings() Error(%s)\n", a);	return;}
+#define ERROR_EXIT(a) {printf("LoadSettings() Error(%s)\n", a);	delete [] data;	return;}
 		rapidjson::Document document;
 		rapidjson::ParseResult res = document.Parse<rapidjson::kParseTrailingCommasFlag>(data);
 		if (!res)
@@ -135,12 +135,10 @@ void LoadSettings()
 			Theme::SetTheme((Theme::Preset)theme);
 
 			//	language
-			if (!header.HasMember("language") || !header["language"].IsUint())
+			if (!header.HasMember("language") || !header["language"].IsString())
 				ERROR_EXIT("Missing attribute medo::language");
-			uint32 language = header["language"].GetUint();
-			if (language >= (uint32)GetAvailableLanguages().size())
-				ERROR_EXIT("medo::theme language");
-			SetLangauge(language);
+			BString language(header["language"].GetString());
+			gLanguageManager->SetLanguage(language);
 
 			//	export_media_kit
 			if (!header.HasMember("menu_export_media_kit") || !header["menu_export_media_kit"].IsBool())
@@ -191,12 +189,13 @@ public:
 
 			//	Language popup
 			fAppearancePopupLanguage = new BOptionPopUp(BRect(20, 70, 320, 110), "language", GetText(TXT_SETTINGS_APPEARANCE_LANGUAGE), new BMessage(eMsgAppearanceLanguage));
-			const std::vector<const char *> kAvailableLanguages = GetAvailableLanguages();
-			for (int i=0; i < (int)kAvailableLanguages.size(); i++)
+			std::vector<BString *> available_languages;
+			gLanguageManager->GetAvailableLanguages(available_languages);
+			for (int i=0; i < (int)available_languages.size(); i++)
 			{
-				fAppearancePopupLanguage->AddOption(kAvailableLanguages[i], i);
+				fAppearancePopupLanguage->AddOption(available_languages[i]->String(), i);
 			}
-			fAppearancePopupLanguage->SelectOptionFor(GetLanguage());
+			fAppearancePopupLanguage->SelectOptionFor(gLanguageManager->GetCurrentLanguageIndex());
 			tab_appearance->AddChild(fAppearancePopupLanguage);
 
 			fAppearanceButtonApply = new BButton(BRect(20, 150, 200, 190), "apply", GetText(TXT_SETTINGS_APPEARANCE_RESTART), new BMessage(eMsgAppearanceApply));
@@ -251,11 +250,15 @@ public:
 				break;
 
 			case eMsgAppearanceLanguage:
-				SetLangauge(fAppearancePopupLanguage->SelectedOption());
+			{
+				const char *selected_label;
+				int32 selected_option = fAppearancePopupLanguage->SelectedOption(&selected_label);
+				gLanguageManager->SetLanguage(BString(selected_label));
 				SaveSettings();
 				if (fAppearanceButtonApply->IsHidden())
 					fAppearanceButtonApply->Show();
 				break;
+			}
 
 			case eMsgAppearanceApply:
 				MedoWindow::GetInstance()->PostMessage(B_QUIT_REQUESTED);

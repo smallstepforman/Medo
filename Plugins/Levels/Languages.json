@@ -1,0 +1,164 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Levels",
+				"Photoshop style min/gamma/max levels",
+				"Minimum Input",
+				"0.0",
+				"1.0",
+				"Gamma",
+				"0.0",
+				"3.0",
+				"Max Input",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Levels",
+				"Photoshop style min/gamma/max levels",
+				"Minimum Input",
+				"0.0",
+				"1.0",
+				"Gamma",
+				"0.0",
+				"3.0",
+				"Max Input",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Levels",
+				"Mini- / Gamma- / Max-Pegel im Photoshop-Stil",
+				"Minimale Eingabe",
+				"0.0",
+				"1.0",
+				"Gamma",
+				"0.0",
+				"3.0",
+				"Max. Eingabe",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Les niveaux",
+				"Niveaux min / gamma / max de style Photoshop",
+				"Entrée minimale",
+				"0.0",
+				"1.0",
+				"Gamma",
+				"0.0",
+				"3.0",
+				"Entrée max",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Livelli",
+				"Livelli min/gamma/max in stile Photoshop",
+				"Ingresso Minimo",
+				"0.0",
+				"1.0",
+				"Gamma",
+				"0.0",
+				"3.0",
+				"Ingresso Max",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Уровни",
+				"Минимальные/гамма/максимальные уровни в стиле Photoshop",
+				"Минимальный ввод",
+				"0.0",
+				"1.0",
+				"Гамма",
+				"0.0",
+				"3.0",
+				"Максимальный ввод",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Нивои",
+				"Ниво мин / гама / максимум у стилу Photoshop-а",
+				"Минимални унос",
+				"0.0",
+				"1.0",
+				"Гама",
+				"0.0",
+				"3.0",
+				"Максимални унос",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Niveles",
+				"Niveles del tipo mín/gama/máx de Photoshop",
+				"Entrada mínima",
+				"0.0",
+				"1.0",
+				"Gama",
+				"0.0",
+				"3.0",
+				"Entrada máxima",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Levels",
+				"Photoshop stijl min/gamma/max levels",
+				"Levels",
+				"0.0",
+				"1.0",
+				"Gama",
+				"0.0",
+				"3.0",
+				"Max",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Level",
+				"Tingkat min/gamma/maks gaya Photoshop",
+				"Levels",
+				"0.0",
+				"1.0",
+				"Gama",
+				"0.0",
+				"3.0",
+				"Masukan Mak",
+				"0.0",
+				"1.0"
+			]
+		}
+	]
+}

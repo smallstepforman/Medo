@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Page Curl",
+				"Page turn (curl) effect",
+				"Factor",
+				"0.0",
+				"5.0",
+				"Radius",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Page Curl",
+				"Page turn (curl) effect",
+				"Factor",
+				"0.0",
+				"5.0",
+				"Radius",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Page Curl",
+				"Page turn (curl) effect",
+				"Faktor",
+				"0.0",
+				"5.0",
+				"Radius",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Curl de page",
+				"Effet de rotation de page (curl)",
+				"Facteur",
+				"0.0",
+				"5.0",
+				"Rayon",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Arriccia Pagina",
+				"Effetto Volta Pafina (Arriccia)",
+				"Fattore",
+				"0.0",
+				"5.0",
+				"Raggio",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Загиб страницы",
+				"Эффект поворота (загиба) страницы",
+				"Фактор",
+				"0.0",
+				"5.0",
+				"Радиус",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Окретање странице",
+				"Ефекат окретања странице (увијања)",
+				"Фактор",
+				"0.0",
+				"5.0",
+				"Пречник",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Cambio de página",
+				"Efecto de cambio de página (curvatura)",
+				"Factor",
+				"0.0",
+				"5.0",
+				"Radio",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Pagina Krullen",
+				"Pagina Draaien (curl) Effect",
+				"Factor",
+				"0.0",
+				"5.0",
+				"Radius",
+				"0.0",
+				"1.0"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Halaman keriting",
+				"Efek pembalikan halaman (keriting)",
+				"Faktor",
+				"0.0",
+				"5.0",
+				"Radius",
+				"0.0",
+				"1.0"
+			]
+		}
+	]
+}

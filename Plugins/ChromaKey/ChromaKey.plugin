@@ -4,10 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"image",
 		"name":	"Chroma Key",
-		"labelA":	["Chroma Key", "Chroma Key", "Chroma Key", "Clé Chroma", "Chiave Cromatica", "Хромакей", "Прозирна боја", "Clave de croma", "Chroma Sleutel", "Kunci Chroma"],
-		"labelB":	["Make a colour transparent", "Make a color transparent", "Eine Farbe tansparent machen", "Rendre une couleur transparente",
-							"Rendi Trasparente un Colore", "Сделать цвет прозрачным", "Изаберите прозирну боју", "Hacer transparente a un color",
-							"Maak een kleur transparant", "Jadikan warna transparan"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/ChromaKey/icon.png"
 	},
 	"fragment": {
@@ -37,9 +35,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 620, 100],
-				"label":			["Threshold", "Threshold", "Schwelle", "Seuil", "Soglia", "Предел", "Праг", "Umbral", "Verscherpen", "Ambang"],
-				"label_min": ["0"],
-				"label_max":	["100"],
+				"label":			2,
+				"label_min": 3,
+				"label_max":	4,
 				"default":		0.05,
 				"range":		[0.0, 0.5],
 				"uniform":		"uThreshold",
@@ -47,9 +45,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 620, 200],
-				"label":			["Smoothing", "Smoothing", "Glätten", "Lissage", "Levigatura", "Сглаживание", "Заглађивање", "Suavizado", "Verzachten", "Menghaluskan"],
-				"label_min":	 ["0.0"],
-				"label_max": ["1.0"],
+				"label":			5,
+				"label_min":	 6,
+				"label_max": 7,
 				"default":		0.2,
 				"range":		[0.0, 1.0],
 				"uniform":		"uSmoothing",
@@ -57,7 +55,7 @@
 			{
 				"type":			"colour",
 				"rect":			[20, 240, 620, 480],
-				"label":			["Chroma Colour", "Chroma Color", "Chroma Farbe", "Couleur Chroma", "Colore Chroma", "Хромa Цвет", "Прозирна Боја", "Kleur", "Chroma Colour", "Warna"],
+				"label":			8,
 				"default":		[0.0, 1.0, 0.0, 1.0],
 				"uniform":		"uChromaColour",
 			}

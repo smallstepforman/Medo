@@ -12,6 +12,7 @@
 #endif
 
 class BRadioButton;
+class LanguageJson;
 
 namespace yrender
 {
@@ -47,6 +48,7 @@ public:
 	void			MessageReceived(BMessage *msg)					override;
 	
 private:
+	LanguageJson				*fLanguage;
 	yrender::YRenderNode		*fRenderNode;
 	std::vector<BRadioButton *>	fGuiButtons;
 };

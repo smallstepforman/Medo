@@ -12,6 +12,7 @@
 
 #include "Editor/EffectNode.h"
 #include "Editor/Language.h"
+#include "Editor/LanguageJson.h"
 #include "Editor/Project.h"
 #include "Gui/LinkedSpinners.h"
 
@@ -24,19 +25,6 @@ enum EQUILISER_LANGUAGE_TEXT
 	TXT_EQUALISER_TEXT_B,
 	TXT_EQUALISER_FILTER,
 	NUMBER_EQUALISER_LANGUAGE_TEXT
-};
-static const char *kEqualiserLanguages[][NUMBER_EQUALISER_LANGUAGE_TEXT] =
-{
-{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"English (Britian)",
-{"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"English (USA)",
-{"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"Deutsch",
-{"Equalizer",		"Equalizer",		"20 band Equalizer",		"Filter"},			//	"Français",
-{"Equalizzatore",	"Equalizzatore",	"Equalizzatore a 20 bande",	"Filtro"},			//	"Italiano",
-{"Эквалайзер",		"Эквалайзер",		"20-полосный эквалайзер",	"Фильтр"},			//	"Русский",
-{"Eквилајзер",		"Eквилајзер",		"20-опсежни еквилајзер",	"Филтер"},			//	"Српски",
-{"Ecualizador",		"Ecualizador",		"Ecualizador de 20 bandas",	"Filtro"},			//	"Español",
-{"Equaliser",		"Equaliser",		"20 band Equaliser",		"Filter"},			//	"Dutch",
-{"Equalizer",		"Equalizer",		"Equalizer 20 band",		"Saring"},			//	"Indonesia",
 };
 
 EffectNode_Equaliser *instantiate_effect(BRect frame)
@@ -75,8 +63,6 @@ EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 {
 	const float kFontFactor = be_plain_font->Size()/20.0f;
 
-	assert(sizeof(kEqualiserLanguages)/(NUMBER_EQUALISER_LANGUAGE_TEXT*sizeof(char *)) == GetAvailableLanguages().size());
-
 	OrfanidisEq::FrequencyGrid fg;
 	switch (kNumberSliders)
 	{
@@ -92,6 +78,13 @@ EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 	fRotatedFont = new BFont(be_plain_font);
 	fRotatedFont->SetSize(be_plain_font->Size());
 	fRotatedFont->SetRotation(90);
+
+	fLanguage = new LanguageJson("AddOns/Equaliser/Languages.json");
+	if (fLanguage->GetTextCount() == 0)
+	{
+		printf("Cannot open \"AddOns/Equaliser/Languages.json\"\n");
+		return;
+	}
 
 	char buffer[20];
 	for (int i=0; i < kNumberSliders; i++)
@@ -117,7 +110,7 @@ EffectNode_Equaliser :: EffectNode_Equaliser(BRect frame, const char *filename)
 	fButtonReset = new BButton(BRect(20*kFontFactor, 340, 200*kFontFactor, 380), "reset", GetText(TXT_EFFECTS_COMMON_RESET), new BMessage(kMsgReset));
 	AddChild(fButtonReset);
 
-	fOptionFilter = new BOptionPopUp(BRect(300*kFontFactor, 340, 500*kFontFactor, 380), "filter", kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_FILTER], new BMessage(kMsgFilter));
+	fOptionFilter = new BOptionPopUp(BRect(300*kFontFactor, 340, 500*kFontFactor, 380), "filter", fLanguage->GetText(TXT_EQUALISER_FILTER), new BMessage(kMsgFilter));
 	//fOptionFilter->AddOption("None", OrfanidisEq::filter_type::none);
 	fOptionFilter->AddOption("Butterworth", OrfanidisEq::filter_type::butterworth);
 	fOptionFilter->AddOption("Chebyshev1", OrfanidisEq::filter_type::chebyshev1);
@@ -136,6 +129,7 @@ EffectNode_Equaliser :: ~EffectNode_Equaliser()
 {
 	delete fEqualiser;
 	delete fRotatedFont;
+	delete fLanguage;
 }
 
 void EffectNode_Equaliser :: AttachedToWindow()
@@ -184,7 +178,7 @@ BBitmap * EffectNode_Equaliser :: GetIcon()
 */
 const char * EffectNode_Equaliser :: GetTextEffectName(const uint32 language_idx)
 {
-	return kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_NAME];
+	return fLanguage->GetText(TXT_EQUALISER_NAME);
 }
 
 /*	FUNCTION:		EffectNode_Equaliser :: GetTextA
@@ -194,7 +188,7 @@ const char * EffectNode_Equaliser :: GetTextEffectName(const uint32 language_idx
 */	
 const char * EffectNode_Equaliser :: GetTextA(const uint32 language_idx)
 {
-	return kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_TEXT_A];
+	return fLanguage->GetText(TXT_EQUALISER_TEXT_A);
 }
 
 /*	FUNCTION:		EffectNode_Equaliser :: GetTextB
@@ -204,7 +198,7 @@ const char * EffectNode_Equaliser :: GetTextA(const uint32 language_idx)
 */
 const char * EffectNode_Equaliser :: GetTextB(const uint32 language_idx)
 {
-	return kEqualiserLanguages[GetLanguage()][TXT_EQUALISER_TEXT_B];
+	return fLanguage->GetText(TXT_EQUALISER_TEXT_B);
 }
 
 /*	FUNCTION:		EffectNode_Equaliser :: CreateMediaEffect

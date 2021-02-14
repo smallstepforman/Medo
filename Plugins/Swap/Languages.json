@@ -1,0 +1,124 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Swap",
+				"Swap from A to B",
+				"Reflection Intensity",
+				"Reflection Projection",
+				"Reflection Offset",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Swap",
+				"Swap from A to B",
+				"Reflection Intensity",
+				"Reflection Projection",
+				"Reflection Offset",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Tauschen",
+				"Tausche A nach B",
+				"Reflexionsintensität",
+				"Reflexionsprojektion",
+				"Reflexionsversatz",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Échanger",
+				"Passer de A à B",
+				"Intensité de réflexion",
+				"Projection de réflexion",
+				"Décalage de réflexion",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Scambia",
+				"Scambia da A a B",
+				"Intensità della Riflessione",
+				"Proiezione della Riflessione",
+				"Compensazione della Riflessionet",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Обмен",
+				"Поменять местами с А на Б",
+				"Интенсивность отражения",
+				"Проекция отражения",
+				"Смещение отражения",
+				"Минимум (0%)",
+				"Максимум (100 %)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Замена",
+				"Замените са A на Б",
+				"Интензитет рефлексије",
+				"Пројекција рефлексије",
+				"Помак рефлексије",
+				"Минимум (0%)",
+				"Максимум (100 %)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Intercambiar",
+				"Intercambiar de A a B",
+				"Intensidad del reflejo",
+				"Proyección del reflejo",
+				"Desplazamiento del reflejo",
+				"Mínimo (0%)",
+				"Máximo (100 %)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Wissel",
+				"Wissel van A naar B",
+				"Reflectie-intensiteit",
+				"Reflectieprojectie",
+				"Reflectiecompensatie",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Menukar",
+				"Tukar dari A ke B",
+				"Intensitas Refleksi",
+				"Proyeksi Refleksi",
+				"Offset Refleks",
+				"Min (0%)",
+				"Max (100 %)"
+			]
+		}
+	]
+}

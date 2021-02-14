@@ -4,12 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"special",
 		"name":	"NightVision",
-		"labelA":	["Night Vision", "Night Vision", "Nachtsicht", "Vision nocturne",
-							"Visione Notturna", "Ночное видение", "Ноћна визија", "Visión nocturna",
-							"Nachtzicht", "Night"],
-		"labelB":	["Green Night Vision shader", "Green Night Vision shader", "Grüne Nachtsicht", "Shader de vision nocturne verte",
-							"Tinta Verde Visione Notturna", "Зеленый шейдер ночного видения", "Зелена ноћна визија", "Sombreador de visión nocturna verde",
-							"Groene Nachtzicht shader", "Shader Hijau Penglihatan Malam"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/NightVision/icon.png"
 	},
 	"fragment": {
@@ -35,9 +31,7 @@
 			{
 				"type":			"text",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Green Night Vision shader", "Green Night Vision shader", "Grüne Nachtsicht", "Shader de vision nocturne verte",
-										"Tinta Verde Visione Notturna", "Зеленый шейдер ночного видения", "Зелена ноћна визија", "Sombreador de visión nocturna verde",
-										"Groene Nachtzicht shader", "Shader Hijau Penglihatan Malam"],
+				"label":			2,
 				"font":			"be_plain_font"
 			}
 		]

@@ -84,7 +84,7 @@ void EffectsWindow :: MessageReceived(BMessage *msg)
 					if (fEffectNode)
 					{
 						AddChild(fEffectNode);
-						SetTitle(fEffectNode->GetTextEffectName(GetLanguage()));
+						SetTitle(fEffectNode->GetTextEffectName(gLanguageManager->GetCurrentLanguageIndex()));
 						fEffectNode->ResizeTo(Bounds().Width(), Bounds().Height());
 					}
 					else

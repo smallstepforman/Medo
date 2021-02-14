@@ -1,0 +1,144 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Chroma Key",
+				"Make a colour transparent",
+				"Threshold",
+				"0",
+				"100",
+				"Smoothing",
+				"0.0",
+				"1.0",
+				"Chroma Colour",
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Chroma Key",
+				"Make a color transparent",
+				"Threshold",
+				"0",
+				"100",
+				"Smoothing",
+				"0.0",
+				"1.0",
+				"Chroma Color",
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Chroma Key",
+				"Eine Farbe tansparent machen",
+				"Schwelle",
+				"0",
+				"100",
+				"Glätten",
+				"0.0",
+				"1.0",
+				"Chroma Farbe",
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Clé Chroma",
+				"Rendre une couleur transparente",
+				"Seuil",
+				"0",
+				"100",
+				"Lissage",
+				"0.0",
+				"1.0",
+				"Couleur Chroma",
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Chiave Cromatica",
+				"Rendi Trasparente un Colore",
+				"Soglia",
+				"0",
+				"100",
+				"Levigatura",
+				"0.0",
+				"1.0",
+				"Colore Chroma",
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Хромакей",
+				"Сделать цвет прозрачным",
+				"Предел",
+				"0",
+				"100",
+				"Сглаживание",
+				"0.0",
+				"1.0",
+				"Хромa Цвет",
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Прозирна боја",
+				"Изаберите прозирну боју",
+				"Праг",
+				"0",
+				"100",
+				"Заглађивање",
+				"0.0",
+				"1.0",
+				"Прозирна Боја",
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Clave de croma",
+				"Hacer transparente a un color",
+				"Umbral",
+				"0",
+				"100",
+				"Suavizado",
+				"0.0",
+				"1.0",
+				"Kleur",
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Chroma Sleutel",
+				"Maak een kleur transparant",
+				"Verscherpen",
+				"0",
+				"100",
+				"Verzachten",
+				"0.0",
+				"1.0",
+				"Chroma Sleutel",
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Kunci Chroma",
+				"Jadikan warna transparan",
+				"Ambang",
+				"0",
+				"100",
+				"Menghaluskan",
+				"0.0",
+				"1.0",
+				"Warna",
+			]
+		}
+	]
+}

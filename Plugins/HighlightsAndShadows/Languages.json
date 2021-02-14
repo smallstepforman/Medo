@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Shadows & Highlights",
+				"Adjust the shadows and highlights",
+				"Shadows",
+				"Darker",
+				"Lighter",
+				"Highlights",
+				"Darker",
+				"Lighter"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Shadows & Highlights",
+				"Adjust the shadows and highlights",
+				"Shadows",
+				"Darker",
+				"Lighter",
+				"Highlights",
+				"Darker",
+				"Lighter"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Schatten & Lichter",
+				"Schatten und Lichter anpassen",
+				"Schatten",
+				"Dunkler",
+				"Heller",
+				"Lichter",
+				"Dunkler",
+				"Heller"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Ombres et reflets",
+				"Ajustez les ombres et les reflets",
+				"Ombres",
+				"Plus foncé",
+				"Plus léger",
+				"Points forts",
+				"Plus foncé",
+				"Plus léger"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Luci ed Ombre",
+				"Regola Luci ed Ombre",
+				"Ombre",
+				"Più scuro",
+				"Più chiaro",
+				"Punti luce",
+				"Più scuro",
+				"Più chiaro"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Тени и блики",
+				"Настроить тени и блики",
+				"Тени",
+				"Темнее",
+				"Светлее",
+				"Блики",
+				"Темнее",
+				"Светлее"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Сенке и Светлост",
+				"Подесите сенке и светла места",
+				"Сенке",
+				"Тамније",
+				"Светлије",
+				"Светлост",
+				"Тамније",
+				"Светлије"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Sombras y reflejos",
+				"Ajusta las sombras y reflejos",
+				"Sombras",
+				"Oscuro",
+				"Claro",
+				"Reflejos",
+				"Oscuro",
+				"Claro"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Schaduws & Hoogtepunten",
+				"Pas de schaduws en hoogtepunten aan",
+				"Schaduws",
+				"Donkerder",
+				"Lichter",
+				"Hoogepunten",
+				"Donkerder",
+				"Lichter"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Bayangan & Sorotan",
+				"Sesuaikan bayangan dan sorotan",
+				"Bayangan",
+				"Lebih gelap",
+				"Lebih ringan",
+				"Sorotan",
+				"Lebih gelap",
+				"Lebih ringan"
+			]
+		}
+	]
+}

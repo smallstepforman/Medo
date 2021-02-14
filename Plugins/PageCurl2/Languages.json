@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Page Curl 2",
+				"Page Curl Effect (cylinder)",
+				"Shadow",
+				"Min (0%)",
+				"Max (100%)",
+				"Grey",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Page Curl 2",
+				"Page Curl Effect (cylinder)",
+				"Shadow",
+				"Min (0%)",
+				"Max (100%)",
+				"Gray",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Page Curl 2",
+				"Page Curl Effect (cylinder)",
+				"Schatten",
+				"Min (0%)",
+				"Max (100%)",
+				"Grau",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Curl de page 2",
+				"Effet de boucle de page (cylindre)",
+				"Ombre",
+				"Min (0%)",
+				"Max (100%)",
+				"Grise",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Arriccia Pagina 2",
+				"Effetto Arriccia Pagina (cilindro)",
+				"Ombra",
+				"Min (0%)",
+				"Max (100%)",
+				"Grigio",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Загиб страницы 2",
+				"Эффект загиба страницы (цилиндр)",
+				"Тень",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Серый",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Окретање странице 2",
+				"Ефекат увијања странице (цилиндар)",
+				"Сенка",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Сива",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Cambio de página 2",
+				"Efecto de cambio de página (cilindro)",
+				"Sombra",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Gris",
+				"Mínimo (0%)",
+				"Máximo (100%)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Pagina Krullen 2",
+				"Pagina Curl Effect (cylinder)",
+				"Schaduw",
+				"Min (0%)",
+				"Max (100%)",
+				"Grijs",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Halaman keriting 2",
+				"Efek Halaman Keriting (silinder)",
+				"Bayangan",
+				"Min (0%)",
+				"Max (100%)",
+				"Abu-abu",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		}
+	]
+}

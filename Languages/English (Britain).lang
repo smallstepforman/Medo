@@ -1,11 +1,3 @@
-/*	PROJECT:		Medo
- *	AUTHORS:		Zenja Solaja, Melbourne Australia
- *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2021
- *	DESCRIPTION:	Language text
- */
- 
-static const char *kLanguage_English_Britain[] = 
-{
 //	Menu
 "Medo",
 "About",
@@ -399,5 +391,4 @@ static const char *kLanguage_English_Britain[] =
 "Adjust gain (volume) of audio clip",
 "Start Gain",
 "End Gain",
-};
 

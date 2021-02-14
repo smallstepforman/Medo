@@ -4,10 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"special",
 		"name":	"Fireworks",
-		"labelA":	["Fireworks", "Fireworks", "Feuerwerk", "Feux d'artifice", "Fuochi d'artificio", "Фейерверк", "Ватромет", "Fuegos artificiales", "Vuurwerk", "Kembang api"],
-		"labelB":	["Fireworks Effect", "Fireworks Effect", "Feuerwerk-Effekt", "Effet de feux d'artifice", 
-							"Effetto Fuochi d'artificio", "Эффект фейерверка", "Ефекат ватромета", "Efecto de fuegos artificiales",
-							"Vuurwerk Effect", "Efek Kembang Api"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/Fireworks/icon.png"
 	},
 	"fragment": {
@@ -41,11 +39,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Number Explosions", "Number Explosions", "Anzahl der Herzen", "Nombre d'explosions",
-										"Numero Esplosioni", "Количество взрывов", "Број експлозија", "Número de explosiones",
-										"Aantal Explosies", "Ledakan Angka"],
-				"label_min":	 ["0"],
-				"label_max":	["10"],
+				"label":			2,
+				"label_min":	 3,
+				"label_max":	4,
 				"default":		8.0,
 				"range":		[0, 10],
 				"uniform":		"NUM_EXPLOSIONS",
@@ -53,11 +49,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 520, 200],
-				"label":			["Number Particles", "Number Particles", "Anzahl Partikel", "Nombre de particules",
-										"Numero Particelle", "Число частиц", "Број честица", "Número de partículas",
-										"Aantal Deeltjes", "Partikel Nomor"],
-				"label_min":	 ["0"],
-				"label_max":	["100"],
+				"label":			5,
+				"label_min":	 6,
+				"label_max":	7,
 				"default":		50.0,
 				"range":		[0, 100],
 				"uniform":		"NUM_PARTICLES",
@@ -65,9 +59,7 @@
 			{
 				"type":			"text",
 				"rect":			[20, 250, 520, 280],
-				"label":			["Caution: very slow", "Caution: very slow", "Achtung: sehr langsam", "Attention: très lent",
-										"Attenzione: molto lento", "Осторожно: очень медленно", "Опрез: врло споро", "Advertencia: es muy lento",
-										"Waarschuwing: zeer langzaam", "Perhatian: sangat lambat"],
+				"label":			8,
 				"font":			"be_plain_font"
 			}
 		]

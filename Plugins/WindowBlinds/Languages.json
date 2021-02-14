@@ -1,0 +1,134 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Blinds",
+				"Window Blinds (slices) transition",
+				"Count",
+				"10",
+				"20",
+				"Smoothness",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Blinds",
+				"Window Blinds (slices) transition",
+				"Count",
+				"10",
+				"20",
+				"Smoothness",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Jalousie",
+				"Übergang von Jalousien (Scheiben)",
+				"Anzahl",
+				"10",
+				"20",
+				"Glätte",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Stores",
+				"Transition de stores (tranches)",
+				"Compter",
+				"10",
+				"20",
+				"Douceur",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Persiane",
+				"Transizione a Persiane (sezioni)",
+				"Conta",
+				"10",
+				"20",
+				"Levigatezza",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Жалюзи",
+				"Переход Оконные жалюзи (срезы)",
+				"Счетчик",
+				"10",
+				"20",
+				"Плавность",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ролетне",
+				"Прелаз ролетне (прореза)",
+				"Број",
+				"10",
+				"20",
+				"Глаткоћа",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Persianas",
+				"Transición de persianas (cortes)",
+				"Cantidad",
+				"10",
+				"20",
+				"Suavidad",
+				"Mínimo (0%)",
+				"Máximo (100%)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Jaloezieën",
+				"Venster jaloezieën (schijven) overgang",
+				"Aantal",
+				"10",
+				"20",
+				"Zachtheid",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Tirai",
+				"Transisi Jendela buta (irisan)",
+				"Menghitung",
+				"10",
+				"20",
+				"Kehalusan",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		}
+	]
+}

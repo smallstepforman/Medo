@@ -1,0 +1,114 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"EdgeDetect",
+				"Sobel Edge Detection",
+				"Intensity",
+				"Min  (0%)",
+				"Max (100%)",
+				"Colour"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"EdgeDetect",
+				"Sobel Edge Detection",
+				"Intensity",
+				"Min  (0%)",
+				"Max (100%)",
+				"Color"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Ecken erkennen",
+				"Sobel Kantenerkennung",
+				"Intensivität",
+				"Min  (0%)",
+				"Max (100%)",
+				"Farbe"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Détecter bord",
+				"Détection des bords Sobel",
+				"Intensité",
+				"Min  (0%)",
+				"Max (100%)",
+				"Couleur"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Rileva Bordo",
+				"Sobel Rand Detectie",
+				"Intesità",
+				"Min  (0%)",
+				"Max (100%)",
+				"Colore"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Обнаружение края",
+				"Обнаружение края Sobel",
+				"Интенсивность",
+				"Минимум  (0%)",
+				"Максимум (100%)",
+				"Цвет"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Ивице",
+				"Откривање ивица Sobel",
+				"Интензитет",
+				"Минимум  (0%)",
+				"Максимум (100%)",
+				"Боја"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Detectar bordes",
+				"Detección de bordes Sobel",
+				"Intensidad",
+				"Mínimo  (0%)",
+				"Máximo (100%)",
+				"Color"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Rand Detectie",
+				"Sobel Rand Detectie",
+				"Intensiteit",
+				"Min  (0%)",
+				"Max (100%)",
+				"Kleur"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Deteksi Tepi",
+				"Deteksi Tepi Sobel",
+				"Intesitas",
+				"Min  (0%)",
+				"Max (100%)",
+				"Warna"
+			]
+		}
+	]
+}

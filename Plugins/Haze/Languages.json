@@ -1,0 +1,164 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Haze",
+				"Heat Haze",
+				"Speed",
+				"Min (0%)",
+				"Max (100%)",
+				"Frequency",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Haze",
+				"Heat Haze",
+				"Slider",
+				"Min (0%)",
+				"Max (100%)",
+				"Frequency",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Dunst",
+				"Heißer Dunst",
+				"Geschwindigkeit",
+				"Min (0%)",
+				"Max (100%)",
+				"Frequenz",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Brume",
+				"Brume de chaleur",
+				"Vitesse",
+				"Min (0%)",
+				"Max (100%)",
+				"Fréquence",
+				"Min (0%)",
+				"Max (100%)",
+				"Amplitude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Foschia",
+				"Calore Foschia",
+				"Velocità",
+				"Min (0%)",
+				"Max (100%)",
+				"Frequenza",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampiezza",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Дымка",
+				"Тепловая дымка",
+				"Скорость",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Частота",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Амплитуда",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Топлота",
+				"Измаглица од врућине",
+				"Брзина",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Фреквенција",
+				"Минимум (0%)",
+				"Максимум (100%)",
+				"Амплитуда",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Neblina",
+				"Calor de neblina",
+				"Velocidad",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Frecuencia",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+				"Amplitud",
+				"Mínimo (0%)",
+				"Máximo (100%)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Nevel",
+				"Verhitte Nevel",
+				"Snelheid",
+				"Min (0%)",
+				"Max (100%)",
+				"Frequentie",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Kabut",
+				"Kabut Panas",
+				"Kecepatan",
+				"Min (0%)",
+				"Max (100%)",
+				"Frekuensi",
+				"Min (0%)",
+				"Max (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		}
+	]
+}

@@ -4,8 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"transition",
 		"name":	"SlotMachine",
-		"labelA":	["Slot Machine"],
-		"labelB":	["Slot Machine Effect"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/SlotMachine/icon.png"
 	},
 	"fragment": {
@@ -31,7 +31,7 @@
 			{
 				"type":			"text",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Recommend 3-4 second duration"],
+				"label":			2,
 				"font":			"be_plain_font"
 			}
 		]

@@ -13,6 +13,7 @@
 #include <interface/Window.h>
 
 #include "AlphaColourControl.h"
+#include "Editor/Language.h"
 
 enum kAlphaColourMessages
 {
@@ -87,12 +88,20 @@ AlphaColourControl :: AlphaColourControl(BPoint point, const char *name, BMessag
 	fColourControl = new BColorControl(BPoint(0, 32), B_CELLS_32x8, 6.0f, "ColorControl", msg, true);
 	AddChild(fColourControl);
 
+	//	Colour labels
+	BView *view_red = fColourControl->FindView("_red");
+	BView *view_green = fColourControl->FindView("_green");
+	BView *view_blue = fColourControl->FindView("_blue");
+	if (view_red)		((BTextControl *)view_red)->SetLabel(GetText(TXT_EFFECTS_COMMON_RED));
+	if (view_green)		((BTextControl *)view_green)->SetLabel(GetText(TXT_EFFECTS_COMMON_GREEN));
+	if (view_blue)		((BTextControl *)view_blue)->SetLabel(GetText(TXT_EFFECTS_COMMON_BLUE));
+
 	float scale = be_plain_font->Size()/16;
 	fAlphaSlider = new AlphaSlider(BRect(0, 0, 256*scale, 32), "AlphaSlider", nullptr, nullptr, 0, 255);
 	fAlphaSlider->SetModificationMessage(new BMessage(kMsgAlphaSlider));
 	AddChild(fAlphaSlider);
 
-	fTextAlpha = new BTextControl(BRect(264*scale, 0, 380*scale, 32), "alpha", "Alpha", "0", new BMessage(kMsgAlphaText), B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW | B_NAVIGABLE);
+	fTextAlpha = new BTextControl(BRect(264*scale, 0, 380*scale, 32), "alpha", GetText(TXT_EFFECTS_COMMON_ALPHA), "0", new BMessage(kMsgAlphaText), B_FOLLOW_LEFT | B_FOLLOW_TOP, B_WILL_DRAW | B_NAVIGABLE);
 	float labelWidth = StringWidth("Green: ");
 	fTextAlpha->SetDivider(labelWidth);
 	for (int32 i = 0; i < 256; i++)

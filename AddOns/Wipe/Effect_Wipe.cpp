@@ -18,6 +18,7 @@
 
 #include "Editor/EffectNode.h"
 #include "Editor/Language.h"
+#include "Editor/LanguageJson.h"
 #include "Editor/Project.h"
 #include "Editor/RenderActor.h"
 
@@ -34,19 +35,6 @@ enum WIPE_LANGUAGE_TEXT
 	TXT_WIPE_CROSS,
 	TXT_WIPE_CIRCLE,
 	NUMBER_WIPE_LANGUAGE_TEXT
-};
-static const char *kWipeLanguages[][NUMBER_WIPE_LANGUAGE_TEXT] =
-{
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Middle -> Out",		"Cross",			"Circle"},				//	"English (Britian)",
-{"Wipe",		"Wipe",				"Wipe Transition between 2 tracks",		"Left -> Right",		"Right -> Left",		"Middle -> Out",		"Cross",			"Circle"},				//	"English (USA)",
-{"Wischen",		"Wischen",			"Übergang verwischen zwischen 2 Tracks","Links -> Rechtst",		"Rechts -> Links",		"Mitte -> Aus",			"Kreuz",			"Kreis"},				//	"Deutsch",
-{"Effacer",		"Effacer",			"Effacer la transition entre 2 pistes", "Gauche -> Droite",		"Droite -> Gauche",		"Milieu -> Sortie",		"Croix",			"Cercle"},				//	"Français",
-{"Pulisci",		"Pulisci",			"Pulisci Transizione fra 2 tracce",		"Sinistra -> Destra",	"Destra -> Sinistra",	"Al centro -> Fuori",	"Incrociare",		"Cerchio"},				//	"Italiano",
-{"Вытеснение",	"Вытеснение",		"Плавный переход между 2 треками",		"Слева -> направо",		"Справа -> налево",		"Средний -> Из",		"Пересечение",		"Круговое вытеснение"},	//	"Русский",
-{"Прелаз",		"Гладак прелаз",	"Гладак прелаз између 2 траке",			"Лево -> Десно",		"Десно -> Лево",		"Средина -> Страна",	"Укрштени прелаз",	"Кружни прелаз"},		//	"Српски",
-{"Limpiar",		"Limpiar",			"Limpiar transiciones entre dos pistas","Izquierda -> Derecha",	"Derecha -> Izquierda",	"Medio -> Fuera",		"Cruz",				"Círculo"},				//	"Español",
-{"Wissen",		"Wissen",			"Wis overgang tussen 2 tracks",			"Links -> Rechts",		"Rechts -> Links",		"Midden -> Out",		"Kruis",			"Cirkel",},				//	"Dutch",
-{"Menghapus",	"Menghapus",		"Hapus Transisi antara 2 trek",			"Kiri -> Kanan",		"Kanan -> Kiri",		"Tengah -> Keluar",		"Menyeberang",		"Lingkaran"},			//	"Indonesian",
 };
 
 Effect_Wipe *instantiate_effect(BRect frame)
@@ -336,15 +324,19 @@ public:
 Effect_Wipe :: Effect_Wipe(BRect frame, const char *filename)
 	: EffectNode(frame, filename)
 {
-	assert(sizeof(kWipeLanguages)/(NUMBER_WIPE_LANGUAGE_TEXT*sizeof(char *)) == GetAvailableLanguages().size());
-
 	InitSwapTexturesCheckbox();
 
 	fRenderNode = nullptr;
+	fLanguage = new LanguageJson("AddOns/Wipe/Languages.json");
+	if (fLanguage->GetTextCount() == 0)
+	{
+		printf("Cannot open \"AddOns/Wipe/Languages.json\"\n");
+		return;
+	}
 
 	for (std::size_t i=0; i < sizeof(kRadioButtons)/sizeof(RadioButton); i++)
 	{
-		BRadioButton *button = new BRadioButton(kRadioButtons[i].rect, kRadioButtons[i].name, kWipeLanguages[GetLanguage()][kRadioButtons[i].text], new BMessage(kRadioButtons[i].msg));
+		BRadioButton *button = new BRadioButton(kRadioButtons[i].rect, kRadioButtons[i].name, fLanguage->GetText(kRadioButtons[i].text), new BMessage(kRadioButtons[i].msg));
 		fGuiButtons.push_back(button);
 		mEffectView->AddChild(button);
 	}
@@ -357,7 +349,9 @@ Effect_Wipe :: Effect_Wipe(BRect frame, const char *filename)
 	DESCRIPTION:	Destructor
 */
 Effect_Wipe :: ~Effect_Wipe()
-{ }
+{
+	delete fLanguage;
+}
 
 /*	FUNCTION:		Effect_Fade :: AttachedToWindow
 	ARGS:			none
@@ -421,7 +415,7 @@ BBitmap * Effect_Wipe :: GetIcon()
 */
 const char * Effect_Wipe :: GetTextEffectName(const uint32 language_idx)
 {
-	return kWipeLanguages[GetLanguage()][TXT_WIPE_NAME];
+	return fLanguage->GetText(TXT_WIPE_NAME);
 }
 
 /*	FUNCTION:		Effect_Wipe :: GetTextA
@@ -431,7 +425,7 @@ const char * Effect_Wipe :: GetTextEffectName(const uint32 language_idx)
 */	
 const char * Effect_Wipe :: GetTextA(const uint32 language_idx)
 {
-	return kWipeLanguages[GetLanguage()][TXT_WIPE_TEXT_A];
+	return fLanguage->GetText(TXT_WIPE_TEXT_A);
 }
 
 /*	FUNCTION:		Effect_Wipe :: GetTextB
@@ -441,7 +435,7 @@ const char * Effect_Wipe :: GetTextA(const uint32 language_idx)
 */
 const char * Effect_Wipe :: GetTextB(const uint32 language_idx)
 {
-	return kWipeLanguages[GetLanguage()][TXT_WIPE_TEXT_B];
+	return fLanguage->GetText(TXT_WIPE_TEXT_B);
 }
 
 /*	FUNCTION:		Effect_Wipe :: CreateMediaEffect

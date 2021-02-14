@@ -1,0 +1,104 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Vignette",
+				"Vignetting Effect",
+				"Intensity",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Vignette",
+				"Vignetting Effect",
+				"Intensity",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Vignette-Effekt",
+				"Vignetting Effect",
+				"Intensivität",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Vignette",
+				"Effet de vignettage",
+				"Intensité",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Vignetta",
+				"Effetto Vignetta",
+				"Intesità",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Виньетка",
+				"Эффект виньетки",
+				"Интенсивность",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Вињета",
+				"Ефекат вињете",
+				"Интензитет",
+				"Минимум (0%)",
+				"Максимум (100%)"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Viñeta",
+				"Efecto de viñeta",
+				"Intensidad",
+				"Mínimo (0%)",
+				"Máximo (100%)"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Vignet",
+				"Vignet Effect",
+				"Intensiteit",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Skema",
+				"Efek vinyet",
+				"Intesitas",
+				"Min (0%)",
+				"Max (100%)"
+			]
+		}
+	]
+}

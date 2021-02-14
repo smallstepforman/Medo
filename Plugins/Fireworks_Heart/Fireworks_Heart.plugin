@@ -4,12 +4,8 @@
 		"vendor":	"Zen Yes Pty Ltd",
 		"type":		"special",
 		"name":	"Fireworks Heart",
-		"labelA":	["Fireworks (Heart)", "Fireworks (Heart)", "Feuerwerk (Herzen)", "Feu d'artifice (coeur)",
-							"Fuochi d'artificio (Cuore)", "Фейерверк (Сердце)", "Ватромет (Срце)", "Fuegos artificiales (corazones)",
-							"Vuurwerk (Hart)",  "Fireworks (Hati)"],
-		"labelB":	["Fireworks Effect", "Fireworks Effect", "Feuerwerk Effect", "Effet de feux d'artifice", 
-							"Effetto Fuochi d'artificio", "Эффект фейерверка", "Ефекат ватромета", "Efecto de fuegos artificiales",
-							"Vuurwerk Effect", "Efek Kembang Api"],
+		"labelA":	0,
+		"labelB":	1,
 		"icon":		"Plugins/Fireworks_Heart/icon.png"
 	},
 	"fragment": {
@@ -43,11 +39,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 20, 520, 100],
-				"label":			["Number Hearts", "Number Hearts", "Anzahl der Herzen", "Nombre de coeurs",
-										"Numero Cuori", "Число сердец", "Број срца", "Número de explosiones",
-										"Aantal Harten", "Jumlah Hati"],
-				"label_min": ["1"],
-				"label_max":	["100"],
+				"label":			2,
+				"label_min": 3,
+				"label_max":	4,
 				"default":		50.0,
 				"range":		[1, 100],
 				"uniform":		"np",
@@ -55,11 +49,9 @@
 			{
 				"type":			"slider",
 				"rect":			[20, 120, 520, 200],
-				"label":			["Number Particles", "Number Particles", "Anzahl Partikel", "Nombre de particules",
-										"Numero Particelle", "Число частиц", "Број честица", "Número de partículas",
-										"Aantal Deeltjes", "Jumlah Partikel"],
-				"label_min":	 ["10"],
-				"label_max":	["100"],
+				"label":			5,
+				"label_min":	 6,
+				"label_max":	7,
 				"default":		40.0,
 				"range":		[10, 100],
 				"uniform":		"snp",
@@ -67,9 +59,7 @@
 			{
 				"type":			"text",
 				"rect":			[20, 250, 520, 280],
-				"label":			["Caution: very slow", "Caution: very slow", "Achtung: sehr langsam", "Attention: très lent",
-										"Attenzione: molto lento", "Осторожно: очень медленно", "Опрез: врло споро", "Advertencia: es muy lento",
-										"Waarschuwing: zeer langzaam", "Perhatian: sangat lambat"],
+				"label":			8,
 				"font":			"be_bold_font"
 			}
 		]

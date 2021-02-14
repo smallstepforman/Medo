@@ -1,0 +1,104 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Burn",
+				"Burn transition",
+				"Intensity",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Burn",
+				"Burn transition",
+				"Intensity",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Brennen",
+				"Brennen Übergang",
+				"Intensivität",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Brûler",
+				"Transición de quemadura",
+				"Intensité",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Bruciatura",
+				"Transizione Bruciatura",
+				"Intesità",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Выжигание",
+				"Переход выжигания",
+				"Интенсивность",
+				"Минимум (0%)",
+				"Максимум (100%)",
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Сагоревање",
+				"Прелаз ватре",
+				"Интензитет",
+				"Минимум (0%)",
+				"Максимум (100%)",
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Quemadura",
+				"Transición de quemadura",
+				"Intensidad",
+				"Mínimo (0%)",
+				"Máximo (100%)",
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Brand",
+				"Brand Overgang",
+				"Intensiteit",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Membakar",
+				"Transisi pembakaran",
+				"Intesitas",
+				"Min (0%)",
+				"Max (100%)",
+			]
+		}
+	]
+}
