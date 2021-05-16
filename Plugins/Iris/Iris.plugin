@@ -1,0 +1,60 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"transition",
+		"name":	"Iris",
+		"labelA":	0,
+		"labelB":	1,
+		"icon":		"Plugins/Iris/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit1"
+			},
+			{
+				"type":		"vec2",
+				"name":		"uCenter"
+			},
+			{
+				"type":		"float",
+				"name":	"uWidth"
+			},
+			{
+				"type":		"interval",
+				"name":	"uTime"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Iris/Iris.frag"
+		},
+		"gui": [
+			{
+				"type":				"vec2",
+				"rect":				[20, 20, 220, 100],
+				"label":				2,
+				"default":			[0.5, 0.5],
+				"range":				[0.0, 1.0],
+				"mouse_down":	true,
+				"uniform":			"uCenter"
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 220, 520, 300],
+				"label":			3,
+				"label_min":	 	4,
+				"label_max":	5,
+				"default":		0.025,
+				"range":			[0.0, 0.1],
+				"uniform":		"uWidth"
+			}
+		]
+	}
+}

@@ -1,0 +1,114 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Iris",
+				"Iris Transition",
+				"Centre",
+				"Edge Smoothness",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Iris",
+				"Iris Transition",
+				"Center",
+				"Width",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Iris",
+				"Iris Transition",
+				"Center",
+				"Kantenglätte",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Iris",
+				"Transition Iris",
+				"Centre",
+				"Lissage des bords",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Iris",
+				"Transizione Iris",
+				"Centro",
+				"Levigatezza dei bordi",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Ирис",
+				"Ирис Переход",
+				"Центр",
+				"Гладкость края",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Дужица",
+				"Ирис транзиција",
+				"Центар",
+				"Глаткост ивица",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Iris",
+				"Transición del iris",
+				"Centrar",
+				"Suavidad de los bordes",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Iris",
+				"Irisovergang",
+				"Centrum",
+				"Gladheid van de randen",
+				"0.0",
+				"0.1",
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Iris",
+				"Transisi Iris",
+				"Pusat",
+				"Kehalusan Tepi",
+				"0.0",
+				"0.1",
+			]
+		}
+	]
+}
