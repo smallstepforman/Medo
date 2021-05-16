@@ -452,5 +452,11 @@ void VideoManager :: ClearPendingThumbnails()
 }
 
 //	FFmpeg (via BMediaKit) is not thread safe
+//	16 May 2021 tests show that update to ffmpeg resolved race conditions.  Disable for now.
+#if 0
 const bool VideoManager :: LockMediaKit()		{return fMediaKitSemaphore->Lock();}
 const bool VideoManager :: UnlockMediaKit()		{return fMediaKitSemaphore->Unlock();}
+#else
+const bool VideoManager :: LockMediaKit()		{return true;}
+const bool VideoManager :: UnlockMediaKit()		{return true;}
+#endif
