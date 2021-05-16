@@ -1,0 +1,130 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"special",
+		"name":	"Circle",
+		"labelA":	0,
+		"labelB":	1,
+		"icon":		"Plugins/Circle/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTextureUnit0"
+			},
+			{
+				"type":		"vec2",
+				"name":		"uCenter"
+			},
+			{
+				"type":		"float",
+				"name":	"uWidth"
+			},
+			{
+				"type":		"float",
+				"name":	"uRadius"
+			},
+			{
+				"type":		"vec2",
+				"name":	"uAspect"
+			},
+			{
+				"type":		"colour",
+				"name":		"uColour"
+			},
+			{
+				"type":		"int",
+				"name":	"uFilled",
+			},
+			{
+				"type":		"int",
+				"name":	"uAnimated",
+			},
+			{
+				"type":		"float",
+				"name":	"uAnimatedInterval"
+			},
+			{
+				"type":		"timestamp",
+				"name":	"uTime",
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/Circle/Circle.frag"
+		},
+		"gui": [
+			{
+				"type":				"vec2",
+				"rect":				[20, 20, 220, 100],
+				"label":				2,
+				"default":			[0.5, 0.5],
+				"range":				[0.0, 1.0],
+				"mouse_down":	true,
+				"uniform":			"uCenter"
+			},
+			{
+				"type":				"vec2",
+				"rect":				[320, 20, 520, 100],
+				"label":				8,
+				"default":			[1.0, 1.0],
+				"range":				[0.0, 2.0],
+				"mouse_down":	false,
+				"uniform":			"uAspect"
+			},
+			{
+				"type":			"slider",
+				"rect":			[20, 120, 320, 200],
+				"label":			7,
+				"label_min":	 	7,
+				"label_max":	7,
+				"default":		0.2,
+				"range":			[0.0, 1.0],
+				"uniform":		"uRadius"
+			},
+			{
+				"type":			"slider",
+				"rect":			[340, 120, 640, 200],
+				"label":			3,
+				"label_min":	 	4,
+				"label_max":	5,
+				"default":		0.02,
+				"range":			[0.0, 0.1],
+				"uniform":		"uWidth"
+			},
+			{
+				"type":				"checkbox",
+				"rect":				[20, 240, 200, 280],
+				"label":				10,
+				"default":			0,
+				"uniform":		"uAnimated"
+			},
+			{
+				"type":			"slider",
+				"rect":			[220, 220, 520, 300],
+				"label":			11,
+				"label_min":	 	12,
+				"label_max":	13,
+				"default":		2.0,
+				"range":			[1.0, 4.0],
+				"uniform":		"uAnimatedInterval"
+			},
+			{
+				"type":			"colour",
+				"rect":			[20, 320, 620, 480],
+				"label":			6,
+				"default":		[0.0, 1.0, 0.0, 1.0],
+				"uniform":		"uColour"
+			},
+			{
+				"type":				"checkbox",
+				"rect":				[20, 480, 200, 520],
+				"label":				9,
+				"default":			0,
+				"uniform":		"uFilled"
+			}			
+		]
+	}
+}

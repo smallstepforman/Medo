@@ -1,0 +1,194 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"Circle",
+				"Circle Effect",
+				"Centre",
+				"Edge Smoothness",
+				"0.0",
+				"0.1",
+				"Colour",
+				"Radius",
+				"Aspect",
+				"Filled",
+				"Animated",
+				"Animation Duration",
+				"1 sec",
+				"4 secs"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"Circle",
+				"Circle Effect",
+				"Center",
+				"Edge Smoothness",
+				"0.0",
+				"0.1",
+				"Color",
+				"Radius",
+				"Aspect",
+				"Filled",
+				"Animated",
+				"Animation Duration",
+				"1 sec",
+				"4 secs"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"Kreis",
+				"Kreiseffekt",
+				"Center",
+				"Kantenglätte",
+				"0.0",
+				0,1,
+				"Farbe",
+				"Radius",
+				"Aspekt",
+				"Gefüllt",
+				"Animiert",
+				"Animationsdauer",
+				"1 Sek",
+				"4 Sekunden"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Cercle",
+				"Effet de cercle",
+				"Centre",
+				"Lissage des bords",
+				"0,0",
+				"0,1",
+				"Couleur",
+				"Rayon",
+				"Aspect",
+				"Rempli",
+				"Animé",
+				"Durée de l'animation",
+				"1 sec",
+				"4 secs"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Cerchio",
+				"Effetto cerchio",
+				"Centro",
+				"Levigatezza dei bordi",
+				"0,0",
+				"0,1",
+				"Colore",
+				"Raggio",
+				"Aspetto",
+				"Riempito",
+				"Animato",
+				"Durata animazione",
+				"1 sec",
+				"4 secondi"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"Круг",
+				"Эффект круга",
+				"Центр",
+				"Гладкость края",
+				"0,0",
+				"0,1",
+				"Цвет",
+				"Радиус",
+				"Аспект",
+				"Заполненный",
+				"Анимированный",
+				"Продолжительность анимации",
+				"1 сек",
+				"4 секунды"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"Круг",
+				"Ефекат круга",
+				"Центар",
+				"Глаткост ивица",
+				"0,0",
+				"0,1",
+				"Боја",
+				"Радијус",
+				"Аспект",
+				"Попуњено",
+				"Анимирани",
+				"Трајање анимације",
+				"1 сек",
+				"4 секунди"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Circulo",
+				"Efecto círculo",
+				"Centrar",
+				"Suavidad de los bordes",
+				"0.0",
+				"0,1",
+				"Color",
+				"Radio",
+				"Aspecto",
+				"Lleno",
+				"Animado",
+				"Duración de la animación",
+				"1 seg",
+				"4 segundos"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"Cirkel",
+				"Cirkeleffect",
+				"Centrum",
+				"Gladheid van de randen",
+				"0.0",
+				"0.1",
+				"Kleur",
+				"Straal",
+				"Aspect",
+				"Gevuld",
+				"Geanimeerd",
+				"Animatieduur",
+				"1 sec",
+				"4 seconden"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Lingkaran",
+				"Efek Lingkaran",
+				"Pusat",
+				"Kehalusan Tepi",
+				"0,0",
+				"0,1",
+				"Warna",
+				"Radius",
+				"Aspek",
+				"Terisi",
+				"Animasi",
+				"Durasi Animasi",
+				"1 detik",
+				"4 detik"
+			]
+		}
+	]
+}
