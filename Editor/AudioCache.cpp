@@ -5,7 +5,7 @@
  */
 
 #include <cassert>
-#include <vector>
+#include <deque>
 
 #include <MediaKit.h>
 #include <interface/Bitmap.h>
@@ -199,50 +199,39 @@ uint8 * AudioCache :: GetAudioBufferLocked(const MediaSource *source, const int6
 
 	const size_t kSampleSize = source->GetAudioSampleSize();
 
-	bigtime_t ts = system_time();
-	bigtime_t oldest_ts = ts;
-	int oldest_idx = -1;
-	int ii = 0;
 	DEBUG("AudioCache::GetAudioBufferLocked() source=%s, start=%ld, end=%ld\n", source->GetFilename(), audio_start, audio_end);
-	for (std::vector<AUDIO_ITEM>::iterator i = fAudioCache.begin(); i != fAudioCache.end(); i++)
+	for (std::deque<AUDIO_ITEM>::iterator i = fAudioCache.begin(); i != fAudioCache.end(); i++)
 	{
 		if ((*i).source == source)
 		{
 			if (((*i).audio_start <= audio_start) && ((*i).audio_end >= audio_end))
 			{
 				//	Match, determine start pointer
-				(*i).timestamp = ts;
 				audio_buffer_size = (audio_end - audio_start)*kSampleSize;
-				return (*i).buffer + (audio_start - (*i).audio_start)*kSampleSize;
+				AUDIO_ITEM item = *i;
+				fAudioCache.erase(i);
+				fAudioCache.push_front(item);
+				return item.buffer + (audio_start - item.audio_start)*kSampleSize;
 			}
 		}
-		if ((*i).timestamp < oldest_ts)
-		{
-			oldest_idx = ii;
-			oldest_ts = (*i).timestamp;
-		}
-		ii++;
 	}
 
 	//	audio buffer not in cache, need to load it
+
 	AUDIO_ITEM item = CreateAudioItem(source, audio_start, source->GetAudioNumberSamples());
-	item.timestamp = system_time();
 	audio_end = item.audio_end;
 	audio_buffer_size = (audio_end - audio_start)*kSampleSize;
 
-	if (fAudioCacheCurrentSize < fAudioCacheMaxSize)
+	if (fAudioCacheCurrentSize >= fAudioCacheMaxSize)
 	{
-		fAudioCache.push_back(item);
-		fAudioCacheCurrentSize += item.buffer_size;
+		AUDIO_ITEM back = fAudioCache.back();
+		delete back.buffer;
+		fAudioCacheCurrentSize -= back.buffer_size;
+		fAudioCache.pop_back();
 	}
-	else
-	{
-		assert(oldest_idx >= 0);
-		delete fAudioCache[oldest_idx].buffer;
-		fAudioCacheCurrentSize -= fAudioCache[oldest_idx].buffer_size;
-		fAudioCache[oldest_idx] = item;
-		fAudioCacheCurrentSize += item.buffer_size;
-	}
+
+	fAudioCache.push_front(item);
+	fAudioCacheCurrentSize += item.buffer_size;
 	return item.buffer;
 }
 
@@ -409,12 +398,14 @@ BBitmap * AudioCache :: CreateBitmap(sem_id manager_semaphore, const MediaSource
 */
 BBitmap	* AudioCache :: FindBitmapLocked(const MediaSource *source, const int64 audio_start, const int64 audio_end, const int32 width, const int32 height)
 {
-	for (auto &i : fBitmapCache)
+	for (std::deque<BITMAP_ITEM>::iterator i = fBitmapCache.begin(); i != fBitmapCache.end(); i++)
 	{
-		if ((i.source == source) && (i.audio_start == audio_start) && (i.audio_end == audio_end) && (i.width == width) && (i.height == height))
+		if (((*i).source == source) && ((*i).audio_start == audio_start) && ((*i).audio_end == audio_end) && ((*i).width == width) && ((*i).height == height))
 		{
-			i.timestamp = system_time();
-			return i.bitmap;
+			BITMAP_ITEM anItem = *i;
+			fBitmapCache.erase(i);
+			fBitmapCache.push_front(anItem);
+			return anItem.bitmap;
 		}
 	}
 	return nullptr;
@@ -430,10 +421,10 @@ BBitmap	* AudioCache :: FindBitmapLocked(const MediaSource *source, const int64 
 */
 BBitmap	* AudioCache :: FindSimilarBitmapLocked(const MediaSource *source, const int64 audio_start, const int64 audio_end, const int32 width, const int32 height)
 {
-	std::vector<BITMAP_ITEM>::iterator mi = fBitmapCache.end();
+	std::deque<BITMAP_ITEM>::iterator mi = fBitmapCache.end();
 	int32 dist2 = 4*3840*3840 + 4*2160*2160;	//	max distance (8K resolution)
 
-	for (std::vector<BITMAP_ITEM>::iterator i = fBitmapCache.begin(); i != fBitmapCache.end(); i++)
+	for (std::deque<BITMAP_ITEM>::iterator i = fBitmapCache.begin(); i != fBitmapCache.end(); i++)
 	{
 		if (((*i).source == source) && ((*i).audio_start == audio_start))
 		{
@@ -449,8 +440,10 @@ BBitmap	* AudioCache :: FindSimilarBitmapLocked(const MediaSource *source, const
 
 	if (mi != fBitmapCache.end())
 	{
-		(*mi).timestamp = system_time();
-		return (*mi).bitmap;
+		BITMAP_ITEM anItem = *mi;
+		fBitmapCache.erase(mi);
+		fBitmapCache.push_front(anItem);
+		return anItem.bitmap;
 	}
 	else
 		return nullptr;
@@ -477,7 +470,6 @@ BBitmap * AudioCache :: CreateBitmapUnlocked(sem_id manager_semaphore, const Med
 	item.height = height;
 	item.samples_pixel = (audio_end - audio_start)/width;
 	item.bitmap = CreateBitmap(manager_semaphore, source, audio_start, audio_end, item.samples_pixel, width, height);
-	item.timestamp = system_time();
 
 	status_t err;
 	while ((err = acquire_sem(manager_semaphore)) == B_INTERRUPTED) ;
@@ -490,22 +482,13 @@ BBitmap * AudioCache :: CreateBitmapUnlocked(sem_id manager_semaphore, const Med
 	//	Add item to cache
 	if (fBitmapCache.size() < fCacheMaxBitmaps)
 	{
-		fBitmapCache.push_back(item);
+		fBitmapCache.push_front(item);
 	}
 	else
 	{
-		std::size_t index = 0;
-		bigtime_t oldest = fBitmapCache[0].timestamp;
-		for (std::size_t i=1; i < fCacheMaxBitmaps; i++)
-		{
-			if (fBitmapCache[i].timestamp < oldest)
-			{
-				oldest = fBitmapCache[i].timestamp;
-				index = i;
-			}
-		}
-		delete fBitmapCache[index].bitmap;
-		fBitmapCache[index] = item;
+		delete fBitmapCache.back().bitmap;
+		fBitmapCache.pop_back();
+		fBitmapCache.push_front(item);
 	}
 	release_sem_etc(manager_semaphore, 1, B_DO_NOT_RESCHEDULE);
 	

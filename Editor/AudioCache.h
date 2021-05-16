@@ -7,8 +7,8 @@
 #ifndef _AUDIO_CACHE_H_
 #define _AUDIO_CACHE_H_
 
-#ifndef _GLIBCXX_VECTOR
-#include <vector>
+#ifndef _GLIBCXX_DEQUE
+#include <deque>
 #endif
 
 class BBitmap;
@@ -28,7 +28,6 @@ class AudioCache
 		const MediaSource	*source;
 		int64				audio_start;
 		int64				audio_end;
-		bigtime_t			timestamp;
 	};
 	struct AUDIO_ITEM
 	{
@@ -37,11 +36,10 @@ class AudioCache
 		const MediaSource	*source;
 		int64				audio_start;	//	in source frames (eg. 44100)
 		int64				audio_end;		//	in source frames
-		bigtime_t			timestamp;
 		void				PrintToStream();
 	};
-	std::vector<AUDIO_ITEM>		fAudioCache;
-	std::vector<BITMAP_ITEM>	fBitmapCache;
+	std::deque<AUDIO_ITEM>		fAudioCache;
+	std::deque<BITMAP_ITEM>		fBitmapCache;
 
 	std::size_t					fAudioCacheMaxSize;
 	std::size_t					fAudioCacheCurrentSize;

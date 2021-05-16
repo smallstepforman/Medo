@@ -35,48 +35,46 @@ static const size_t		kThumbnailWidth		= 16*6;
 static const size_t		kThumbnailHeight	= 9*6;
 
 /**********************************
-	VideoBitmapCache
+	VideoBitmapLruCache
 ***********************************/
-class VideoBitmapCache
+class VideoBitmapLruCache
 {
 private:
 	struct FRAME
 	{
-		BBitmap			*bitmap;
-		MediaSource		*source;
-		int64			video_frame;
-		bigtime_t		timestamp;
+		BBitmap				*bitmap;
+		const MediaSource	*source;
+		int64				video_frame;
 
-		FRAME() : bitmap(nullptr), source(nullptr), video_frame(0), timestamp(0) {}
+		FRAME() : bitmap(nullptr), source(nullptr), video_frame(0) { }
 	};
 
-	std::vector<FRAME>	fFrames;
+	std::deque<FRAME>	fFrames;
 	size_t				fMaxFrames;
 	
 public:
-/*	FUNCTION:		VideoBitmapCache :: VideoBitmapCache
+/*	FUNCTION:		VideoBitmapLruCache :: VideoBitmapLruCache
 	ARGS:			max_frames
 	RETURN:			n/a
 	DESCRIPTION:	Constructor
 */
-	VideoBitmapCache(const size_t max_frames)
+	VideoBitmapLruCache(const size_t max_frames)
 	{
 		fMaxFrames = max_frames;
-		fFrames.reserve(fMaxFrames);		
 	}
 
-/*	FUNCTION:		VideoBitmapCache :: ~VideoBitmapCache
+/*	FUNCTION:		VideoBitmapLruCache :: ~VideoBitmapLruCache
 	ARGS:			n/a
 	RETURN:			n/a
 	DESCRIPTION:	Destructor
 */
-	~VideoBitmapCache()
+	~VideoBitmapLruCache()
 	{
 		for (auto i : fFrames)
 			delete i.bitmap;	
 	}
 	
-/*	FUNCTION:		BitmapCache :: GetFrame
+/*	FUNCTION:		VideoBitmapLruCache :: GetFrame
 					source
 	ARGS:			video_frame
 					bitmap_width
@@ -85,7 +83,7 @@ public:
 	RETURN:			iterator to next element in cache to overwrite
 	DESCRIPTION:	Get iterator to next element in cache to overwrite (or new item)
 */	
-	std::vector<FRAME>::iterator GetFrameLocked(const MediaSource *source, const int64 video_frame, const float bitmap_width, const float bitmap_height, bool &found)
+	BBitmap *GetFrameLocked(const MediaSource *source, const int64 video_frame, const float bitmap_width, const float bitmap_height, bool &found)
 	{
 		assert(source != nullptr);
 		BMediaTrack *track = source->GetVideoTrack();
@@ -93,37 +91,52 @@ public:
 		assert(video_frame <= source->GetVideoNumberFrames());
 
 		//	Check if frame already in slot (reuse)
-		auto it = fFrames.begin();
-		for (std::vector<FRAME>::iterator i = fFrames.begin(); i != fFrames.end(); i++)
+		for (std::deque<FRAME>::iterator i = fFrames.begin(); i != fFrames.end(); i++)
 		{
 			if (((*i).source == source) && ((*i).video_frame == video_frame))
 			{
-				DEBUG("VideoBitmapCache::GetFrameLocked(%ld) - Reuse slot (%ld)\n", video_frame, i-fFrames.begin());
-				(*i).timestamp = system_time();
 				found = true;
-				return i;
+				//	Push to front (take care not to thrash deque)
+				if (i - fFrames.begin() > 16)
+				{
+					FRAME aFrame = *i;
+					fFrames.erase(i);
+					fFrames.push_front(aFrame);
+					return aFrame.bitmap;
+				}
+				else
+					return (*i).bitmap;
 			}
-			//	Oldest timestamp?
-			if ((*i).timestamp < (*it).timestamp)
-				it = i;
 		}
 		found = false;
 	
 		//	Reuse or create new slot		
-		if (fFrames.size() < fMaxFrames)
+		if (fFrames.size() >= fMaxFrames)
 		{
-			FRAME	aFrame;
-			aFrame.bitmap = new BBitmap(BRect(0, 0, bitmap_width - 1, bitmap_height - 1), B_RGBA32);
-			fFrames.push_back(aFrame);
-			it = fFrames.end();
-			it--;
-			DEBUG("VideoBitmapCache::GetFrameLocked(%ld) - New entry\n", video_frame);
+			DEBUG("[%p] VideoBitmapCache::GetFrameLocked(%ld) - pop_back(%ld)\n", this, video_frame, fFrames.back().video_frame);
+			delete fFrames.back().bitmap;
+			fFrames.pop_back();
+
 		}
-		else
+		FRAME	aFrame;
+		aFrame.bitmap = new BBitmap(BRect(0, 0, bitmap_width - 1, bitmap_height - 1), B_RGBA32);
+		aFrame.source = source;
+		aFrame.video_frame = video_frame;
+		fFrames.push_front(aFrame);
+		return aFrame.bitmap;
+	}
+
+	void InvalidateItem(const MediaSource *source, const int64 video_frame)
+	{
+		for (std::deque<FRAME>::iterator i = fFrames.begin(); i != fFrames.end(); i++)
 		{
-			DEBUG("VideoBitmapCache::GetFrameLocked(%ld) - Replace entry\n", video_frame);
+			if (((*i).source == source) && ((*i).video_frame == video_frame))
+			{
+				delete (*i).bitmap;
+				fFrames.erase(i);
+				return;
+			}
 		}
-		return it;	
 	}
 };
 
@@ -178,8 +191,8 @@ VideoManager :: VideoManager()
 	printf("[VideoManager] Max Cached Frames = [4K] %ld images / [HD] %ld images\n", kFrameCacheSize, kFrameCacheSize*4);
 	printf("[VideoManager] Max Thumbnails = %ld thumbs\n", kThumbnailCacheSize);
 	
-	fFrameCache = new VideoBitmapCache(kFrameCacheSize);
-	fThumbnailCache = new VideoBitmapCache(kThumbnailCacheSize);
+	fFrameCache = new VideoBitmapLruCache(kFrameCacheSize);
+	fThumbnailCache = new VideoBitmapLruCache(kThumbnailCacheSize);
 
 	fQueueSemaphore = new yarra::Platform::Semaphore;
 	fThumbnailActor = new VideoThumbnailActor;
@@ -235,11 +248,11 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 
 	//	Check if frame in cache
 	bool found;
-	auto it = fFrameCache->GetFrameLocked(source, video_frame, source->GetVideoWidth(), source->GetVideoHeight(), found);
+	BBitmap *bitmap = fFrameCache->GetFrameLocked(source, requested_video_frame, source->GetVideoWidth(), source->GetVideoHeight(), found);
 	fQueueSemaphore->Unlock();
 	if (found)
-		return (*it).bitmap;
-		
+		return bitmap;
+
 	//	No match, read frames
 	media_header mh;
 	int64 num_read;
@@ -260,6 +273,10 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 		{
 			printf("Cannot seek to frame %ld, file=%s\n", video_frame, source->GetFilename());
 			UnlockMediaKit();
+			if (!fQueueSemaphore->Lock())
+				return nullptr;
+			fFrameCache->InvalidateItem(source, video_frame);
+			fQueueSemaphore->Unlock();
 			return nullptr;
 		}
 	}
@@ -268,52 +285,65 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 	//	Seek will advance to keyframe, we need to advance to actual frame after keyframe
 	while (video_frame < requested_video_frame)
 	{
-		(*it).bitmap->Lock();
-		attempt = 0;
-		do 
-		{
-			st = video_track->ReadFrames((char *)(*it).bitmap->Bits(), &num_read, &mh);
-		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
-		if (st != B_OK)
-		{
-			printf("Cannot read frame %ld, file=%s\n", video_frame, source->GetFilename());
-			(*it).bitmap->Unlock();
-			UnlockMediaKit();
-			return nullptr;	
-		}
-		(*it).bitmap->Unlock();
-		(*it).video_frame = (st==B_OK ? video_frame : -1);
-		(*it).timestamp = system_time();
-		(*it).source = source;
-		DEBUG("Skip Save(%ld)  status_t=%d\n", video_frame, st);
-		
-		video_frame++;
 		if (!fQueueSemaphore->Lock())	//	safe to request fQueueSemaphore while holding fDecodeSemaphore
 		{
 			UnlockMediaKit();
 			return nullptr;
 		}
-		it = fFrameCache->GetFrameLocked(source, video_frame, source->GetVideoWidth(), source->GetVideoHeight(), found);
+		bitmap = fFrameCache->GetFrameLocked(source, video_frame, source->GetVideoWidth(), source->GetVideoHeight(), found);
 		fQueueSemaphore->Unlock();
+
+		bitmap->Lock();
+		attempt = 0;
+		do 
+		{
+			st = video_track->ReadFrames((char *)bitmap->Bits(), &num_read, &mh);
+		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
+		if (st != B_OK)
+		{
+			printf("Cannot read frame %ld, file=%s\n", video_frame, source->GetFilename());
+			bitmap->Unlock();
+			UnlockMediaKit();
+			if (!fQueueSemaphore->Lock())
+				return nullptr;
+			fFrameCache->InvalidateItem(source, video_frame);
+			fQueueSemaphore->Unlock();
+			return nullptr;	
+		}
+		bitmap->Unlock();
+		DEBUG("Skip Save(%ld)  status_t=%d\n", video_frame, st);
+		
+		video_frame++;
 	}
 
-	(*it).bitmap->Lock();
+	if (!fQueueSemaphore->Lock())	//	safe to request fQueueSemaphore while holding fDecodeSemaphore
+	{
+		UnlockMediaKit();
+		return nullptr;
+	}
+	bitmap = fFrameCache->GetFrameLocked(source, video_frame, source->GetVideoWidth(), source->GetVideoHeight(), found);
+	fQueueSemaphore->Unlock();
+
+	bitmap->Lock();
 	attempt = 0;
 	do
 	{
-		st = video_track->ReadFrames((char *)(*it).bitmap->Bits(), &num_read, &mh);
+		st = video_track->ReadFrames((char *)bitmap->Bits(), &num_read, &mh);
 	} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
-	(*it).bitmap->Unlock();
-	(*it).video_frame = (st==B_OK ? video_frame : -1);
-	(*it).timestamp = system_time();
-	(*it).source = source;
+	bitmap->Unlock();
 	UnlockMediaKit();
 	DEBUG("Final Save(%ld).  status_t=%ld\n", video_frame, st);
 
 	if (st == B_OK)
-		return (*it).bitmap;
+		return bitmap;
 	else
+	{
+		if (!fQueueSemaphore->Lock())
+			return nullptr;
+		fFrameCache->InvalidateItem(source, video_frame);
+		fQueueSemaphore->Unlock();
 		return nullptr;
+	}
 }
 
 /*	FUNCTION:		VideoManager :: CreateThumbnailBitmap
@@ -327,13 +357,13 @@ BBitmap * VideoManager :: CreateThumbnailBitmap(MediaSource *source, const int64
 	assert(source != nullptr);
 	assert(source->GetSecondaryVideoTrack() != nullptr);
 
-	DEBUG("VideoManager::GetThumbnailBitmap(%ld)\n", frame_idx);
-	
 	//	Convert bigtime_t index to video_frame index
 	assert(frame_idx <= source->GetVideoDuration());
 	int64 video_frame = frame_idx / float(kFramesSecond / source->GetVideoFrameRate());
 	if (video_frame >= source->GetVideoNumberFrames())
 		video_frame = source->GetVideoNumberFrames() - 1;
+
+	DEBUG("VideoManager::CreateThumbnailBitmap(%ld)\n", video_frame);
 
 	BBitmap *out = nullptr;
 
@@ -342,34 +372,29 @@ BBitmap * VideoManager :: CreateThumbnailBitmap(MediaSource *source, const int64
 
 	//	Check if frame in cache
 	bool found;
-	auto it = fThumbnailCache->GetFrameLocked(source, video_frame, kThumbnailWidth, kThumbnailHeight, found);
+	BBitmap *bitmap = fThumbnailCache->GetFrameLocked(source, video_frame, kThumbnailWidth, kThumbnailHeight, found);
 	fQueueSemaphore->Unlock();
 
 	if (found)
 	{
 		DEBUG("Found cached thumbnail\n");
-		out = (*it).bitmap;
+		return bitmap;
+	}
+
+	//	Create new thumbnail
+	BBitmap *frame = nullptr;
+	int attempt = 0;
+	while ((frame == nullptr) && (++attempt <= 3))
+		frame = GetFrameBitmap(source, frame_idx, true);
+			
+	if (frame)
+	{
+		DEBUG("Found frame - generating thumbnail\n");
+		out = CreateThumbnail(frame, kThumbnailWidth, kThumbnailHeight, bitmap);
 	}
 	else
 	{
-		//	Create new thumbnail
-		BBitmap *frame = nullptr;	
-		int attempt = 0;
-		while ((frame == nullptr) && (++attempt <= 3))
-			frame = GetFrameBitmap(source, frame_idx, true);
-			
-		if (frame)
-		{
-			DEBUG("Found frame - generating thumbnail\n");
-			out = CreateThumbnail(frame, kThumbnailWidth, kThumbnailHeight, (*it).bitmap);
-			(*it).source = source;
-			(*it).video_frame = video_frame;
-			(*it).timestamp = system_time();
-		}
-		else
-		{
-			printf("VideoManager::GetThumbnailBitmap(%s, %ld) - cannot generate bitmap\n", source->GetFilename(), video_frame);
-		}
+		printf("VideoManager::GetThumbnailBitmap(%s, %ld) - cannot generate bitmap\n", source->GetFilename(), video_frame);
 	}
 	return out;
 }
@@ -395,19 +420,25 @@ BBitmap * VideoManager :: GetThumbnailAsync(MediaSource *source, const int64 fra
 	if (video_frame >= source->GetVideoNumberFrames())
 		video_frame = source->GetVideoNumberFrames() - 1;
 
-	BBitmap *out = nullptr;
-	
+	DEBUG("VideoManager::GetThumbnailAsync(%ld)\n", video_frame);
+
 	//	Check if frame in cache, otherwise schedule work
 	bool found;
-	auto it = fThumbnailCache->GetFrameLocked(source, video_frame, kThumbnailWidth, kThumbnailHeight, found);
+	BBitmap *bitmap = fThumbnailCache->GetFrameLocked(source, video_frame, kThumbnailWidth, kThumbnailHeight, found);
 	fQueueSemaphore->Unlock();
 
 	if (found)
-		out = (*it).bitmap;
+		return bitmap;
 	else
-		fThumbnailActor->Async(&VideoThumbnailActor::AsyncGenerateThumbnail, fThumbnailActor, source, frame_idx, notification);
+	{
+		if (!fQueueSemaphore->Lock())
+			return nullptr;
+		fThumbnailCache->InvalidateItem(source, video_frame);
+		fQueueSemaphore->Unlock();
 
-	return out;
+		fThumbnailActor->Async(&VideoThumbnailActor::AsyncGenerateThumbnail, fThumbnailActor, source, frame_idx, notification);
+		return nullptr;
+	}
 }
 
 /*	FUNCTION:		VideoManager :: ClearPendingThumbnails

@@ -18,15 +18,15 @@ namespace yarra
 class BMediaTrack;
 class BBitmap;
 class MediaSource;
-class VideoBitmapCache;
+class VideoBitmapLruCache;
 class VideoThumbnailActor;
 
 //===================
 class VideoManager
 {
 private:
-	VideoBitmapCache			*fFrameCache;
-	VideoBitmapCache			*fThumbnailCache;
+	VideoBitmapLruCache			*fFrameCache;
+	VideoBitmapLruCache			*fThumbnailCache;
 	yarra::Platform::Semaphore	*fQueueSemaphore;
 	VideoThumbnailActor			*fThumbnailActor;
 	yarra::Platform::Semaphore	*fMediaKitSemaphore;
