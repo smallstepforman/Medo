@@ -112,7 +112,7 @@ void LanguageManager :: ParseLanguageDirectory(const BString &dir_path)
 */
 void LanguageManager :: ParseLanguageFile(const BPath &path)
 {
-	//printf("FParseLanguageFile: %s\n", path.Path());
+	//printf("ParseLanguageFile: %s\n", path.Path());
 	LanguageFile *aLanguage = new LanguageFile;
 	aLanguage->mFilename.SetTo(path.Path());
 
@@ -139,6 +139,9 @@ void LanguageManager :: ParseLanguageFile(const BPath &path)
 		if (*itr == 0)
 		{
 			printf("ParseLanguageFiles(%s) - mismatched quotes\n", path.Path());
+			for(auto &i : aLanguage->mText)
+				printf("\"%s\"\n", i.String());
+
 			delete [] data;
 			delete aLanguage;
 			return;
@@ -164,6 +167,7 @@ void LanguageManager :: ParseLanguageFile(const BPath &path)
 	{
 		printf("*** ParseLanguageFile: %s ***\n", path.Path());
 		printf("Invalid number of strings(%ld), expected(%d)\n", aLanguage->mText.size(), NUMBER_TXT_DEFINITIONS);
+
 		delete aLanguage;
 	}
 	delete [] data;

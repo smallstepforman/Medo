@@ -99,6 +99,16 @@
 				"Min (0%)",
 				"Max (100%)"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Vinheta",
+				"Efeito de Vinheta",
+				"Intensidade",
+				"Min (0%)",
+				"Máx. (100%)"
+			]
 		}
 	]
 }

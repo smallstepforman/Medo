@@ -129,6 +129,19 @@
 				"0.0",
 				"1.0"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Viragem de página",
+				"Efeito de virada de página (ondulação)",
+				"Fator",
+				"0,0",
+				"5.0",
+				"Raio",
+				"0,0",
+				"1.0"
+			]
 		}
 	]
 }

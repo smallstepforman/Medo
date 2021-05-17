@@ -129,6 +129,19 @@
 				"Lebih gelap",
 				"Lebih ringan"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Sombras e destaques",
+				"Ajustar as sombras e realces",
+				"Sombras",
+				"Mais escura",
+				"Isqueiro",
+				"Luzes",
+				"Mais escura",
+				"Isqueiro"
+			]
 		}
 	]
 }

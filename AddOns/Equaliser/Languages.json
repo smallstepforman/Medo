@@ -89,6 +89,15 @@
 				"Equalizer 20 band",
 				"Saring"
 			]
-		}
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Equalizador",
+				"Equalizador",
+				"Equalizador de 20 bandas",
+				"Filtro"
+			]
+		},
 	]
 }

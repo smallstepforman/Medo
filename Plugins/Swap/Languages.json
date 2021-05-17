@@ -119,6 +119,18 @@
 				"Min (0%)",
 				"Max (100 %)"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Trocar",
+				"Trocar de A para B",
+				"Intensidade de reflexão",
+				"Projeção de reflexão",
+				"Deslocamento do reflexo",
+				"Min (0%)",
+				"Máx (100%)"
+			]
 		}
 	]
 }

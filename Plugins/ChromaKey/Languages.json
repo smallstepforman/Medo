@@ -139,6 +139,20 @@
 				"1.0",
 				"Warna",
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Chave cromática (chroma key)",
+				"Tornar uma cor transparente",
+				"Limiar",
+				"0",
+				"100",
+				"Suavização",
+				"0,0",
+				"1.0",
+				"Cor de Croma"
+			]
 		}
 	]
 }

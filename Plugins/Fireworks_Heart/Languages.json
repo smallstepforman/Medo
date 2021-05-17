@@ -139,6 +139,20 @@
 				"100",
 				"Perhatian: sangat lambat"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Fogos de artifício (coração)",
+				"Efeito de fogos de artifício",
+				"Numero de Corações",
+				"1",
+				"100",
+				"Número de partículas",
+				"10",
+				"100",
+				"Cuidado: muito lento"
+			]
 		}
 	]
 }

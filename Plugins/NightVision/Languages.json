@@ -79,6 +79,14 @@
 				"Shader Hijau Penglihatan Malam",
 				"Shader Hijau Penglihatan Malam"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Visão noturna",
+				"Sombreador de visão noturna verde",
+				"Sombreador de visão noturna verde"
+			]
 		}
 	]
 }

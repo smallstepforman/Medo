@@ -189,6 +189,25 @@
 				"1 detik",
 				"4 detik"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Círculo",
+				"Efeito Círculo",
+				"Centro",
+				"Suavidade da borda",
+				"0,0",
+				"0,1",
+				"Cor",
+				"Raio",
+				"Aspecto",
+				"Preenchido",
+				"Animado",
+				"Duração da animação",
+				"1 segundo",
+				"4 segs"
+			]
 		}
 	]
 }

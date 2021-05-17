@@ -129,6 +129,19 @@
 				"Menyeberang",
 				"Lingkaran"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Limpar",
+				"Limpar",
+				"Limpe a transição entre 2 faixas",
+				"Esquerda -> Direita",
+				"Direita -> Esquerda",
+				"Meio -> Fora",
+				"Cruz",
+				"Círculo"
+			]
 		}
 	]
 }

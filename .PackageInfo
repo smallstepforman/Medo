@@ -1,5 +1,5 @@
 name				"Medo"
-version			R1.0.0~Beta1-2
+version			R1.0.0~Beta1-3
 architecture		x86_64
 summary			"A Media Editor exclusively built for Haiku"
 description		"A modern video editor with customisable OpenGL GLSL plugin based effects.
@@ -16,11 +16,17 @@ There are many bundled media effects, including:
 
 Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised for many CPU-core systems, and has low system resource requirements.
 
-An SDK allows 3rd party developers to create Addons and Plugins"
+An SDK allows 3rd party developers to create Addons and Plugins
+
+Changelog in R1.0.0 - Beta 3:
+- new Iris Plugin
+- new Circle Plugin
+- ThumbnailCache uses LRU design
+- Portugese language"
 
 packager			"Zenja Solaja <solaja.@gmail.com>"
 vendor				"Zen Yes Pty Ltd"
 copyrights			{"Zen Yes Pty Ltd 2019-2021"}
 licenses			{MIT}
-provides			{Medo = R1.0.0~Beta1-2}
+provides			{Medo = R1.0.0~Beta1-3}
 urls				{"https://github.com/smallstepforman/Medo/blob/main/README.md"}

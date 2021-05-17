@@ -119,6 +119,18 @@
 				"Alfa Masuk (A -> 1)",
 				"Alfa Keluar (A -> 0)"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Desaparecer",
+				"Fade (preto/alfa)",
+				"Desvanecer para preto / Desvanecer transparência",
+				"Desvanecer de preto",
+				"Desvanecer para preto",
+				"Alfa no início (A -> 1)",
+				"Alfa no fim (A -> 0)"
+			]
 		}
 	]
 }

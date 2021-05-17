@@ -53,7 +53,7 @@ public:
 
 		SetFont(be_bold_font);
 		SetHighColor({0, 0, 0, 255});
-		DrawString("Haiku Media Editor", BPoint(x_offset, y_offset));							y_offset += 30;
+		DrawString("Haiku Media Editor R1.0.0 (Beta 3)", BPoint(x_offset, y_offset));							y_offset += 30;
 
 		SetFont(be_plain_font);
 		SetHighColor({128, 128, 128, 255});
@@ -83,6 +83,7 @@ public:
 		DrawString("Indonesia:", BPoint(x_offset, y_offset));		DrawString("Mazbrili", BPoint(x_offset + 160, y_offset));			y_offset += 25;
 		DrawString("Italian:", BPoint(x_offset, y_offset));			DrawString("Forart", BPoint(x_offset + 160, y_offset));				y_offset += 25;
 		DrawString("German:", BPoint(x_offset, y_offset));			DrawString("Lelldorin", BPoint(x_offset + 160, y_offset));			y_offset += 25;
+		DrawString("Portugese:", BPoint(x_offset, y_offset));		DrawString("Victor Domingos", BPoint(x_offset + 160, y_offset));	y_offset += 25;
 		DrawString("Russian:", BPoint(x_offset, y_offset));			DrawString("Akuji", BPoint(x_offset + 160, y_offset));				y_offset += 25;
 		DrawString("Serbian:", BPoint(x_offset, y_offset));			DrawString("Zenja Solaja", BPoint(x_offset + 160, y_offset));		y_offset += 25;
 		DrawString("Spanish:", BPoint(x_offset, y_offset));			DrawString("Cafeina", BPoint(x_offset + 160, y_offset));			y_offset += 25;

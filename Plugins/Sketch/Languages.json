@@ -129,6 +129,19 @@
 				"Min (0%)",
 				"Max (100%)"
 			]
+		},
+				{
+			"language": "Português",
+			"text": [
+				"Rascunho",
+				"Efeito simples de contorno e desenho animado",
+				"Inclinação da borda",
+				"Min (0%)",
+				"Máx (100%)",
+				"Potência",
+				"Min (0%)",
+				"Máx. (100%)"
+			]
 		}
 	]
 }

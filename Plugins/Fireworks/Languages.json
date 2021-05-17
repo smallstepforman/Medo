@@ -139,6 +139,20 @@
 				"100",
 				"Perhatian: sangat lambat"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Fogo-de-artifício",
+				"Efeito de fogos de artifício",
+				"Número de explosões",
+				"0",
+				"10",
+				"Número de partículas",
+				"0",
+				"100",
+				"Cuidado: muito lento"
+			]
 		}
 	]
 }

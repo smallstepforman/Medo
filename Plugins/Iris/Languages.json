@@ -109,6 +109,17 @@
 				"0.0",
 				"0.1",
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Íris",
+				"Transição da íris",
+				"Centro",
+				"Suavidade da borda",
+				"0,0",
+				"0,1"
+			]
 		}
 	]
 }

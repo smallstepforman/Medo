@@ -99,6 +99,16 @@
 				"Min (0%)",
 				"Max (100%)",
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Queimar",
+				"Transição de gravação",
+				"Intensidade",
+				"Min (0%)",
+				"Máx (100%)",
+			]
 		}
 	]
 }

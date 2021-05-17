@@ -159,6 +159,22 @@
 				"0.0",
 				"1.0"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Níveis",
+				"Níveis mín./Gama/máx. Estilo Photoshop",
+				"Entrada mínima",
+				"0,0",
+				"1.0",
+				"Gama",
+				"0,0",
+				"3.0",
+				"Entrada máxima",
+				"0,0",
+				"1.0"
+			]
 		}
 	]
 }

@@ -139,6 +139,20 @@
 				"Max (100%)",
 				"Menambah"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Pixelizar",
+				"Pixelizar",
+				"Tamanho X",
+				"Min (0%)",
+				"Máx (100%)",
+				"Tamanho Y",
+				"Min (0%)",
+				"Máx (100%)",
+				"Interpolar"
+			]
 		}
 	]
 }

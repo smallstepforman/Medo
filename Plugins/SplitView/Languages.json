@@ -127,6 +127,22 @@
 				"Kiri X",
 				"Benar X"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Vista dividida",
+				"Vista dividida",
+				"Ponto Médio",
+				"0",
+				"1",
+				"Left Offset X",
+				"Right Offset X",
+				"Interpolar em",
+				"No Limiar",
+				"Interpolar para fora",
+				"Limiar de saída"
+			]
 		}
 	]
 }

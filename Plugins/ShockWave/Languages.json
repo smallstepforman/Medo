@@ -139,6 +139,19 @@
 				"Gelombang Peluruhan",
 				"Visibilitas Gelombang"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Onda de choque",
+				"Efeito de onda de choque",
+				"Posição",
+				"Fator de ondulação",
+				"Intensidade de choque",
+				"Gravidade",
+				"Decaimento da onda",
+				"Visibilidade de onda",
+			]
 		}
 	]
 }

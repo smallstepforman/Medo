@@ -129,6 +129,19 @@
 				"Min (0%)",
 				"Max (100%)"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Persianas",
+				"Transição tipo persianas (cortes)",
+				"Quantidade",
+				"10",
+				"20",
+				"Suavidade",
+				"Min (0%)",
+				"Máx. (100%)"
+			]
 		}
 	]
 }

@@ -159,6 +159,22 @@
 				"Min (0%)",
 				"Max (100%)"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Miragem",
+				"Miragem de calor",
+				"Velocidade",
+				"Min (0%)",
+				"Máx (100%)",
+				"Frequência",
+				"Min (0%)",
+				"Máx (100%)",
+				"Ampliltude",
+				"Min (0%)",
+				"Máx. (100%)"
+			]
 		}
 	]
 }

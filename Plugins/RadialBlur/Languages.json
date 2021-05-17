@@ -119,6 +119,18 @@
 				"Kecerahan",
 				"Menambah"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Desfocagem radial",
+				"Efeito de desfoque radial",
+				"Quantidade de desfocagem",
+				"Min (0%)",
+				"Máx (100%)",
+				"Brilho",
+				"Interpolar"
+			]
 		}
 	]
 }

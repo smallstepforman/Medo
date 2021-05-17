@@ -109,6 +109,17 @@
 				"Max (100%)",
 				"Warna"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Detecção de borda",
+				"Deteção de bordas Sobel",
+				"Intensidade",
+				"Min (0%)",
+				"Máx (100%)",
+				"Cor"
+			]
 		}
 	]
 }

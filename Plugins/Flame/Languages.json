@@ -129,6 +129,19 @@
 				"0.0",
 				"1.0"
 			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Chama",
+				"Efeito chama",
+				"Brilho",
+				"0,0",
+				"1.0",
+				"Misturar",
+				"0,0",
+				"1.0"
+			]
 		}
 	]
 }
