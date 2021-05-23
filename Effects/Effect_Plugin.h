@@ -41,8 +41,8 @@ struct PluginUniform
 };
 struct PluginGuiWidget
 {
-	enum GuiWidget {eSlider, eCheckbox, eSpinner2, eSpinner3, eSpinner4, eColour, eText};
-	static inline constexpr unsigned int kVecCountElements[] = {0, 1, 2, 3, 4, 4, 0};	//	must match GuiWidget layout
+	enum GuiWidget {eSlider, eCheckbox, eRadioButton, eSpinner2, eSpinner3, eSpinner4, eColour, eText};
+	static inline constexpr unsigned int kVecCountElements[] = {0, 1, 1, 2, 3, 4, 4, 0};	//	must match GuiWidget layout
 
 	GuiWidget					widget_type;
 	BRect						rect;

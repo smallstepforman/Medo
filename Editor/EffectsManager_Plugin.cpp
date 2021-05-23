@@ -24,7 +24,7 @@
 #include "Effects/Effect_Plugin.h"
 
 static const std::vector<const char *>	kUniformTypes = {"sampler2D", "float", "vec2", "vec3", "vec4", "colour", "int", "timestamp", "interval", "resolution"};		//	Must match PluginUniform::UniformType
-static const std::vector<const char *> kGuiWidgets = {"slider", "checkbox", "vec2", "vec3", "vec4", "colour", "text"};												//	Must match PluginGuiWidget::GuiWidget
+static const std::vector<const char *> kGuiWidgets = {"slider", "checkbox", "radiobutton", "vec2", "vec3", "vec4", "colour", "text"};												//	Must match PluginGuiWidget::GuiWidget
 
 /*	FUNCTION:		EffectsManager :: LoadPlugins
 	ARGS:			plugin_path
@@ -468,6 +468,14 @@ bool EffectsManager :: LoadPlugin(BPath *path)
 					//	default
 					if (!v.HasMember("default") || !v["default"].IsInt())
 						ERROR_EXIT("Missing attribute fragment::gui::checkbox::default");
+					aWidget.default_value[0] = v["default"].GetInt();
+					break;
+				}
+				case PluginGuiWidget::eRadioButton:
+				{
+					//	default
+					if (!v.HasMember("default") || !v["default"].IsInt())
+						ERROR_EXIT("Missing attribute fragment::gui::radiobutton::default");
 					aWidget.default_value[0] = v["default"].GetInt();
 					break;
 				}

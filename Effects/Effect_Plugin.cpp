@@ -289,6 +289,8 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 	fColourPickerWindow = nullptr;
 	fColourPickerMessage = nullptr;
 
+	int count_radio_buttons = 0;
+
 	//	Init Gui objects
 	for (auto &w : plugin->mFragmentShader.gui_widgets)
 	{
@@ -321,6 +323,16 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 				BCheckBox *button = new BCheckBox(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
 												  plugin->mLanguage->GetText(w.txt_label), plugin->mLanguage->GetText(w.txt_label), new BMessage(eMsgGui));
 				if (w.default_value[0] > 0)
+					button->SetValue(1);
+				mEffectView->AddChild(button);
+				fGuiWidgets.push_back(button);
+				break;
+			}
+			case PluginGuiWidget::eRadioButton:
+			{
+				BRadioButton *button = new BRadioButton(BRect(w.rect.left*kFontFactor, w.rect.top, w.rect.right*kFontFactor, w.rect.bottom),
+													plugin->mLanguage->GetText(w.txt_label), plugin->mLanguage->GetText(w.txt_label), new BMessage(eMsgGui));
+				if (++count_radio_buttons == 1)
 					button->SetValue(1);
 				mEffectView->AddChild(button);
 				fGuiWidgets.push_back(button);
@@ -420,6 +432,7 @@ void Effect_Plugin :: AttachedToWindow()
 		{
 			case PluginGuiWidget::eSlider:			((ValueSlider *)fGuiWidgets[idx])->SetTarget(this, Window());		break;
 			case PluginGuiWidget::eCheckbox:		((BCheckBox *)fGuiWidgets[idx])->SetTarget(this, Window());			break;
+			case PluginGuiWidget::eRadioButton:		((BRadioButton *)fGuiWidgets[idx])->SetTarget(this, Window());		break;
 			case PluginGuiWidget::eText:																				break;
 
 			case PluginGuiWidget::eColour:
@@ -547,6 +560,8 @@ MediaEffect * Effect_Plugin :: CreateMediaEffect()
 		data->uniforms.push_back(du);
 	}
 
+	int gui_idx = 0;
+	int radio_button_idx = 0;
 	for (auto &w : fPlugin->mFragmentShader.gui_widgets)
 	{
 		printf("Uniform =%s, idx=%d\n", w.uniform.c_str(), w.uniform_idx);
@@ -558,6 +573,13 @@ MediaEffect * Effect_Plugin :: CreateMediaEffect()
 			case PluginGuiWidget::eCheckbox:
 				data->uniforms[w.uniform_idx].mInt = w.default_value[0];
 				break;
+			case PluginGuiWidget::eRadioButton:
+			{
+				BRadioButton *button = (BRadioButton *)fGuiWidgets[gui_idx];
+				if (button->Value())
+					data->uniforms[w.uniform_idx].mInt = radio_button_idx;
+				break;
+			}
 			case PluginGuiWidget::eSpinner2:
 			case PluginGuiWidget::eSpinner3:
 			case PluginGuiWidget::eSpinner4:
@@ -572,6 +594,7 @@ MediaEffect * Effect_Plugin :: CreateMediaEffect()
 			default:
 				assert(0);
 		}
+		gui_idx++;
 	}
 
 #if 0
@@ -679,6 +702,7 @@ void Effect_Plugin :: MediaEffectSelected(MediaEffect *effect)
 		mSwapTexturesCheckbox->SetValue(effect_data->swap_texture_units ? 1 : 0);
 
 	int gui_idx = 0;
+	int radio_button_idx = 0;
 	for (auto &w : fPlugin->mFragmentShader.gui_widgets)
 	{
 		switch (w.widget_type)
@@ -704,6 +728,14 @@ void Effect_Plugin :: MediaEffectSelected(MediaEffect *effect)
 			{
 				BCheckBox *button = (BCheckBox *)fGuiWidgets[gui_idx];
 				button->SetValue(effect_data->uniforms[w.uniform_idx].mInt);
+				break;
+			}
+			case PluginGuiWidget::eRadioButton:
+			{
+				BRadioButton *button = (BRadioButton *)fGuiWidgets[gui_idx];
+				if (effect_data->uniforms[w.uniform_idx].mInt == radio_button_idx)
+					button->SetValue(1);
+				radio_button_idx++;
 				break;
 			}
 			case PluginGuiWidget::eColour:
@@ -742,6 +774,7 @@ void Effect_Plugin :: MessageReceived(BMessage *msg)
 				break;
 			EffectPluginData *effect_data = (EffectPluginData *)effect->mEffectData;
 			int gui_idx = 0;
+			int radio_button_idx = 0;
 			for (auto &w : fPlugin->mFragmentShader.gui_widgets)
 			{
 				switch (w.widget_type)
@@ -767,6 +800,14 @@ void Effect_Plugin :: MessageReceived(BMessage *msg)
 					{
 						BCheckBox *button = (BCheckBox *)fGuiWidgets[gui_idx];
 						effect_data->uniforms[w.uniform_idx].mInt = button->Value();
+						break;
+					}
+					case PluginGuiWidget::eRadioButton:
+					{
+						BRadioButton *button = (BRadioButton *)fGuiWidgets[gui_idx];
+						if (button->Value())
+							effect_data->uniforms[w.uniform_idx].mInt = radio_button_idx;
+						radio_button_idx++;
 						break;
 					}
 					case PluginGuiWidget::eColour:
@@ -941,6 +982,7 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 		return true;
 	};
 
+	int radio_button_idx = 0;
 	for (auto &w : fPlugin->mFragmentShader.gui_widgets)
 	{
 		switch (w.widget_type)
@@ -966,13 +1008,31 @@ bool Effect_Plugin :: LoadParameters(const rapidjson::Value &v, MediaEffect *med
 				{
 					effect_data->uniforms[w.uniform_idx].mInt = v[w.uniform.c_str()].GetInt();
 					if (effect_data->uniforms[w.uniform_idx].mInt < 0)
-						effect_data->uniforms[w.uniform_idx].mInt =0;
+						effect_data->uniforms[w.uniform_idx].mInt = 0;
 					if (effect_data->uniforms[w.uniform_idx].mInt > 1)
 						effect_data->uniforms[w.uniform_idx].mInt = 1;
 				}
 				else
 				{
 					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eCheckbox parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
+					valid = false;
+				}
+				break;
+
+			case PluginGuiWidget::eRadioButton:
+				if (v.HasMember(w.uniform.c_str()) && v[w.uniform.c_str()].IsInt())
+				{
+					if (radio_button_idx == 0)
+					{
+						effect_data->uniforms[w.uniform_idx].mInt = v[w.uniform.c_str()].GetInt();
+						if (effect_data->uniforms[w.uniform_idx].mInt < 0)
+							effect_data->uniforms[w.uniform_idx].mInt = 0;
+					}
+					radio_button_idx++;
+				}
+				else
+				{
+					printf("[Effect_Plugin::LoadParameters(%s)] - invalid eRadioButton parameter %s\n", fPlugin->mHeader.name.c_str(), w.uniform.c_str());
 					valid = false;
 				}
 				break;
@@ -1021,6 +1081,7 @@ bool Effect_Plugin :: SaveParameters(FILE *file, MediaEffect *media_effect)
 	sprintf(buffer, "\t\t\t\t\"swap_textures\": %s,\n", data->swap_texture_units ? "true" : "false");
 	fwrite(buffer, strlen(buffer), 1, file);
 
+	int radio_button_idx = 0;
 	for (auto &w : fPlugin->mFragmentShader.gui_widgets)
 	{
 		switch (w.widget_type)
@@ -1033,6 +1094,15 @@ bool Effect_Plugin :: SaveParameters(FILE *file, MediaEffect *media_effect)
 			case PluginGuiWidget::eCheckbox:
 				sprintf(buffer, "\t\t\t\t\"%s\": %d,\n", w.uniform.c_str(), data->uniforms[w.uniform_idx].mInt);
 				fwrite(buffer, strlen(buffer), 1, file);
+				break;
+
+			case PluginGuiWidget::eRadioButton:
+				if (radio_button_idx == 0)
+				{
+					sprintf(buffer, "\t\t\t\t\"%s\": %d,\n", w.uniform.c_str(), data->uniforms[w.uniform_idx].mInt);
+					fwrite(buffer, strlen(buffer), 1, file);
+				}
+				radio_button_idx++;
 				break;
 
 			case PluginGuiWidget::eSpinner2:

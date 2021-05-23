@@ -1,0 +1,137 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"sRGB / Gamma",
+				"sRGB / Gamma Colour conversion",
+				"sRGB  ->  Linear",
+				"Linear  ->  sRGB",
+				"Gamma  ->  Linear",
+				"Linear  ->  Gamma",
+				"Gamma",
+				"1.0",
+				"3.0"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"sRGB / Gamma",
+				"sRGB / Gamma Color conversion",
+				"sRGB  ->  Linear",
+				"Linear  ->  sRGB",
+				"Gamma  ->  Linear",
+				"Linear  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"sRGB / Gamma",
+				"sRGB / Gamma-Farbkonvertierung",
+				"sRGB  ->  Linear",
+				"Linear  ->  sRGB",
+				"Gamma  ->  Linear",
+				"Linear  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"sRGB / Gamma",
+				"Conversion des couleurs sRGB / Gamma",
+				"sRGB -> Linéaire",
+				"Linéaire -> sRGB",
+				"Gamma  ->  Linéaire",
+				"Linéaire  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"sRGB / Gamma",
+				"Conversione colore sRGB / Gamma",
+				"sRGB -> Lineare",
+				"Lineare -> sRGB",
+				"Gamma  ->  Linear",
+				"Linear  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"sRGB / Гамма",
+				"Преобразование цветов sRGB / Гамма",
+				"sRGB  ->  Линейный",
+				"Линейный  ->  sRGB",
+				"Гамма  ->  Линейный",
+				"Линейный  ->  Гамма",
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"sRGB / Гама",
+				"Kонверзија sRGB / гама боје",
+				"sRGB  ->  Линеарно",
+				"Линеарно  ->  sRGB",
+				"Гама  ->  Линеарно",
+				"Линеарно  ->  Гама",
+				"Гама",
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"sRGB / Gama",
+				"Conversión de color sRGB / Gama",
+				"sRGB  ->  Lineal",
+				"Lineal  ->  sRGB",
+				"Gama  ->  Lineal",
+				"Lineal  ->  Gama",
+				"Gama",
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"sRGB / Gamma",
+				"sRGB / Gamma kleurconversie",
+				"sRGB  ->  Lineair",
+				"Lineair  ->  sRGB",
+				"Gamma  ->  Lineair",
+				"Lineair  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"sRGB / Gama",
+				"sRGB / Gamma Konversi Warna Linear",
+				"sRGB  ->  Linear",
+				"Linear  ->  sRGB",
+				"Gamma  ->  Linear",
+				"Linear  ->  Gamma",
+				"Gamma",
+			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"sRGB / Gama",
+				"sRGB / Gamma Conversão de cor linear",
+				"sRGB  ->  Linear",
+				"Linear  ->  sRGB",
+				"Gama  ->  Linear",
+				"Linear  ->  Gama",
+				"Gama",
+			]
+		}
+	]
+}

@@ -1,0 +1,71 @@
+{
+	"plugin" : {
+		"version":	1,
+		"vendor":	"Zen Yes Pty Ltd",
+		"type":		"colour",
+		"name":	"SRgb-Gamma",
+		"labelA":	0,
+		"labelB":	1,
+		"icon":		"Plugins/SrgbGamma/icon.png"
+	},
+	"fragment": {
+		"uniforms": [
+			{
+				"type":		"sampler2D",
+				"name":	"uTexture0"
+			},
+			{
+				"type":		"int",
+				"name":	"uDirection"
+			},
+			{
+				"type":		"float",
+				"name":	"uGamma"
+			}
+		],
+		"source":
+		{
+			"file": "Plugins/SrgbGamma/SrgbGamma.frag"
+		},
+		"gui": [
+			{
+				"type":			"radiobutton",
+				"rect":			[20, 20, 320, 60],
+				"label":			2,
+				"default":		1,
+				"uniform":	"uDirection",
+			},
+			{
+				"type":			"radiobutton",
+				"rect":			[20, 80, 320, 120],
+				"label":			3,
+				"default":		0,
+				"uniform":	"uDirection",
+			},
+			{
+				"type":			"radiobutton",
+				"rect":			[20, 200, 320, 240],
+				"label":			4,
+				"default":		0,
+				"uniform":	"uDirection",
+			},
+			{
+				"type":			"radiobutton",
+				"rect":			[20, 260, 320, 300],
+				"label":			5,
+				"default":		0,
+				"uniform":	"uDirection",
+			},
+			{
+				"type":			"slider",
+				"rect":			[340, 200, 640, 280],
+				"label":			6,
+				"label_min":	 7,
+				"label_max":	8,
+				"default":		2.4,
+				"range":		[1.0, 3.0],
+				"uniform":		"uGamma",
+			},
+		]
+	}
+}
