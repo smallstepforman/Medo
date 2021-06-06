@@ -1,7 +1,8 @@
 /*	PROJECT:		Medo
  *	AUTHORS:		Zenja Solaja, Melbourne Australia
  *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2021
- *	DESCRIPTION:	Effect Node IIR Filter
+ *	DESCRIPTION:	Audio Effect / IIR Filter
+ *					Designing Audio Effects Plugins in C++, Will C. Pirkle, 2nd Edition
  */
 
 #ifndef EFFECT_IIR_FILTER_H
@@ -15,6 +16,8 @@ class BSlider;
 class BButton;
 class BOptionPopUp;
 class LanguageJson;
+
+class AudioFilter;
 
 class EffectNode_IIRFilter : public EffectNode
 {
@@ -49,6 +52,14 @@ private:
 	BOptionPopUp					*fOptionAlgorithm;
 	BButton							*fButtonReset;
 	void							SetSliderValue(int index, float value);
+
+	struct FilterCache
+	{
+		AudioFilter		*audio_filter;
+		int64			audio_end_frame;
+		float			sample_rate;
+	};
+	std::vector<FilterCache>		fFilterCache;
 };
 
 extern "C" __declspec(dllexport) EffectNode_IIRFilter *instantiate_effect(BRect frame);

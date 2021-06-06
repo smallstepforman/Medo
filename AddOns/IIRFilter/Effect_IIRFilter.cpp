@@ -1,7 +1,8 @@
 /*	PROJECT:		Medo
  *	AUTHORS:		Zenja Solaja, Melbourne Australia
  *	COPYRIGHT:		Zen Yes Pty Ltd, 2019-2021
- *	DESCRIPTION:	Effects Node template
+ *	DESCRIPTION:	Audio Effect / IIR Filter
+ *					Designing Audio Effects Plugins in C++, Will C. Pirkle, 2nd Edition
  */
 
 #include <cstdio>
@@ -20,9 +21,11 @@
 #include "fxobjects.h"
 #include "Effect_IIRFilter.h"
 
-//	TODO need to support mulitple filter contexes.  Proof of concept
-static AudioFilter fAudioFilter;
-static AudioFilterParameters fAudioFilterParamters;
+#if 0
+#define DEBUG(...)	do {printf(__VA_ARGS__);} while (0)
+#else
+#define DEBUG(fmt, ...) {}
+#endif
 
 enum EQUILISER_LANGUAGE_TEXT
 {
@@ -89,9 +92,9 @@ struct FilterSlider
 enum class eFilterSlider {eFc, eQ, eBoost};
 static const FilterSlider kFilterSliders[] =
 {
-	{"fc  (Log)",	BRect(20, 20, 200,	640),	20,		20480,		1000,		"20 - 20,480 Hz",		false},
-	{"Q",			BRect(240, 20, 340,	300),	0.707f,	20,			0.707f,		"0.707-20",				true},
-	{"Boost/Cut",	BRect(360, 20, 460, 300),	-20,	20,			0,			"-20 - 20 dB",			true},
+	{"fc  (Log)",	BRect(20, 20, 200,	640),	20,		20480,		1000,		"[20, 20,480] Hz",		false},
+	{"Q",			BRect(240, 20, 340,	300),	0.707f,	20,			0.707f,		"[0.707, 20]",			true},
+	{"Boost/Cut",	BRect(360, 20, 460, 300),	-20,	20,			0,			"(-20, 20) dB",			true},
 };
 static const int kNumberSliders = sizeof(kFilterSliders)/sizeof(FilterSlider);
 
@@ -118,7 +121,7 @@ static int ConvertLogToSlider(float value, float min_range, float max_range, int
 	return int((v - m1)/s);
 }
 
-//	Move Data
+//	Filter Data
 struct EffectIIRFilterData
 {
 	std::vector<float>		filters;
@@ -137,10 +140,22 @@ const char *EffectNode_IIRFilter :: GetEffectName() const	{return "IIR Filter";}
 EffectNode_IIRFilter :: EffectNode_IIRFilter(BRect frame, const char *filename)
 	: EffectNode(frame, filename, false)
 {
-	fAudioFilter.setSampleRate(192000);
-	fAudioFilterParamters = fAudioFilter.getParameters();
-	printf("AudioFilterParamters:\n");
-	printf("Q=%f, boost_cutoff=%f, fc=%f, algorithm=%d\n", fAudioFilterParamters.Q, fAudioFilterParamters.boostCut_dB, fAudioFilterParamters.fc, fAudioFilterParamters.algorithm);
+	FilterCache anItem;
+	anItem.audio_filter = new AudioFilter;
+	anItem.audio_end_frame = -1;
+	anItem.sample_rate = 192'000;
+	AudioFilterParameters params = anItem.audio_filter->getParameters();
+	params.algorithm = filterAlgorithm::kLPF1;
+	params.fc = kFilterSliders[(int)eFilterSlider::eFc].start;
+	params.Q = kFilterSliders[(int)eFilterSlider::eQ].start;
+	params.boostCut_dB = kFilterSliders[(int)eFilterSlider::eBoost].start;
+	anItem.audio_filter->setParameters(params);
+	anItem.audio_filter->setSampleRate(anItem.sample_rate);
+	fFilterCache.push_back(anItem);
+
+	DEBUG("AudioFilterParamters:\n");
+	DEBUG("Q=%f, boost_cutoff=%f, fc=%f, algorithm=%s, sample_rate=%f\n", params.Q, params.boostCut_dB, params.fc, kFilterAlgorithms[(int)params.algorithm].name, anItem.sample_rate);
+	DEBUG("sizeof(AudioFiler) = %lu\n", sizeof(AudioFilter));
 
 	const float kFontFactor = be_plain_font->Size()/20.0f;
 
@@ -252,8 +267,7 @@ MediaEffect * EffectNode_IIRFilter :: CreateMediaEffect()
 	EffectIIRFilterData *data = new EffectIIRFilterData;
 	for (int i=0; i < kNumberSliders; i++)
 	{
-		float value = (float)fSliders[i]->Value()/1000.0f;
-		data->filters.push_back(kFilterSliders[i].min + value*(kFilterSliders[i].max - kFilterSliders[i].min));
+		data->filters.push_back(ConvertSliderToLog(fSliders[i]->Value(), 1000, kFilterSliders[i].min, kFilterSliders[i].max));
 	}
 	data->algorithm = fOptionAlgorithm->Value();
 	media_effect->mEffectData = data;
@@ -323,11 +337,13 @@ void EffectNode_IIRFilter :: MessageReceived(BMessage *msg)
 			for (int i=0; i < kNumberSliders; i++)
 			{
 				float v;
-				float slider_value = (float)fSliders[i]->Value()/1000.0f;
 				if (i == (int)eFilterSlider::eFc)
 					v = ConvertSliderToLog(fSliders[i]->Value(), 1000, kFilterSliders[i].min, kFilterSliders[i].max);
 				else
+				{
+					float slider_value = (float)fSliders[i]->Value()/1000.0f;
 					v = kFilterSliders[i].min + slider_value*(kFilterSliders[i].max - kFilterSliders[i].min);
+				}
 				if (data)
 					data->filters[i] = v;
 				SetSliderValue(i, v);
@@ -339,33 +355,21 @@ void EffectNode_IIRFilter :: MessageReceived(BMessage *msg)
 			EffectIIRFilterData *data = GetCurrentMediaEffect() ? (EffectIIRFilterData *)GetCurrentMediaEffect()->mEffectData : nullptr;
 			if (data)
 				data->algorithm = fOptionAlgorithm->Value();
-
-			fAudioFilterParamters = fAudioFilter.getParameters();
-			fAudioFilterParamters.algorithm = kFilterAlgorithms[fOptionAlgorithm->Value()].algorithm;
-			fAudioFilter.setParameters(fAudioFilterParamters);
-			printf("AudioFilterParamters:\n");
-			printf("Q=%f, boost_cutoff=%f, fc=%f, algorithm=%d, name=%s\n", fAudioFilterParamters.Q, fAudioFilterParamters.boostCut_dB, fAudioFilterParamters.fc,
-				   fAudioFilterParamters.algorithm, kFilterAlgorithms[(int)fAudioFilterParamters.algorithm].name);
-
 			break;
 		}
 		case kMsgReset:
 		{
-			fAudioFilterParamters = fAudioFilter.getParameters();
-			fAudioFilterParamters.algorithm = kFilterAlgorithms[(int)filterAlgorithm::kLPF1].algorithm;
-			fAudioFilterParamters.fc = kFilterSliders[int(eFilterSlider::eFc)].start;
-			fAudioFilterParamters.Q = kFilterSliders[int(eFilterSlider::eQ)].start;
-			fAudioFilterParamters.boostCut_dB = kFilterSliders[int(eFilterSlider::eBoost)].start;
-			fAudioFilter.setParameters(fAudioFilterParamters);
-			printf("AudioFilterParamters:\n");
-			printf("Q=%f, boost_cutoff=%f, fc=%f, algorithm=%d, name=%s\n", fAudioFilterParamters.Q, fAudioFilterParamters.boostCut_dB, fAudioFilterParamters.fc,
-				   fAudioFilterParamters.algorithm, kFilterAlgorithms[(int)fAudioFilterParamters.algorithm].name);
+			AudioFilterParameters params;
+			params.algorithm = kFilterAlgorithms[(int)filterAlgorithm::kLPF1].algorithm;
+			params.fc = kFilterSliders[int(eFilterSlider::eFc)].start;
+			params.Q = kFilterSliders[int(eFilterSlider::eQ)].start;
+			params.boostCut_dB = kFilterSliders[int(eFilterSlider::eBoost)].start;
 
-			fOptionAlgorithm->SetValue((int)fAudioFilterParamters.algorithm);
+			fOptionAlgorithm->SetValue((int)params.algorithm);
 			EffectIIRFilterData *data = GetCurrentMediaEffect() ? (EffectIIRFilterData *)GetCurrentMediaEffect()->mEffectData : nullptr;
 			if (data)
 			{
-				data->algorithm = (int)fAudioFilterParamters.algorithm;
+				data->algorithm = (int)params.algorithm;
 				for (int i=0; i < kNumberSliders; i++)
 				{
 					data->filters[i] = kFilterSliders[i].start;
@@ -375,8 +379,9 @@ void EffectNode_IIRFilter :: MessageReceived(BMessage *msg)
 			else
 			{
 				for (int i=0; i < kNumberSliders; i++)
-					SetSliderValue(i, data->filters[i]);
+					SetSliderValue(i, kFilterSliders[i].start);
 			}
+			break;
 		}
 
 		default:
@@ -480,38 +485,80 @@ int EffectNode_IIRFilter :: AudioEffect(MediaEffect *effect, uint8 *destination,
 	assert(effect->mEffectData != nullptr);
 	EffectIIRFilterData *data = (EffectIIRFilterData *) effect->mEffectData;
 
-	bool reset = false;
-	AudioFilterParameters params = fAudioFilter.getParameters();
-	if ((int)params.algorithm != data->algorithm)
+	const float kSampleRate = count_samples * kFramesSecond / (end_frame-start_frame);
+
+	//	Find cached version
+	std::size_t cache_idx = 0;
+	for (auto &i : fFilterCache)
 	{
+		DEBUG("Assess %d.  audio_start=%lu, candidate=%lu\n", cache_idx, audio_start, i.audio_end_frame);
+		if ((audio_start == i.audio_end_frame) || (audio_start == i.audio_end_frame + 1))
+		{
+			AudioFilterParameters params = i.audio_filter->getParameters();
+			DEBUG("params.algorithm=%d, fc=%f, Q=%f, boost=%f, sample_rate=%f\n", params.algorithm, params.fc, params.Q, params.boostCut_dB, i.sample_rate);
+			DEBUG("data.algorithm=%d, fc=%f, Q=%f, boost=%f, sample_rate=%f\n", data->algorithm, data->filters[(int)eFilterSlider::eFc], data->filters[(int)eFilterSlider::eQ], data->filters[(int)eFilterSlider::eBoost], kSampleRate);
+			if ((params.algorithm == (filterAlgorithm)data->algorithm) &&
+				(params.fc == data->filters[(int)eFilterSlider::eFc]) &&
+				(params.Q == data->filters[(int)eFilterSlider::eQ]) &&
+				(params.boostCut_dB == data->filters[(int)eFilterSlider::eBoost]) &&
+				(i.sample_rate == kSampleRate))
+			{
+				//	Item found, move to beginning of fFilterCache
+				if (cache_idx != 0)
+				{
+					FilterCache item = i;
+					fFilterCache.erase(fFilterCache.begin() + cache_idx);
+					fFilterCache.insert(fFilterCache.begin(), item);
+					cache_idx = 0;
+					DEBUG("Item found at %d, move to 0\n", cache_idx);
+				}
+				else
+					DEBUG("Item found at 0\n");
+				break;
+			}
+		}
+		cache_idx++;
+	}
+	//	If item not found, create new entry
+	if (cache_idx == fFilterCache.size())
+	{
+		//	Max Queue Size
+		if (cache_idx >= 16)
+		{
+			delete fFilterCache[fFilterCache.size() - 1].audio_filter;
+			fFilterCache.pop_back();
+			DEBUG("Item not found - delete last entry\n");
+		}
+		else
+			DEBUG("Item not found - Adding to cache\n");
+
+		FilterCache item;
+		item.audio_filter  = new AudioFilter;
+		AudioFilterParameters params = item.audio_filter->getParameters();
 		params.algorithm = (filterAlgorithm)data->algorithm;
-		reset = true;
-	}
-	if (params.fc != data->filters[int(eFilterSlider::eFc)])
-	{
-		params.fc = data->filters[int(eFilterSlider::eFc)];
-		reset = true;
-	}
-	if (params.Q != data->filters[int(eFilterSlider::eQ)])
-	{
-		params.Q = data->filters[int(eFilterSlider::eQ)];
-		reset = true;
-	}
-	if (params.boostCut_dB != data->filters[int(eFilterSlider::eBoost)])
-	{
-		params.boostCut_dB = data->filters[int(eFilterSlider::eBoost)];
-		reset = true;
-	}
-	if (reset)
-	{
-#if 0
-		printf("AudioFilterParamters:\n");
-		printf("fc=%f, Q=%f, boost_cutoff=%f, algorithm=[%d] %s\n", params.fc, params.Q, params.boostCut_dB,
-			   params.algorithm, kFilterAlgorithms[(int)params.algorithm].name);
-#endif
-		fAudioFilter.setParameters(params);
+		params.fc = data->filters[(int)eFilterSlider::eFc];
+		params.Q = data->filters[(int)eFilterSlider::eQ];
+		params.boostCut_dB = data->filters[(int)eFilterSlider::eBoost];
+		item.audio_filter->setParameters(params);
+		item.audio_filter->setSampleRate(kSampleRate);
+		item.sample_rate = kSampleRate;
+		fFilterCache.insert(fFilterCache.begin(), item);
+		cache_idx = 0;
 	}
 
+	AudioFilter *audio_filter = fFilterCache[0].audio_filter;
+	fFilterCache[0].audio_end_frame = audio_end;
+
+#if 0
+	DEBUG("Status of cache:\n");
+	for (int i=0; i < fFilterCache.size(); i++)
+	{
+		AudioFilterParameters params = fFilterCache[i].audio_filter->getParameters();
+		DEBUG("[%d] algorithm=%d, fc=%f, Q=%f, boost=%f, sample_rate=%f, end=%lu\n", i, params.algorithm, params.fc, params.Q, params.boostCut_dB, fFilterCache[i].sample_rate, fFilterCache[i].audio_end_frame);
+	}
+#endif
+
+	//	Apply filter
 	float *d = (float *)destination;
 	float *s = (float *)source;
 	for (int i=0; i < count_samples; i++)
@@ -519,8 +566,7 @@ int EffectNode_IIRFilter :: AudioEffect(MediaEffect *effect, uint8 *destination,
 		for (int ch=0; ch < count_channels; ch++)
 		{
 			double in = (double) *s++;
-			double out;
-			out = fAudioFilter.processAudioSample(in);
+			double out = audio_filter->processAudioSample(in);
 			*d++ = (float) out;
 		}
 	}
