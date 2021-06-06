@@ -1,0 +1,12 @@
+#!/bin/sh
+
+rm *.so
+rm *.o
+rm -rf CMakeFiles
+rm CMakeCache.txt
+rm cmake_install.cmake
+rm qtcsettings.cmake
+rm CMakeLists.txt.user
+rm -r .cmake
+rm Makefile
+

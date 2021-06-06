@@ -1,0 +1,103 @@
+{
+	"languages": [
+		{
+			"language": "English (Britain)",
+			"text": [
+				"IIR Filter",
+				"IIR Filter",
+				"Impulse Response Filter",
+				"Filter"
+			]
+		},
+		{
+			"language": "English (USA)",
+			"text": [
+				"IIR Filter",
+				"IIR Filter",
+				"Impulse Response Filter",
+				"Filter"
+			]
+		},
+		{
+			"language": "Deutsch",
+			"text": [
+				"IIR-Filter",
+				"IIR-Filter",
+				"Impulsantwortfilter",
+				"Filter"
+			]
+		},
+		{
+			"language": "Français",
+			"text": [
+				"Filtre IIR",
+				"Filtre IIR",
+				"Filtre de réponse impulsionnelle",
+				"Filtre"
+			]
+		},
+		{
+			"language": "Italiano",
+			"text": [
+				"Filtro IIR",
+				"Filtro IIR",
+				"Filtro risposta all'impulso",
+				"Filtro"
+			]
+		},
+		{
+			"language": "Русский",
+			"text": [
+				"БИХ-фильтр",
+				"БИХ-фильтр",
+				"Фильтр импульсной характеристики",
+				"Фильтр"
+			]
+		},
+		{
+			"language": "Српски",
+			"text": [
+				"ИИР филтер",
+				"ИИР филтер",
+				"Филтер импулсног одзива",
+				"Филтер"
+			]
+		},
+		{
+			"language": "Español",
+			"text": [
+				"Filtro IIR",
+				"Filtro IIR",
+				"Filtro de respuesta a impulsos",
+				"Filtrar"
+			]
+		},
+		{
+			"language": "Nederlands",
+			"text": [
+				"IIR-filter",
+				"IIR-filter",
+				"Impulsresponsfilter",
+				"Filter"
+			]
+		},
+		{
+			"language": "Indonesische",
+			"text": [
+				"Filter IIR",
+				"Filter IIR",
+				"Filter Respon Impuls",
+				"Saring"
+			]
+		},
+		{
+			"language": "Português",
+			"text": [
+				"Filtro IIR",
+				"Filtro IIR",
+				"Filtro de Resposta ao Impulso",
+				"Filtro"
+			]
+		},
+	]
+}

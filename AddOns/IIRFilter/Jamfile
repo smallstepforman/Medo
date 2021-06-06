@@ -1,0 +1,37 @@
+SubDir Medo ;
+
+SUFSHARED ?= ".so" ;
+rule SharedLibrary {
+	local objs = $(>:S=$(SUFOBJ)) ;
+	local lib = $(<:S=$(SUFSHARED)) ;
+	
+	# compile it
+	ObjectCcFlags $(>) : -fPIC ;
+	ObjectC++Flags $(>) : -fPIC ;
+	Objects $(>) ;
+	
+	# link it
+	LINKFLAGS on $(lib) =
+	-Wl,-soname,$(lib) -shared [ on $(lib) return $(LINKFLAGS) ]  ;
+	Link $(lib) : $(objs) ;
+	Depends all : $(lib) ;
+	Clean clean : $(lib) ;
+}
+
+# Compiler flags
+#C++FLAGS += -std=c++2a -g -O0 -gno-column-info ;
+C++FLAGS += -std=c++2a -O3 ;
+C++FLAGS += -I../../Yarra -I../../ -I/boot/system/develop/headers/private/interface ;
+C++FLAGS += -I/boot/system/develop/headers/freetype2 ;
+
+# Source files needed to build Medo
+SharedLibrary IIRFilter  :
+	Effect_IIRFilter.cpp
+	fxobjects.cpp
+;
+
+# Link files
+LinkDependancies = -lbe -lmedia -lstdc++ -lGL -ltracker -ltranslation ;
+
+LINKLIBS on Medo = $(LinkDependancies) ;
+
