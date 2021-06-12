@@ -39,7 +39,7 @@
 				"label_min": 3,
 				"label_max":	4,
 				"default":		0.05,
-				"range":		[0.0, 0.5],
+				"range":		[0.0, 0.20],
 				"uniform":		"uThreshold",
 			},
 			{
@@ -48,8 +48,8 @@
 				"label":			5,
 				"label_min":	 6,
 				"label_max": 7,
-				"default":		0.2,
-				"range":		[0.0, 1.0],
+				"default":		0.02,
+				"range":		[0.0, 0.10],
 				"uniform":		"uSmoothing",
 			},
 			{

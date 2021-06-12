@@ -445,8 +445,8 @@ void Effect_Plugin :: AttachedToWindow()
 			case PluginGuiWidget::eSpinner4:
 			{
 				MultiSpinner *multispinner = (MultiSpinner *)fGuiWidgets[idx];
-				for (int i=0; i < fPlugin->mFragmentShader.gui_widgets[idx].widget_type; i++)
-					multispinner->mSpinners[i]->SetTarget(this, Window());
+				for (auto &i : multispinner->mSpinners)
+					i->SetTarget(this, Window());
 				break;
 			}
 
@@ -674,7 +674,6 @@ void Effect_Plugin :: RenderEffect(BBitmap *source, MediaEffect *data, int64 fra
 	}
 
 	fragment_shader->SwapTextureUnits(effect_data->swap_texture_units);
-
 	if (source)
 		fRenderNode->mTexture = gRenderActor->GetPicture((unsigned int)source->Bounds().Width() + 1, (unsigned int)source->Bounds().Height() + 1, source)->mTexture;
 	if (fragment_shader->GetNumberTextureUnits() == 2)
