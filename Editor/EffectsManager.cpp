@@ -107,8 +107,7 @@ EffectsManager :: EffectsManager(BRect preview_frame)
 */
 EffectsManager :: ~EffectsManager()
 {
-	DestroyPlugins();
-	for (auto i : fEffectNodes)
+	for (auto &i : fEffectNodes)
 		delete i;
 	delete fEffectNone;
 

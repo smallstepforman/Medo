@@ -34,7 +34,6 @@ private:
 	bool			LoadAddOn(BPath *path, BRect preview_frame);
 
 	void			LoadPlugins(const char *path);
-	void			DestroyPlugins();
 	bool			LoadPlugin(BPath *path);
 
 	std::vector<EffectNode *>		fEffectNodes;

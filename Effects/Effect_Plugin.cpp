@@ -409,12 +409,13 @@ Effect_Plugin :: Effect_Plugin(EffectPlugin *plugin, BRect frame, const char *vi
 */
 Effect_Plugin :: ~Effect_Plugin()
 {
-	//printf("Effect_Plugin::Destructor(%p)\n", this);
 	if (fColourPickerWindow)
 	{
 		fColourPickerWindow->Terminate();
 		fColourPickerWindow = nullptr;
 	}
+	delete fPlugin->mLanguage;
+	delete fPlugin;
 }
 
 /*	FUNCTION:		Effect_Plugin :: AttachedToWindow

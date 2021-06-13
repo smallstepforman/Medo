@@ -73,9 +73,6 @@ MedoWindow :: MedoWindow()
 	LoadSettings();
 	SetTitle(GetText(TXT_MENU_MEDO));
 
-	fProject = new Project;
-	CreateFilePanel();
-
 	fAboutWindow = nullptr;
 	fAudioMixer = nullptr;
 	fColourScope = nullptr;
@@ -83,6 +80,9 @@ MedoWindow :: MedoWindow()
 	fMonitorWindow = nullptr;
 	fProjectSettings = nullptr;
 	fSettingsWindow = nullptr;
+
+	fProject = new Project;
+	CreateFilePanel();
 
 	new RenderActor(BRect(0, 0, gProject->mResolution.width, gProject->mResolution.height));
 

@@ -68,20 +68,6 @@ void EffectsManager :: LoadPlugins(const char *plugin_path)
 	}
 }
 
-/*	FUNCTION:		EffectsManager :: DestroyPlugins
-	ARGS:			none
-	RETURN:			n/a
-	DESCRIPTION:	Destroy all plugins
-*/
-void EffectsManager :: DestroyPlugins()
-{
-	for (auto &p : fEffectPlugins)
-	{
-		delete p->mLanguage;
-		delete p;
-	}
-}
-
 /*	FUNCTION:		EffectsManager :: LoadPlugin
 	ARGS:			path
 	RETURN:			n/a
