@@ -53,7 +53,7 @@ public:
 
 		SetFont(be_bold_font);
 		SetHighColor({0, 0, 0, 255});
-		DrawString("Haiku Media Editor R1.0.0 (Beta 3)", BPoint(x_offset, y_offset));							y_offset += 30;
+		DrawString("Haiku Media Editor R1.0.0 (Beta 4)", BPoint(x_offset, y_offset));							y_offset += 30;
 
 		SetFont(be_plain_font);
 		SetHighColor({128, 128, 128, 255});
