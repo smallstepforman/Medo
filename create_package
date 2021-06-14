@@ -55,8 +55,8 @@ cd ..
 #Package
 cp ".PackageInfo" "Package/"
 cd Package
-package create -b Medo-R1.0.0~Beta1-3.x86_64.hpkg
-package add Medo-R1.0.0~Beta1-3.x86_64.hpkg apps data
+package create -b Medo-R1.0.0~Beta1-4.x86_64.hpkg
+package add Medo-R1.0.0~Beta1-4.x86_64.hpkg apps data
 cd ..
 
 
