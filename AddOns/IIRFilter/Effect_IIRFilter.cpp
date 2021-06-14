@@ -267,7 +267,15 @@ MediaEffect * EffectNode_IIRFilter :: CreateMediaEffect()
 	EffectIIRFilterData *data = new EffectIIRFilterData;
 	for (int i=0; i < kNumberSliders; i++)
 	{
-		data->filters.push_back(ConvertSliderToLog(fSliders[i]->Value(), 1000, kFilterSliders[i].min, kFilterSliders[i].max));
+		float v;
+		if (i == (int)eFilterSlider::eFc)
+			v = ConvertSliderToLog(fSliders[i]->Value(), 1000, kFilterSliders[i].min, kFilterSliders[i].max);
+		else
+		{
+			float slider_value = (float)fSliders[i]->Value()/1000.0f;
+			v = kFilterSliders[i].min + slider_value*(kFilterSliders[i].max - kFilterSliders[i].min);
+		}
+		data->filters.push_back(v);
 	}
 	data->algorithm = fOptionAlgorithm->Value();
 	media_effect->mEffectData = data;
@@ -288,7 +296,9 @@ void EffectNode_IIRFilter :: MediaEffectSelected(MediaEffect *effect)
 	//	Update GUI
 	EffectIIRFilterData *data = ((EffectIIRFilterData *)effect->mEffectData);
 	for (int i=0; i < kNumberSliders; i++)
+	{
 		SetSliderValue(i, data->filters[i]);
+	}
 	fOptionAlgorithm->SetValue(data->algorithm);
 }
 
