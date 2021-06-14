@@ -1,0 +1,10 @@
+#!/bin/sh
+
+rm *.o
+rm *.so
+rm -rf CMakeFiles
+rm CMakeCache.txt
+rm cmake_install.cmake
+rm Makefile
+rm CMakeLists.txt.user
+

@@ -202,6 +202,8 @@ public:
 
 		void		WindowActivated(bool activated) override;
 		void		ColourSelected(rgb_color colour);
+
+		BMessage	*GetNotificationMessage()	{return fParentMessage;}
 		
 private:
 		float		fInfoHeight;

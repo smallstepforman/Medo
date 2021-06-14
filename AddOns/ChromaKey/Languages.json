@@ -5,12 +5,9 @@
 			"text": [
 				"Chroma Key",
 				"Make a colour transparent",
+				"Enabled",
 				"Threshold",
-				"0",
-				"100",
 				"Smoothing",
-				"0.0",
-				"0.2",
 				"Chroma Colour",
 			]
 		},
@@ -19,26 +16,20 @@
 			"text": [
 				"Chroma Key",
 				"Make a color transparent",
+				"Enabled",
 				"Threshold",
-				"0",
-				"100",
 				"Smoothing",
-				"0",
-				"0.2",
 				"Chroma Color",
 			]
 		},
 		{
 			"language": "Deutsch",
 			"text": [
-				"Chroma Key",
+				"Chroma Farbe",
 				"Eine Farbe tansparent machen",
+				"Aktiviert",
 				"Schwelle",
-				"0",
-				"100",
 				"Glätten",
-				"0",
-				"0.2",
 				"Chroma Farbe",
 			]
 		},
@@ -47,12 +38,9 @@
 			"text": [
 				"Clé Chroma",
 				"Rendre une couleur transparente",
+				"Activer",
 				"Seuil",
-				"0",
-				"100",
 				"Lissage",
-				"0",
-				"0.2",
 				"Couleur Chroma",
 			]
 		},
@@ -61,12 +49,9 @@
 			"text": [
 				"Chiave Cromatica",
 				"Rendi Trasparente un Colore",
+				"Abilitare",
 				"Soglia",
-				"0",
-				"100",
 				"Levigatura",
-				"0",
-				"0.2",
 				"Colore Chroma",
 			]
 		},
@@ -75,12 +60,9 @@
 			"text": [
 				"Хромакей",
 				"Сделать цвет прозрачным",
+				"Включено",
 				"Предел",
-				"0",
-				"100",
 				"Сглаживание",
-				"0",
-				"0.2",
 				"Хромa Цвет",
 			]
 		},
@@ -89,12 +71,9 @@
 			"text": [
 				"Прозирна боја",
 				"Изаберите прозирну боју",
+				"Омогући",
 				"Праг",
-				"0",
-				"100",
 				"Заглађивање",
-				"0",
-				"0.2",
 				"Прозирна Боја",
 			]
 		},
@@ -103,12 +82,9 @@
 			"text": [
 				"Clave de croma",
 				"Hacer transparente a un color",
+				"Activado",
 				"Umbral",
-				"0",
-				"100",
 				"Suavizado",
-				"0",
-				"0.2",
 				"Kleur",
 			]
 		},
@@ -117,12 +93,9 @@
 			"text": [
 				"Chroma Sleutel",
 				"Maak een kleur transparant",
+				"Ingeschakeld",
 				"Verscherpen",
-				"0",
-				"100",
 				"Verzachten",
-				"0",
-				"0.2",
 				"Chroma Sleutel",
 			]
 		},
@@ -131,12 +104,9 @@
 			"text": [
 				"Kunci Chroma",
 				"Jadikan warna transparan",
+				"Diaktifkan",
 				"Ambang",
-				"0",
-				"100",
 				"Menghaluskan",
-				"0",
-				"0.2",
 				"Warna",
 			]
 		},
@@ -145,12 +115,9 @@
 			"text": [
 				"Chave cromática (chroma key)",
 				"Tornar uma cor transparente",
+				"Habilitar",
 				"Limiar",
-				"0",
-				"100",
 				"Suavização",
-				"0",
-				"0.2",
 				"Cor de Croma"
 			]
 		}
