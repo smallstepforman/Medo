@@ -298,7 +298,7 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 		do 
 		{
 			st = video_track->ReadFrames((char *)bitmap->Bits(), &num_read, &mh);
-		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
+		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts) && (video_track->CurrentFrame() < video_track->CountFrames()));
 		if (st != B_OK)
 		{
 			printf("Cannot read frame %ld, file=%s\n", video_frame, source->GetFilename());
@@ -329,7 +329,7 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 	do
 	{
 		st = video_track->ReadFrames((char *)bitmap->Bits(), &num_read, &mh);
-	} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
+	} while ((st != B_OK) && (++attempt <= kMaxReadAttempts) && (video_track->CurrentFrame() < video_track->CountFrames()));
 	bitmap->Unlock();
 	UnlockMediaKit();
 	DEBUG("Final Save(%ld).  status_t=%ld\n", video_frame, st);
@@ -453,7 +453,7 @@ void VideoManager :: ClearPendingThumbnails()
 
 //	FFmpeg (via BMediaKit) is not thread safe
 //	16 May 2021 tests show that update to ffmpeg resolved race conditions.  Disable for now.
-#if 0
+#if 1
 const bool VideoManager :: LockMediaKit()		{return fMediaKitSemaphore->Lock();}
 const bool VideoManager :: UnlockMediaKit()		{return fMediaKitSemaphore->Unlock();}
 #else
