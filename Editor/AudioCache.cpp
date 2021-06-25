@@ -120,7 +120,7 @@ status_t AudioCache :: ReadFile(uint8 *destination, const MediaSource *source, i
 		do
 		{
 			st = audio_track->ReadFrames(source->GetAudioBuffer(), &num_read);
-		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
+		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts) && (audio_track->CurrentFrame() < audio_track->CountFrames()));
 		if (st != B_OK)
 		{
 			DEBUG("AudioCache::ReadFile() ReadFrames()#1 returned %d, start(%ld), end(%ld), num_read(%ld)\n", st, start, end, num_read);
@@ -145,7 +145,7 @@ status_t AudioCache :: ReadFile(uint8 *destination, const MediaSource *source, i
 		do
 		{
 			st = audio_track->ReadFrames(p, &num_read);
-		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
+		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts) && (audio_track->CurrentFrame() < audio_track->CountFrames()));
 		if (st != B_OK)
 		{
 			DEBUG("AudioCache::ReadFile() ReadFrames()#3 returned %d, start(%ld), end(%ld), num_read(%ld)\n", st, start, end, num_read);
@@ -208,10 +208,16 @@ uint8 * AudioCache :: GetAudioBufferLocked(const MediaSource *source, const int6
 			{
 				//	Match, determine start pointer
 				audio_buffer_size = (audio_end - audio_start)*kSampleSize;
-				AUDIO_ITEM item = *i;
-				fAudioCache.erase(i);
-				fAudioCache.push_front(item);
-				return item.buffer + (audio_start - item.audio_start)*kSampleSize;
+				//	Push to front (take care not to thrash deque)
+				if (i - fAudioCache.begin() > 16)
+				{
+					//	Push item to top of cache
+					AUDIO_ITEM item = *i;
+					fAudioCache.erase(i);
+					fAudioCache.push_front(item);
+					i = fAudioCache.begin();
+				}
+				return (*i).buffer + (audio_start - (*i).audio_start)*kSampleSize;
 			}
 		}
 	}

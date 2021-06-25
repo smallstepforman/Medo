@@ -441,7 +441,10 @@ const bool Project :: LoadProject(const char *data, const bool clear_media)
 					}
 				}
 				if (!valid_clip_id)
+				{
+					printf("clip_id == %d\n", clip_id);
 					ERROR_EXIT("Invalid tracks::clips::clip_id");
+				}
 				aTrack.clips.push_back(clip_id);
 			}
 

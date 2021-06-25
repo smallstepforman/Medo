@@ -331,6 +331,13 @@ void MedoWindow :: MessageReceived(BMessage *msg)
 				printf("MedoWindow::MessageReceived(eMsgActionAsyncTimelinePlayerUpdate) - error \'Complete\' not found\n");
 			break;
 		}
+		case eMsgActionControlSourcePreviewReady:
+		{
+			int64 pos;
+			if ((msg->FindInt64("Position", &pos) == B_OK) && (fControlMode == CONTROL_SOURCE))
+				((ControlSource *)fControlViews[CONTROL_SOURCE])->ShowPreview(pos);
+			break;
+		}
 		case eMsgActionAsyncThumbnailReady:
 			fTimelineView->InvalidateItems(TimelineView::INVALIDATE_EDIT_TRACKS);		//	TimelineEdit
 			if (fControlMode == CONTROL_SOURCE)
@@ -542,6 +549,10 @@ void MedoWindow :: MessageReceived(BMessage *msg)
 			}
 			break;
 		}
+
+		//	Timeline messages
+		case TimelineEdit::eMsgDragDropClip:	//	ControlSource message not delivered to TimelineEdit
+			break;
 
 		case B_REFS_RECEIVED:
 			RefsReceived(msg);

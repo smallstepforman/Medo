@@ -44,6 +44,7 @@ private:
 	BSoundPlayer	*fSoundPlayer;
 	int64			fPreviewStartFrame;
 	int64			fPreviewEndFrame;
+	MediaSource		*fPreviewSource;
 
 	struct ResamplerContext
 	{
@@ -69,9 +70,10 @@ public:
 	BBitmap			*GetBitmapAsync(MediaSource *source, const int64 start_frame, const int64 end_frame, const float width, const float height);
 	void			ClearPendingThumbnails();
 
-	void			PlayPreview(const int64 start_frame, const int64 end_frame);
+	void			PlayPreview(const int64 start_frame, const int64 end_frame, MediaSource *preview_source = nullptr);
 	const int64		GetOutputBuffer(const int64 start_frame, const int64 end_frame,
 									void *buffer, size_t buffer_size, const media_raw_audio_format &format);
+
 };
 
 extern AudioManager *gAudioManager;

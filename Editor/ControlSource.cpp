@@ -10,21 +10,49 @@
 #include <interface/Bitmap.h>
 #include <app/Cursor.h>
 #include <app/Application.h>
+#include <translation/TranslationUtils.h>
 #include <MediaKit.h>
 
 #include "MediaSource.h"
 #include "Project.h"
 #include "CursorDefinitions.inc"
 #include "MediaUtility.h"
+#include "MedoWindow.h"
 #include "VideoManager.h"
 #include "AudioManager.h"
 #include "TimelineEdit.h"
 #include "ControlSource.h"
+#include "Gui/BitmapCheckbox.h"
+
+#include "Actor/Actor.h"
+#include "Actor/ActorManager.h"
+#include "Actor/Timer.h"
 
 static const float kClipTimelineOffsetX = 0.0f;
 static const float kClipTimelineHeight = 50.0f;
 static const float kClipAdjustRectHeight = 30.0f;
+static const float kPlayBUttonWidth = kClipAdjustRectHeight;
 static const float kClipAdjustFrameSize = 4.0f;
+
+static const uint32_t kMessagePlayButton = 'play';
+
+/***********************************
+	PreviewActor
+************************************/
+class PreviewActor : public yarra::Actor
+{
+	int64			fTimeline;
+	float			fFrameRate;
+	BMessage		*fMessage;
+public:
+				PreviewActor();
+				~PreviewActor();
+	void		AsyncPlay(int64 start_time, float frame_rate);
+	void		AsyncStop();
+	void		AsyncTimerTick();
+	void		AsyncSetTimeline(int64 t) {fTimeline = t;}
+	int64		GetTimeline() const {return fTimeline;}
+};
 
 /***********************************
 	ClipTimeline
@@ -33,10 +61,13 @@ class ClipTimeline : public BView
 {
 	BRect			fTimelineClipRect;
 	BRect			fTimelineUserRect;
-	bigtime_t		fDuration;
+	int64			fDuration;
+	int64			fPreviewTime;
 	MediaSource		*fMediaSource;
 	BMediaTrack		*fMediaTrack;
 	float			fFrameRateFactor;
+	BitmapCheckbox	*fButtonPlay;
+	PreviewActor	*fPreviewActor;
 	
 	BCursor			*fCursor;
 	bool			fCursorActive;
@@ -63,11 +94,21 @@ public:
 		fMsgDragDrop = new BMessage(TimelineEdit::eMsgDragDropClip);
 			
 		fDuration = 0;
+		fPreviewTime = 0;
 		fMediaTrack = nullptr;
 		fMediaSource = nullptr;
 
 		fTimelineClipRect = Bounds();
+		fTimelineClipRect.left = kPlayBUttonWidth;
 		fTimelineClipRect.bottom -= (kClipTimelineHeight - kClipAdjustRectHeight);
+
+		fButtonPlay = new BitmapCheckbox(BRect(0, 0, kPlayBUttonWidth, kPlayBUttonWidth), "play",
+										 BTranslationUtils::GetBitmap("Resources/icon_play.png"),
+										 BTranslationUtils::GetBitmap("Resources/icon_pause.png"),
+										 new BMessage(kMessagePlayButton));
+		//AddChild(fButtonPlay);
+
+		fPreviewActor = new PreviewActor;
 	}
 	
 /*	FUNCTION:		ClipTimeline :: ~ClipTimeline
@@ -80,7 +121,81 @@ public:
 		if (fCursorActive)
 			be_app->SetCursor(B_HAND_CURSOR);
 		delete fCursor;
-		delete fMsgDragDrop;	
+		delete fMsgDragDrop;
+		delete fPreviewActor;
+		if (fButtonPlay->Parent() != this)
+			delete fButtonPlay;
+	}
+
+/*	FUNCTION:		ClipTimeline :: AttachedToWindow
+	ARGS:			none
+	RETURN:			n/a
+	DESCRIPTION:	Hook function
+*/
+	void AttachedToWindow() override
+	{
+		fButtonPlay->SetTarget(this, Window());
+		if (fMediaSource)
+		{
+			bool has_media = fMediaSource->GetVideoTrack() || fMediaSource->GetAudioTrack();
+			if (has_media && (fButtonPlay->Parent() != this))
+				AddChild(fButtonPlay);
+			if (!has_media && (fButtonPlay->Parent() == this))
+				RemoveChild(fButtonPlay);
+		}
+	}
+/*	FUNCTION:		ClipTimeline :: DetachedFromWindow
+	ARGS:			none
+	RETURN:			n/a
+	DESCRIPTION:	Hook function
+*/
+	void DetachedFromWindow() override
+	{
+		if (fButtonPlay->Value())
+		{
+			fButtonPlay->SetValue(0);
+			fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+		}
+	}
+
+/*	FUNCTION:		ClipTimeline :: SetPreviewTime
+	ARGS:			none
+	RETURN:			n/a
+	DESCRIPTION:	Hook function
+*/
+	void SetPreviewTime(int64 pos)
+	{
+		fPreviewTime = pos;
+	}
+
+/*	FUNCTION:		ClipTimeline :: MessageReceived
+	ARGS:			msg
+	RETURN:			n/a
+	DESCRIPTION:	Hook function
+*/
+	void MessageReceived(BMessage *msg) override
+	{
+		switch (msg->what)
+		{
+			case kMessagePlayButton:
+			{
+				if (fButtonPlay->Value() > 0)
+				{
+					if (fMediaSource->GetVideoTrack())
+						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, fMediaSource->GetVideoFrameRate());
+					else if (fMediaSource->GetAudioTrack())
+						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, 30.0f);
+					else
+						fButtonPlay->SetValue(0);
+				}
+				else
+					fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+				break;
+			}
+
+			default:
+				BView::MessageReceived(msg);
+		}
 	}
 	
 /*	FUNCTION:		ClipTimeline :: FrameResized
@@ -91,12 +206,10 @@ public:
 */
 	void FrameResized(float width, float height)
 	{
-		float r = fTimelineClipRect.Width()/width;
-		
+		float r = fTimelineClipRect.Width()/(width-kClipAdjustRectHeight);
+
 		fTimelineClipRect = Bounds();
-		fTimelineClipRect.left;
-		fTimelineClipRect.right;
-		fTimelineClipRect.top;
+		fTimelineClipRect.left = kPlayBUttonWidth;
 		fTimelineClipRect.bottom -= (kClipTimelineHeight - kClipAdjustRectHeight);
 		
 		fTimelineUserRect.left /= r;
@@ -141,8 +254,9 @@ public:
 	RETURN:			n/a
 	DESCRIPTION:	Draw clip timeline
 */	
-	void Draw(BRect frame)
+	void Draw(BRect _frame)
 	{
+		BRect frame = Bounds();
 		if (fMediaTrack == nullptr)
 		{
 			SetHighColor(216, 216, 216);
@@ -168,6 +282,10 @@ public:
 		SetHighColor(255, 255, 0);
 		SetPenSize(kClipAdjustFrameSize);
 		StrokeRect(fTimelineUserRect);
+
+		SetHighColor(255, 0, 0);
+		float preview_pos = double(fPreviewTime)/double(fDuration)*(frame.Width()-kPlayBUttonWidth);
+		StrokeLine(BPoint(frame.left + kPlayBUttonWidth + preview_pos, fTimelineUserRect.top), BPoint(frame.left + kPlayBUttonWidth + preview_pos, fTimelineUserRect.bottom));
 		
 		char buffer[40];
 		SetHighColor(0, 0, 0);
@@ -205,30 +323,41 @@ public:
 		if (fMediaTrack == nullptr)
 			return;
 
+		//	Preview position
+		if ((point.y >= fTimelineClipRect.bottom - kClipAdjustRectHeight) && (point.y < fTimelineClipRect.bottom))
+		{
+			fPreviewTime = fDuration * double(point.x - kPlayBUttonWidth)/double(fTimelineClipRect.Width());
+			fPreviewActor->Async(&PreviewActor::AsyncSetTimeline, fPreviewActor, fPreviewTime);
+			((ControlSource *)Parent())->ShowPreview(fPreviewTime);
+		}
+
 		if (fCursorActive)
 		{
 			fDragType = fNextDragType;
 			SetMouseEventMask(B_POINTER_EVENTS,	B_LOCK_WINDOW_FOCUS | B_NO_POINTER_HISTORY);
 		}
-		else if (fTimelineUserRect.Contains(point))
+		else
 		{
-			SetMouseEventMask(B_POINTER_EVENTS, 0);
-			fDragType = DRAG_DROP;
-			fMsgDragDrop->MakeEmpty();
+			if (fTimelineUserRect.Contains(point))
+			{
+				SetMouseEventMask(B_POINTER_EVENTS, 0);
+				fDragType = DRAG_DROP;
+				fMsgDragDrop->MakeEmpty();
 			
-			int64 clip_start = ((double)fTimelineUserRect.left/(double)fTimelineClipRect.Width()) * fMediaTrack->CountFrames()*fFrameRateFactor;
-			fMsgDragDrop->AddInt64("start", clip_start);
-			int64 clip_end = ((double)fTimelineUserRect.right/(double)fTimelineClipRect.Width()) * fMediaTrack->CountFrames()*fFrameRateFactor;
-			fMsgDragDrop->AddInt64("end", clip_end);
-			fMsgDragDrop->AddPointer("source", fMediaSource);
+				int64 clip_start = ((double)fTimelineUserRect.left/(double)fTimelineClipRect.Width()) * fMediaTrack->CountFrames()*fFrameRateFactor;
+				fMsgDragDrop->AddInt64("start", clip_start);
+				int64 clip_end = ((double)fTimelineUserRect.right/(double)fTimelineClipRect.Width()) * fMediaTrack->CountFrames()*fFrameRateFactor;
+				fMsgDragDrop->AddInt64("end", clip_end);
+				fMsgDragDrop->AddPointer("source", fMediaSource);
+
+				//	number of frames from fTimelineUserRect.left to mouse.x
+				int64 xoffset = fMediaTrack->CountFrames()*fFrameRateFactor * (point.x - fTimelineUserRect.left)/fTimelineClipRect.Width();
+				fMsgDragDrop->AddInt64("xoffset", xoffset);
 			
-			//	number of frames from fTimelineUserRect.left to mouse.x
-			int64 xoffset = fMediaTrack->CountFrames()*fFrameRateFactor * (point.x - fTimelineUserRect.left)/fTimelineClipRect.Width();
-			fMsgDragDrop->AddInt64("xoffset", xoffset);
-			
-			printf("Initiate Drag-Drop.  Data: clip_start=%ld, frame_end=%ld, xoffset=%ld\n", clip_start, clip_end, xoffset);
-			DragMessage(fMsgDragDrop, fTimelineUserRect, this);
-		}	
+				//printf("Initiate Drag-Drop.  Data: clip_start=%ld, frame_end=%ld, xoffset=%ld\n", clip_start, clip_end, xoffset);
+				DragMessage(fMsgDragDrop, fTimelineUserRect, this);
+			}
+		}
 	}
 
 /*	FUNCTION:		ClipTimeline :: MouseMoved
@@ -338,6 +467,41 @@ public:
 	
 };
 
+/***********************************
+	PreviewActor
+************************************/
+PreviewActor :: PreviewActor() : yarra::Actor()
+{
+	fTimeline = -1;
+	fMessage = new BMessage(MedoWindow::eMsgActionControlSourcePreviewReady);
+	fMessage->AddInt64("Position", 0);
+}
+PreviewActor :: ~PreviewActor()
+{
+	if (fTimeline >= 0)
+		yarra::ActorManager::GetInstance()->CancelTimers(this);
+	delete fMessage;
+}
+void PreviewActor :: AsyncPlay(bigtime_t start_time, float frame_rate)
+{
+	fTimeline = start_time;
+	fFrameRate = frame_rate;
+	yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, this, std::bind(&PreviewActor::AsyncTimerTick, this));
+}
+void PreviewActor :: AsyncStop()
+{
+	fTimeline = -1;
+}
+void PreviewActor :: AsyncTimerTick()
+{
+	if (fTimeline >= 0)
+	{
+		fTimeline += kFramesSecond * (1.0f/fFrameRate);
+		fMessage->ReplaceInt64("Position", fTimeline);
+		MedoWindow::GetInstance()->PostMessage(fMessage);
+		yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, this, std::bind(&PreviewActor::AsyncTimerTick, this));
+	}
+}
 
 /***********************************
 	ControlSource
@@ -494,7 +658,6 @@ void ControlSource :: SetMediaSource(MediaSource *media)
 */
 void ControlSource :: ShowPreview(int64 frame_idx)
 {
-	//printf("ShowPreview(%ld)\n", frame_idx);
 	if (fMediaSource->GetVideoTrack())
 	{
 		fBitmap = gVideoManager->GetFrameBitmap(fMediaSource, frame_idx);
@@ -504,7 +667,15 @@ void ControlSource :: ShowPreview(int64 frame_idx)
 		BRect frame = Bounds();
 		fBitmap = gAudioManager->GetBitmapAsync(fMediaSource, 0, fMediaSource->GetAudioNumberSamples() * kFramesSecond/fMediaSource->GetAudioFrameRate(), frame.Width(), frame.Height());
 	}
+
+	if (fMediaSource->GetAudioTrack())
+	{
+		int64 next_frame = frame_idx + kFramesSecond/gProject->mResolution.frame_rate;
+		gAudioManager->PlayPreview(frame_idx, next_frame, fMediaSource);
+	}
 	
+	fClipTimeline->SetPreviewTime(frame_idx);
+	fClipTimeline->Invalidate();
 	Invalidate();
 }
 

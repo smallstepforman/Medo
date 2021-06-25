@@ -154,6 +154,7 @@ public:
 		eMsgActionExportWindowClosed,
 		eMsgActionProjectSettingsChanged,
 		eMsgActionMedoSettingsChanged,
+		eMsgActionControlSourcePreviewReady,
 	};
 
 private:

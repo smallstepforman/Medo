@@ -95,6 +95,7 @@ AudioManager :: AudioManager()
 
 	fPreviewStartFrame = 0;
 	fPreviewEndFrame = 0;
+	fPreviewSource = nullptr;
 
 #if 1
 	fSoundPlayer = new BSoundPlayer("Medo", SoundPlayerCallback, nullptr, this);

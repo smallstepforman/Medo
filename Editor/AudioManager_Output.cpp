@@ -34,18 +34,22 @@ extern "C" {
 
 /*	FUNCTION:		AudioManager :: PlayPreview
 	ARGS:			start_frame, end_frame
+					preview_source
 	RETURN:			n/a
 	DESCRIPTION:	Play sound preview
 */
-void AudioManager :: PlayPreview(const int64 start_frame, const int64 end_frame)
+void AudioManager :: PlayPreview(const int64 start_frame, const int64 end_frame, MediaSource *preview_source)
 {
 	status_t err;
 	while ((err = acquire_sem(fCacheSemaphore)) == B_INTERRUPTED) ;
 	if (err == B_OK)
 	{
+#if 0
 		if ((start_frame - fPreviewStartFrame > kFramesSecond / gProject->mResolution.frame_rate) || (start_frame < fPreviewStartFrame))
+#endif
 			fPreviewStartFrame = start_frame;
 		fPreviewEndFrame = end_frame;
+		fPreviewSource = preview_source;
 		fSoundPlayer->SetHasData(true);
 		release_sem(fCacheSemaphore);
 	}
@@ -130,40 +134,57 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 		std::vector<MediaEffect *>	effects;
 	};
 	std::vector<TRACK_CLIP>		track_clips;
-	int32						track_idx = gProject->mTimelineTracks.size();
 
-	//	Reverse iterate each track, find clips
-	for (std::vector<TimelineTrack *>::const_reverse_iterator t = gProject->mTimelineTracks.rbegin(); t < gProject->mTimelineTracks.rend(); ++t)
+	MediaClip preview_clip;
+	if (fPreviewSource)
 	{
-		assert(--track_idx >= 0);
+		preview_clip.mMediaSource = fPreviewSource;
+		preview_clip.mMediaSourceType = fPreviewSource->GetMediaType();
+		preview_clip.mSourceFrameStart = 0;
+		preview_clip.mSourceFrameEnd = fPreviewSource->GetAudioDuration();
+		preview_clip.mTimelineFrameStart = 0;
 
-		if (!(*t)->mAudioEnabled)
-			continue;
+		TRACK_CLIP aClip;
+		aClip.clip = &preview_clip;
+		track_clips.push_back(aClip);
+	}
+	else
+	{
+		int32 track_idx = gProject->mTimelineTracks.size();
 
-		//	TODO binary search
-		for (auto &clip : (*t)->mClips)
+		//	Reverse iterate each track, find clips
+		for (std::vector<TimelineTrack *>::const_reverse_iterator t = gProject->mTimelineTracks.rbegin(); t < gProject->mTimelineTracks.rend(); ++t)
 		{
-			if (clip.mTimelineFrameStart > actual_end_frame)
-				break;
+			assert(--track_idx >= 0);
 
-			if ((start_frame < clip.GetTimelineEndFrame()) && (actual_end_frame > clip.mTimelineFrameStart) && clip.mAudioEnabled &&
-				((clip.mMediaSourceType == MediaSource::MEDIA_AUDIO) || (clip.mMediaSourceType == MediaSource::MEDIA_VIDEO_AND_AUDIO)))
+			if (!(*t)->mAudioEnabled)
+				continue;
+
+			//	TODO binary search
+			for (auto &clip : (*t)->mClips)
 			{
-				TRACK_CLIP c;
-				c.track = *t;
-				c.track_idx = track_idx;
-				c.clip = &clip;
+				if (clip.mTimelineFrameStart > actual_end_frame)
+					break;
 
-				//	add effects
-				for (auto &e : c.track->mEffects)
+				if ((start_frame < clip.GetTimelineEndFrame()) && (actual_end_frame > clip.mTimelineFrameStart) && clip.mAudioEnabled &&
+					((clip.mMediaSourceType == MediaSource::MEDIA_AUDIO) || (clip.mMediaSourceType == MediaSource::MEDIA_VIDEO_AND_AUDIO)))
 				{
-					if ((start_frame < e->mTimelineFrameEnd) && (actual_end_frame > e->mTimelineFrameStart))
+					TRACK_CLIP c;
+					c.track = *t;
+					c.track_idx = track_idx;
+					c.clip = &clip;
+
+					//	add effects
+					for (auto &e : c.track->mEffects)
 					{
-						if (e->Type() == MediaEffect::MEDIA_EFFECT_AUDIO)
-							c.effects.push_back(e);
+						if ((start_frame < e->mTimelineFrameEnd) && (actual_end_frame > e->mTimelineFrameStart))
+						{
+							if (e->Type() == MediaEffect::MEDIA_EFFECT_AUDIO)
+								c.effects.push_back(e);
+						}
 					}
+					track_clips.emplace_back(c);
 				}
-				track_clips.emplace_back(c);
 			}
 		}
 	}
@@ -190,6 +211,11 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 		uint8 *buffer_end = buffer_start + buffer_size;
 
 		int64 audio_start = round(((start_frame - c.clip->mTimelineFrameStart) + c.clip->mSourceFrameStart) / kSourceConversionFactor);
+		if (audio_start >= media_source->GetAudioNumberSamples())
+		{
+			printf("AudioManager::GetOutputBuffer() - audio_start > media_source->GetAudioNumberSamples()\n");
+			audio_start = media_source->GetAudioNumberSamples();
+		}
 		//	Cater for scenario where clip starts within interval
 		if (c.clip->mTimelineFrameStart > start_frame)
 		{
@@ -215,6 +241,11 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 		{
 			DEBUG("AudioManager::GetOutputBuffer() [3] audio_end=%ld, buffer_start = %p, buffer_end = %p, buffer_size = %ld\n", audio_end, buffer_start, buffer_end, buffer_size);
 			size_t num_zero = kTargetSampleSize * (actual_end_frame - c.clip->GetTimelineEndFrame())/kTargetConversionFactor;
+			if (num_zero > buffer_size)
+			{
+				printf("AudioManager::GetOutputBuffer() num_zero > buffer_size\n");
+				num_zero = buffer_size;
+			}
 			if (track_clip_index == 0)
 				memset(buffer_end - num_zero, 0, num_zero);
 			buffer_end -= num_zero;
@@ -370,11 +401,16 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 #endif
 
 		//	mix audio
-		MixAudio(buffer_start,													//	destination
-				 audio_buffer,													//	source 1
-				 track_clip_index == 0 ? nullptr : buffer_start,				//	source 2
-				 sizeof(float), format.channel_count, target_samples_done,		//	size
-				 c.track_idx, c.track->mAudioLevels[0], c.track->mAudioLevels[1]);			//	audio_levels
+		if (fPreviewSource)
+			MixAudio(buffer_start, audio_buffer, nullptr, sizeof(float), format.channel_count, target_samples_done, 0, 1.0f, 1.0f);
+		else
+		{
+			MixAudio(buffer_start,															//	destination
+					 audio_buffer,															//	source 1
+					 track_clip_index == 0 ? nullptr : buffer_start,						//	source 2
+					 sizeof(float), format.channel_count, target_samples_done,				//	size
+					 c.track_idx, c.track->mAudioLevels[0], c.track->mAudioLevels[1]);		//	audio_levels
+		}
 
 #if DEBUG_TOTAL_OUT
 		if ((track_clip_index == 0) && (total_output != buffer_size))
