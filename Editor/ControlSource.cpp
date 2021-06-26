@@ -159,13 +159,25 @@ public:
 	}
 
 /*	FUNCTION:		ClipTimeline :: SetPreviewTime
-	ARGS:			none
+	ARGS:			pos
 	RETURN:			n/a
-	DESCRIPTION:	Hook function
+	DESCRIPTION:	Callback when preview frame updated
 */
 	void SetPreviewTime(int64 pos)
 	{
 		fPreviewTime = pos;
+
+		if (fMediaSource->GetAudioTrack())
+		{
+			int64 next_frame = fPreviewTime + kFramesSecond/gProject->mResolution.frame_rate;
+			if (next_frame < fMediaSource->GetAudioDuration())
+				gAudioManager->PlayPreview(fPreviewTime, next_frame, fMediaSource);
+			else
+			{
+				fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+				fButtonPlay->SetValue(0);
+			}
+		}
 	}
 
 /*	FUNCTION:		ClipTimeline :: MessageReceived
@@ -182,9 +194,17 @@ public:
 				if (fButtonPlay->Value() > 0)
 				{
 					if (fMediaSource->GetVideoTrack())
+					{
+						if (fPreviewTime >= fMediaSource->GetVideoDuration())
+							fPreviewTime = 0;
 						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, fMediaSource->GetVideoFrameRate());
+					}
 					else if (fMediaSource->GetAudioTrack())
+					{
+						if (fPreviewTime >= fMediaSource->GetAudioDuration())
+							fPreviewTime = 0;
 						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, 30.0f);
+					}
 					else
 						fButtonPlay->SetValue(0);
 				}
@@ -197,7 +217,7 @@ public:
 				BView::MessageReceived(msg);
 		}
 	}
-	
+
 /*	FUNCTION:		ClipTimeline :: FrameResized
 	ARGS:			width
 					height
@@ -668,12 +688,6 @@ void ControlSource :: ShowPreview(int64 frame_idx)
 		fBitmap = gAudioManager->GetBitmapAsync(fMediaSource, 0, fMediaSource->GetAudioNumberSamples() * kFramesSecond/fMediaSource->GetAudioFrameRate(), frame.Width(), frame.Height());
 	}
 
-	if (fMediaSource->GetAudioTrack())
-	{
-		int64 next_frame = frame_idx + kFramesSecond/gProject->mResolution.frame_rate;
-		gAudioManager->PlayPreview(frame_idx, next_frame, fMediaSource);
-	}
-	
 	fClipTimeline->SetPreviewTime(frame_idx);
 	fClipTimeline->Invalidate();
 	Invalidate();

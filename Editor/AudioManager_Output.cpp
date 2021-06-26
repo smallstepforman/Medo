@@ -44,9 +44,7 @@ void AudioManager :: PlayPreview(const int64 start_frame, const int64 end_frame,
 	while ((err = acquire_sem(fCacheSemaphore)) == B_INTERRUPTED) ;
 	if (err == B_OK)
 	{
-#if 0
 		if ((start_frame - fPreviewStartFrame > kFramesSecond / gProject->mResolution.frame_rate) || (start_frame < fPreviewStartFrame))
-#endif
 			fPreviewStartFrame = start_frame;
 		fPreviewEndFrame = end_frame;
 		fPreviewSource = preview_source;
@@ -214,7 +212,9 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 		if (audio_start >= media_source->GetAudioNumberSamples())
 		{
 			printf("AudioManager::GetOutputBuffer() - audio_start > media_source->GetAudioNumberSamples()\n");
-			audio_start = media_source->GetAudioNumberSamples();
+			if (track_clip_index == 0)
+				memset(buffer, 0, buffer_size);
+			continue;
 		}
 		//	Cater for scenario where clip starts within interval
 		if (c.clip->mTimelineFrameStart > start_frame)
