@@ -330,7 +330,11 @@ BBitmap * AudioCache :: CreateBitmap(sem_id manager_semaphore, const MediaSource
 			if (!audio_buffer)
 				return nullptr;
 			a = audio_buffer;
-			assert(a + samples_pixel*kSampleSize <= audio_buffer + audio_buffer_size);
+			if (a + samples_pixel*kSampleSize > audio_buffer + audio_buffer_size)
+			{
+				printf("AudioCache::CreateBitmap() - warning, buffer overflow (%ld*%ld > %ld)\n", samples_pixel, kSampleSize, audio_buffer_size);
+				break;
+			}
 		}
 		for (int channel = 0; channel < kNumberChannels; channel++)
 		{

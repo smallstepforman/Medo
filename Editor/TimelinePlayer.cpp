@@ -9,6 +9,7 @@
 #include "Actor/Actor.h"
 #include "Actor/ActorManager.h"
 
+#include "AudioManager.h"
 #include "MedoWindow.h"
 #include "RenderActor.h"
 #include "Project.h"
@@ -132,6 +133,9 @@ void TimelinePlayer :: AsyncOutputComplete()
 	fCurrentPosition += frame_time;
 	if ((fCurrentPosition >= fEndPosition) && fRepeat)
 		fCurrentPosition = fStartPosition;
+
+	int64 next_frame = fCurrentPosition + kFramesSecond/gProject->mResolution.frame_rate;
+	gAudioManager->PlayPreview(fCurrentPosition, next_frame);
 
 	if (fPlaying && (fCurrentPosition < fEndPosition))
 	{

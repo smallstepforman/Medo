@@ -94,6 +94,9 @@ TimelineEdit :: TimelineEdit(BRect frame, TimelineView *parent)
 
 	fSelectedItem = SelectedItem::eSelectedNone;
 	fClipTagWindow = nullptr;
+
+	fKeyDownFilterActive = false;
+	fKeyDownButtons = 0;
 }
 
 /*	FUNCTION:		TimelineEdit :: ~TimelineEdit
@@ -405,6 +408,8 @@ void TimelineEdit :: MessageReceived(BMessage *msg)
 */
 bool TimelineEdit :: KeyDownMessage(BMessage *msg)
 {
+	fKeyDownFilterActive = true;
+
 	const char *bytes;
 	msg->FindString("bytes",&bytes);
 	switch (bytes[0])
@@ -459,6 +464,18 @@ bool TimelineEdit :: KeyDownMessage(BMessage *msg)
 		default:
 			return false;
 	}
+}
+
+/*	FUNCTION:		TimelineEdit :: KeyUpMessage
+	ARGS:			msg
+	RETURN:			true if processed
+	DESCRIPTION:	Called by MedoWindow, intercept keyup messages
+*/
+bool TimelineEdit :: KeyUpMessage(BMessage *msg)
+{
+	fKeyDownFilterActive = false;
+	fKeyDownButtons = 0;
+	return false;
 }
 
 /*	FUNCTION:		TimelineEdit :: MouseDown
@@ -588,6 +605,37 @@ void TimelineEdit :: MouseDown(BPoint point)
 */
 void TimelineEdit :: MouseMoved(BPoint point, uint32 transit, const BMessage *message)
 {
+	int32 buttons;
+	const BMessage *msg = Window()->CurrentMessage();
+	msg->FindInt32("buttons", &buttons);
+
+	/*	TODO, BInputFilter will not forward B_MOUSE_DOWN while B_KEY_DOWN state is active.
+		However, B_MOUSE_MOVED is transmitted so we can fudge-detect that scenario here,
+		and invoke MouseDown/MouseUp()
+		This should be removed once a proper workaround for BInputFilter is developed
+	*/
+	if (fKeyDownFilterActive)
+	{
+		if (buttons)
+		{
+			if (buttons != fKeyDownButtons)
+			{
+				MouseDown(point);
+				fKeyDownButtons = buttons;
+				return;
+			}
+		}
+		else
+		{
+			if (buttons != fKeyDownButtons)
+			{
+				MouseUp(point);
+				fKeyDownButtons = buttons;
+				return;
+			}
+		}
+	}
+
 	switch (fState)
 	{
 		case State::eMoveClip:

@@ -119,7 +119,7 @@ public:
 */
 TimelineView :: TimelineView(BRect frame, MedoWindow *parent)
 	: BView(frame, "TimelineView", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS | B_FULL_UPDATE_ON_RESIZE),
-	fParent(parent), fLeftFrameIndex(0), fEditViewScrollOffsetY(0), fCurrentFrame(0), fZoomSliderValue(kDefaultZoomIndex)
+	fParent(parent), fLeftFrameIndex(0), fEditViewScrollOffsetY(0), fCurrentFrame(0), fZoomSliderValue(kDefaultZoomIndex), fZoomKeyRestoreValue(-1)
 {
 	SetViewColor(Theme::GetUiColour(UiColour::eTimelineView));
 
@@ -255,6 +255,7 @@ void TimelineView :: AttachedToWindow()
 
 void TimelineView :: MouseDown(BPoint point)
 {
+	printf("TimelineView::MouseDown()\n");
 	if (!Window()->IsActive())
 		Window()->Activate();
 	BView::MouseDown(point);
@@ -270,7 +271,12 @@ void TimelineView :: MessageReceived(BMessage *msg)
 	switch (msg->what)
 	{
 		case kMessageZoomSlider:
-			MessageZoomSlider(msg);
+			//	Get value (plus sanity checks)
+			if (msg->FindInt32("be:value", &fZoomSliderValue) == B_OK)
+			{
+				assert((fZoomSliderValue >= 0) && (fZoomSliderValue < sizeof(kZoomValues)/sizeof(ZoomValue)));
+				UpdateZoom();
+			}
 			break;
 
 		case kMessageButtonPlay:
@@ -403,8 +409,11 @@ void TimelineView :: PlayComplete()
 */
 bool TimelineView :: KeyDownMessage(BMessage *msg)
 {
+	if (fTimelineEdit->KeyDownMessage(msg))
+		return true;
+
 	const char *bytes;
-	msg->FindString("bytes",&bytes);
+	msg->FindString("bytes", &bytes);
 	switch (bytes[0])
 	{
 		case B_LEFT_ARROW:
@@ -419,16 +428,75 @@ bool TimelineView :: KeyDownMessage(BMessage *msg)
 			return true;
 		}
 		case '-':
-			((MedoWindow *)Window())->GetOutputView()->Zoom(false);
+		case '_':
+		case B_DOWN_ARROW:
+			if (fZoomSliderValue < sizeof(kZoomValues)/sizeof(ZoomValue) - 1)
+			{
+				++fZoomSliderValue;
+				fZoomSlider->SetValue(fZoomSliderValue);
+				UpdateZoom();
+			}
 			return true;
+		case B_UP_ARROW:
 		case '=':
 		case '+':
+			if (fZoomSliderValue > 0)
+			{
+				--fZoomSliderValue;
+				fZoomSlider->SetValue(fZoomSliderValue);
+				UpdateZoom();
+			}
+			return true;
+
+		case '[':
+		case '{':
+			((MedoWindow *)Window())->GetOutputView()->Zoom(false);
+			return true;
+		case ']':
+		case '}':
 			((MedoWindow *)Window())->GetOutputView()->Zoom(true);
 			return true;
 
-		default:
-			return fTimelineEdit->KeyDownMessage(msg);
+		case 'z':
+		case 'Z':
+			if (fZoomSliderValue != 2)
+			{
+				fZoomKeyRestoreValue = fZoomSliderValue;
+				fZoomSliderValue = 2;
+				fZoomSlider->SetValue(fZoomSliderValue);
+				UpdateZoom();
+			}
+			return true;
 
+		default:
+			return false;
+	}
+}
+
+/*	FUNCTION:		TimelineView :: KeyUpMessage
+	ARGS:			msg
+	RETURN:			true if processed
+	DESCRIPTION:	Called by MedoWindow, intercept keyup messages
+*/
+bool TimelineView :: KeyUpMessage(BMessage *msg)
+{
+	if (fTimelineEdit->KeyUpMessage(msg))
+		return true;
+
+	const char *bytes;
+	msg->FindString("bytes", &bytes);
+	switch (bytes[0])
+	{
+		case 'z':
+		case 'Z':
+			fZoomSliderValue = fZoomKeyRestoreValue;
+			fZoomKeyRestoreValue = -1;
+			fZoomSlider->SetValue(fZoomSliderValue);
+			UpdateZoom();
+			return true;
+
+		default:
+			return false;
 	}
 }
 
@@ -578,8 +646,10 @@ void TimelineView :: PositionUpdate(const int64 position, const bool generate_ou
 		fTimelinePosition->SetPosition(position);
 
 	//	Preview audio
+#if 0
 	int64 next_frame = fCurrentFrame + kFramesSecond/gProject->mResolution.frame_rate;
 	gAudioManager->PlayPreview(fCurrentFrame, next_frame);
+#endif
 
 	//	Invalidate children
 	InvalidateItems(INVALIDATE_POSITION_SLIDER | INVALIDATE_EDIT_TRACKS);
@@ -604,30 +674,41 @@ void TimelineView :: PositionKeyframeUpdate()
 	InvalidateItems(INVALIDATE_POSITION_SLIDER);
 }
 
-/*	FUNCTION:		TimelineView :: MessageZoomSlider
-	ARGS:			msg
+/*	FUNCTION:		TimelineView :: UpdateZoom
+	ARGS:			none
 	RETURN:			n/a
-	DESCRIPTION:	Zoom slider updated
+	DESCRIPTION:	Called when zoom updated (slider/key)
 */
-void TimelineView :: MessageZoomSlider(BMessage *msg)
+void TimelineView :: UpdateZoom()
 {
-	//	Get value (plus sanity checks)
-	assert(msg->FindInt32("be:value", &fZoomSliderValue) == B_OK);
-	assert((fZoomSliderValue >= 0) && (fZoomSliderValue < sizeof(kZoomValues)/sizeof(ZoomValue)));
-	
+	int64 current_position = fTimelinePosition->GetCurrrentPosition();
+	int64 visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
+	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1s to right (space for append)
+	double pos = double(current_position - fLeftFrameIndex) / double(visible_frames);
+	bool pos_visible = ((pos >= 0.0) && (pos <= 1.0));
+	if (!pos_visible)
+		pos = double(fLeftFrameIndex)/double(total_frames);
+
 	fTimelineEdit->SetZoomFactor(kZoomValues[fZoomSliderValue].value);
 	fTimelinePosition->SetZoomFactor(kZoomValues[fZoomSliderValue].value);
 
-	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1s to right (space for append)
-	const int64 visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
-	double pos = double(fTimelinePosition->GetCurrrentPosition() - 0.5*visible_frames)/(double)total_frames;
-	if (pos < 0.0)
-		pos = 0.0;
-	fLeftFrameIndex = pos*total_frames;
+	visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
+	if (pos_visible)
+	{
+		fLeftFrameIndex = current_position - pos*visible_frames;
+	}
+	else
+	{
+		fLeftFrameIndex = pos*total_frames;
+	}
+	if (fLeftFrameIndex < 0)
+		fLeftFrameIndex = 0;
+
 	fTimelineEdit->SetScrollViewOrigin(fLeftFrameIndex, fEditViewScrollOffsetY);
-	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(pos*100.0f + 1);
-	
 	InvalidateItems(INVALIDATE_EDIT_TRACKS | INVALIDATE_HORIZONTAL_SLIDER | INVALIDATE_POSITION_SLIDER);
+
+	float scroll_pos = fLeftFrameIndex/total_frames;
+	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(scroll_pos*100.0f + 1);
 
 	fZoomSlider->SetToolTip(kZoomValues[fZoomSliderValue].label);
 	fZoomSlider->ToolTip()->SetSticky(true);

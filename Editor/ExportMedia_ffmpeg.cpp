@@ -825,9 +825,14 @@ AVFrame * Export_ffmpeg :: get_video_frame(OutputStream *ost)
 		if (err == B_OK)
 		{
 			// colour conversion
-			uint8_t *inData[1]     = { (uint8_t *)output->Bits()};
-			int      inLinesize[1] = { 4 * (int)gProject->mResolution.width };
-			sws_scale(ost->sws_ctx, inData, inLinesize, 0, gProject->mResolution.height, ost->frame->data, ost->frame->linesize);
+			if (output)
+			{
+				uint8_t *inData[1]     = { (uint8_t *)output->Bits()};
+				int      inLinesize[1] = { 4 * (int)gProject->mResolution.width };
+				sws_scale(ost->sws_ctx, inData, inLinesize, 0, gProject->mResolution.height, ost->frame->data, ost->frame->linesize);
+			}
+			else
+				printf("Export_ffmpeg::get_video_frame(), warning output = nullptr\n");
 		}
 		else
 		{

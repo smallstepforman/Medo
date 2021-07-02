@@ -572,6 +572,11 @@ void MedoWindow :: MessageReceived(BMessage *msg)
 				BWindow::MessageReceived(msg);
 			break;
 
+		case B_KEY_UP:
+			if (!fTimelineView->KeyUpMessage(msg))
+				BWindow::MessageReceived(msg);
+			break;
+
 		case B_MODIFIERS_CHANGED:
 		case B_MOUSE_IDLE:
 			break;

@@ -44,7 +44,8 @@ void AudioManager :: PlayPreview(const int64 start_frame, const int64 end_frame,
 	while ((err = acquire_sem(fCacheSemaphore)) == B_INTERRUPTED) ;
 	if (err == B_OK)
 	{
-		if ((start_frame - fPreviewStartFrame > kFramesSecond / gProject->mResolution.frame_rate) || (start_frame < fPreviewStartFrame))
+		//	Resampler will buffer several end frames, so allow for some grace before resetting fPreviewStartFrame
+		if ((start_frame - fPreviewStartFrame > int64(0.5*kFramesSecond /gProject->mResolution.frame_rate)) || (start_frame < fPreviewStartFrame))
 			fPreviewStartFrame = start_frame;
 		fPreviewEndFrame = end_frame;
 		fPreviewSource = preview_source;

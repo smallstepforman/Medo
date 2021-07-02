@@ -642,7 +642,11 @@ void TimelineEdit :: MoveEffectUpdate(BPoint point)
 */
 void TimelineEdit :: ResizeClipUpdate(BPoint point)
 {
-	assert(fState == State::eResizeClip);
+	if (fState != State::eResizeClip)
+	{
+		printf("TimelineEdit::ResizeClipUpdate() - warning, fState != State::eResizeClip\n");
+		return;
+	}
 	assert(fActiveClip.track != nullptr);
 	assert(fActiveClip.clip_idx >= 0);
 
@@ -722,6 +726,9 @@ void TimelineEdit :: ResizeClipUpdate(BPoint point)
 void TimelineEdit :: ResizeEffectUpdate(BPoint point)
 {
 	MediaEffect *effect = fActiveEffect.media_effect;
+	if (!effect)
+		return;
+
 	int64 frame_idx = fLeftFrameIndex + point.x*fFramesPixel;
 	if (effect->Type() == MediaEffect::MEDIA_EFFECT_IMAGE)
 		frame_idx = CalculateStickyFrameIndex(frame_idx, fActiveResizeDirection == ResizeDirection::eLeft);

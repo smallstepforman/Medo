@@ -65,6 +65,7 @@ public:
 	void			OutputViewMouseMoved(const BPoint &point);
 	void			OutputViewZoomed(const float zoom_factor);
 	bool			KeyDownMessage(BMessage *msg);
+	bool			KeyUpMessage(BMessage *msg);
 
 	TimelinePlayer	*GetTimelinePlayer() {return fTimelinePlayer;}
 	TimelineEdit	*GetTimelineEdit() {return fTimelineEdit;}
@@ -85,6 +86,8 @@ private:
 	float				fEditViewScrollOffsetY;
 	int64				fCurrentFrame;
 	int32				fZoomSliderValue;
+	int32				fZoomKeyRestoreValue;
+	void				UpdateZoom();
 	void				SetTimeSliderLabels();
 	void				UpdateHorizontalScrollBar();
 	void				UpdateVerticalScrollBar();

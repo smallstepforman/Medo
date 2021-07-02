@@ -43,6 +43,7 @@ public:
 	void			FrameResized(float width, float height)		override;
 	
 	bool			KeyDownMessage(BMessage *msg);
+	bool			KeyUpMessage(BMessage *msg);
 	void			MouseDown(BPoint point)						override;
 	void			MouseMoved(BPoint point, uint32 transit, const BMessage *message) override;
 	void			MouseUp(BPoint point)						override;
@@ -72,6 +73,9 @@ private:
 	int64			fLeftFrameIndex;
 	float			fScrollViewOffsetY;
 	bool			fDrawAllVideoThumbnails;
+
+	bool			fKeyDownFilterActive;
+	int32			fKeyDownButtons;
 	
 	enum class State {eIdle, eMoveClip, eResizeClip, eMoveEffect, eResizeEffect, eTimelineScrub};
 	State			fState;
