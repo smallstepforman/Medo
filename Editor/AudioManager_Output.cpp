@@ -334,7 +334,7 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 				rc.output_rate = format.frame_rate;
 				rc.media_source = media_source;
 				fResamplerContext.push_back(rc);
-				printf("new ResamplerContext: %s (source=%0.2f, target=%0.2f\n", rc.media_source->GetFilename(), rc.input_rate, rc.output_rate);
+				printf("new ResamplerContext: %s (source=%0.2f, target=%0.2f\n", rc.media_source->GetFilename().String(), rc.input_rate, rc.output_rate);
 			}
 
 			target_samples_done = swr_convert(swr_ctx, &fProcessingBuffers[processing_buffer], kTargetNumberSamples, (const uint8 **)&audio_buffer, audio_end - audio_start);

@@ -271,7 +271,7 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
 		if (st != B_OK)
 		{
-			printf("Cannot seek to frame %ld, file=%s\n", video_frame, source->GetFilename());
+			printf("Cannot seek to frame %ld, file=%s\n", video_frame, source->GetFilename().String());
 			UnlockMediaKit();
 			if (!fQueueSemaphore->Lock())
 				return nullptr;
@@ -301,7 +301,7 @@ BBitmap * VideoManager :: GetFrameBitmap(MediaSource *source, const int64 frame_
 		} while ((st != B_OK) && (++attempt <= kMaxReadAttempts) && (video_track->CurrentFrame() < video_track->CountFrames()));
 		if (st != B_OK)
 		{
-			printf("Cannot read frame %ld, file=%s\n", video_frame, source->GetFilename());
+			printf("Cannot read frame %ld, file=%s\n", video_frame, source->GetFilename().String());
 			bitmap->Unlock();
 			UnlockMediaKit();
 			if (!fQueueSemaphore->Lock())
@@ -394,7 +394,7 @@ BBitmap * VideoManager :: CreateThumbnailBitmap(MediaSource *source, const int64
 	}
 	else
 	{
-		printf("VideoManager::GetThumbnailBitmap(%s, %ld) - cannot generate bitmap\n", source->GetFilename(), video_frame);
+		printf("VideoManager::GetThumbnailBitmap(%s, %ld) - cannot generate bitmap\n", source->GetFilename().String(), video_frame);
 	}
 	return out;
 }

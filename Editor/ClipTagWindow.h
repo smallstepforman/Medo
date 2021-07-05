@@ -14,14 +14,13 @@
 class BTextControl;
 class BTextView;
 class BMessage;
-class TimelineEdit;
 
 class ClipTagWindow : public BWindow
 {
 public:
-	enum CLIP_TAG_TYPE {CLIP_TAG, CLIP_NOTE};
+	enum Type {eClipTag, eNote, eSourceLabel};
 
-						ClipTagWindow(BPoint pos, CLIP_TAG_TYPE type, TimelineEdit *parent, const char *text);
+						ClipTagWindow(BPoint pos, Type type, BView *parent, const char *text);
 						~ClipTagWindow()				override;
 	void				MessageReceived(BMessage *msg)	override;
 	bool				QuitRequested()					override;		//	Close button
@@ -30,8 +29,8 @@ public:
 private:
 	BTextControl		*fTextControl;
 	BTextView			*fTextView;
-	CLIP_TAG_TYPE		fClipTagType;
-	TimelineEdit		*fParent;
+	Type				fClipTagType;
+	BView				*fParent;
 	BMessage			*fParentMessage;
 	bool				fReallyQuit;
 };

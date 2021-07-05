@@ -27,9 +27,10 @@
 
 struct SOURCE
 {
-	unsigned int 	id;
+	unsigned int				id;
 	MediaSource::MEDIA_TYPE		type;
-	std::string		filename;
+	std::string					filename;
+	std::string					label;
 };
 static const char *kMediaType[] = {"invalid", "video", "audio", "video_audio", "image"};
 static_assert(sizeof(kMediaType)/sizeof(char *) == MediaSource::NUMBER_MEDIA_TYPES, "sizeof(kMediaType) != MediaSource::NUMBER_MEDIA_TYPES");
@@ -175,6 +176,9 @@ const bool Project :: LoadProject(const char *data, const bool clear_media)
 			if (!v.HasMember("file") || !v["file"].IsString())
 				ERROR_EXIT("Missing attribute sources::file");
 			aSource.filename.assign(v["file"].GetString());
+			//	"label"
+			if (v.HasMember("label") && v["label"].IsString())
+				aSource.label.assign(v["label"].GetString());
 
 			FILE *file = fopen(aSource.filename.c_str(), "rb");
 			if (!file)
@@ -557,7 +561,9 @@ const bool Project :: LoadProject(const char *data, const bool clear_media)
 	//	Sources
 	for (auto &s : inSources)
 	{
-		MedoWindow::GetInstance()->AddMediaSource(s.filename.c_str());
+		MediaSource *source = MedoWindow::GetInstance()->AddMediaSource(s.filename.c_str());
+		if (!s.label.empty())
+			source->SetLabel(s.label.c_str());
 	}
 
 	//	Create tracks
@@ -638,7 +644,8 @@ const bool Project :: SaveProject(FILE *file)
 		SOURCE aSource;
 		aSource.id = source_id++;
 		aSource.type = s->GetMediaType();
-		aSource.filename =  s->GetFilename();
+		aSource.filename = s->GetFilename().String();
+		aSource.label = s->GetLabel().String();
 		outSources.push_back(aSource);
 	}
 	
@@ -767,6 +774,12 @@ const bool Project :: SaveProject(FILE *file)
 		sprintf(buffer, "\t\t\t\"type\": \"%s\",\n", kMediaType[s.type]);
 		fwrite(buffer, strlen(buffer), 1, file);
 		
+		if (!s.label.empty())
+		{
+			sprintf(buffer, "\t\t\t\"label\": \"%s\",\n", s.label.c_str());
+			fwrite(buffer, strlen(buffer), 1, file);
+		}
+
 		sprintf(buffer, "\t\t\t\"file\": \"%s\"\n", s.filename.c_str());
 		fwrite(buffer, strlen(buffer), 1, file);
 		

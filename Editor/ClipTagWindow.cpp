@@ -8,9 +8,11 @@
 
 #include <InterfaceKit.h>
 
-#include "TimelineEdit.h"
 #include "ClipTagWindow.h"
+#include "Language.h"
 #include "Project.h"
+#include "SourceListView.h"
+#include "TimelineEdit.h"
 
 static const uint32_t	kMsgButtonOk		= 'cwm1';
 static const uint32_t	kMsgButtonCancel	= 'cwm2';
@@ -27,6 +29,7 @@ static const TAG_WINDOW_DEFINITIONS kTagWindow[] =
 {
 	{320,	120,	"Edit tag",		300, 32},
 	{320,	220,	"Edit note",	300, 128},
+	{320,	120,	"Edit label",	300, 32},
 };
 
 /*	FUNCTION:		ClipTagWindow :: ClipTagWindow
@@ -37,7 +40,7 @@ static const TAG_WINDOW_DEFINITIONS kTagWindow[] =
 	RETURN:			n/a
 	DESCRIPTION:	Constructor
 */
-ClipTagWindow :: ClipTagWindow(BPoint pos, CLIP_TAG_TYPE type, TimelineEdit *parent, const char *text)
+ClipTagWindow :: ClipTagWindow(BPoint pos, Type type, BView *parent, const char *text)
 	: BWindow(BRect(pos.x, pos.y, pos.x + kTagWindow[type].window_width, pos.y+kTagWindow[type].window_height),
 			  kTagWindow[type].window_title, B_FLOATING_WINDOW, B_WILL_ACCEPT_FIRST_CLICK),
 	  fClipTagType(type), fParent(parent), fReallyQuit(false)
@@ -51,33 +54,38 @@ ClipTagWindow :: ClipTagWindow(BPoint pos, CLIP_TAG_TYPE type, TimelineEdit *par
 	fParentMessage->AddString("tag", "");
 
 	//	Text control (single line)
-	if (type == CLIP_TAG)
+	switch (type)
 	{
-		fTextControl = new BTextControl(BRect(10, 10, 10+kTagWindow[CLIP_TAG].text_width, 10+kTagWindow[CLIP_TAG].text_height),
-							  "fTextControl", nullptr, text, fParentMessage);
-		view->AddChild(fTextControl);
-		fTextControl->SetTarget(nullptr, this);
-		fTextView = nullptr;
-	}
-	else
-	{	//	Text view (multiline)
-		fTextView = new BTextView(BRect(10, 10, 10+kTagWindow[CLIP_NOTE].text_width, 10+kTagWindow[CLIP_NOTE].text_height),
-							  "fTextView", BRect(0, 0, kTagWindow[CLIP_NOTE].text_width, kTagWindow[CLIP_NOTE].text_height), B_FOLLOW_LEFT_TOP);
-		fTextView->SetText(text);
-		view->AddChild(fTextView);
-		fTextControl = nullptr;
+		case Type::eClipTag:
+		case Type::eSourceLabel:
+			fTextControl = new BTextControl(BRect(10, 10, 10+kTagWindow[type].text_width, 10+kTagWindow[type].text_height),
+									  "fTextControl", nullptr, text, fParentMessage);
+			view->AddChild(fTextControl);
+			fTextControl->SetTarget(nullptr, this);
+			fTextView = nullptr;
+			break;
+		case Type::eNote:
+			//	Text view (multiline)
+			fTextView = new BTextView(BRect(10, 10, 10+kTagWindow[type].text_width, 10+kTagWindow[type].text_height),
+								  "fTextView", BRect(0, 0, kTagWindow[type].text_width, kTagWindow[type].text_height), B_FOLLOW_LEFT_TOP);
+			fTextView->SetText(text);
+			view->AddChild(fTextView);
+			fTextControl = nullptr;
+			break;
+		default:
+			assert(0);
 	}
 
 	//	Cancel
 	BButton *button_cancel = new BButton(BRect(kTagWindow[type].window_width - 170, kTagWindow[type].window_height - 50,
 											   kTagWindow[type].window_width - 90, kTagWindow[type].window_height - 20),
-											"button_cancel", "Cancel", new BMessage(kMsgButtonCancel));
+											"button_cancel", GetText(TXT_CANCEL), new BMessage(kMsgButtonCancel));
 	view->AddChild(button_cancel);
 
 	//	OK
 	BButton *button_ok = new BButton(BRect(kTagWindow[type].window_width - 80, kTagWindow[type].window_height - 50,
 										   kTagWindow[type].window_width - 20, kTagWindow[type].window_height - 20),
-											"button_ok", "OK", new BMessage(kMsgButtonOk));
+											"button_ok", GetText(TXT_OK), new BMessage(kMsgButtonOk));
 	view->AddChild(button_ok);
 }
 	
@@ -128,21 +136,42 @@ void ClipTagWindow :: MessageReceived(BMessage *msg)
 	switch (msg->what)
 	{
 		case kMsgButtonOk:
-			if (fClipTagType == CLIP_TAG)
+		{
+			switch (fClipTagType)
 			{
-				fParentMessage->what = TimelineEdit::eMsgClipEditTagComplete;
-				fParentMessage->ReplaceString("tag", fTextControl->Text());
-			}
-			else
-			{
-				fParentMessage->what = TimelineEdit::eMsgClipEditNoteComplete;
-				fParentMessage->ReplaceString("tag", fTextView->Text());
+				case Type::eClipTag:
+					fParentMessage->what = TimelineEdit::eMsgClipEditTagComplete;
+					fParentMessage->ReplaceString("tag", fTextControl->Text());
+					break;
+				case Type::eSourceLabel:
+					fParentMessage->what = SourceListView::SourceListMessages::eMsgEditLabelComplete;
+					fParentMessage->ReplaceString("tag", fTextControl->Text());
+					break;
+				case Type::eNote:
+					fParentMessage->what = TimelineEdit::eMsgClipEditNoteComplete;
+					fParentMessage->ReplaceString("tag", fTextView->Text());
+					break;
+				default:
+					assert(0);
 			}
 			fParent->Window()->PostMessage(fParentMessage, fParent);
 			break;
+		}
 
 		case kMsgButtonCancel:
-			fParentMessage->what = TimelineEdit::eMsgClipEditTagCancelled;
+			switch (fClipTagType)
+			{
+				case Type::eClipTag:
+				case Type::eNote:
+					fParentMessage->what = TimelineEdit::eMsgClipEditTagCancelled;
+					break;
+				case Type::eSourceLabel:
+					fParentMessage->what = SourceListView::SourceListMessages::eMsgEditLabelCancel;
+					break;
+				default:
+					assert(0);
+					break;
+			}
 			fParent->Window()->PostMessage(fParentMessage, fParent);
 			break;
 

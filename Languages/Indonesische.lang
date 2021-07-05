@@ -159,6 +159,12 @@
 "Menerapkan",
 "Membatalkan",
 
+//	Media Source Context
+"Info Berkas",
+"Ubah Label",
+"Hapus Media",
+"Hapus Media (termasuk semua Referensi)",
+
 //	Font
 "Pilih Font",
 "Ukuran",

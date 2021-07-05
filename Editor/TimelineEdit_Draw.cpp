@@ -190,6 +190,9 @@ void TimelineEdit :: DrawTrack(TimelineTrack *track, BRect frame)
 	if (fDrawAllVideoThumbnails)
 		gVideoManager->ClearPendingThumbnails();
 
+	font_height text_height;
+	be_plain_font->GetHeight(&text_height);
+
 	//	Now draw tracks
 	int32 clip_index = 0;
 	for (auto &i : track->mClips)
@@ -310,6 +313,33 @@ void TimelineEdit :: DrawTrack(TimelineTrack *track, BRect frame)
 			}
 		}
 
+		//	Indicate left/right clip boundaries (relative to source media and visible viewport)
+		SetHighColor(255, 255, 255);
+		if (left > i.mTimelineFrameStart)
+		{
+			//	left not visible
+			MovePenTo(BPoint(clip_frame.left, clip_frame.top+0.5f*clip_frame.Height()));
+			DrawString("<");
+		}
+		else if (i.mSourceFrameStart > 0)
+		{
+			//	Clip can be resized left
+			MovePenTo(BPoint(clip_frame.left, clip_frame.top+0.5f*clip_frame.Height()));
+			DrawString("*");
+		}
+		if (right < i.mTimelineFrameStart + i.Duration())
+		{
+			//	Right not visible
+			MovePenTo(BPoint(clip_frame.right - (0.5f*text_height.ascent), clip_frame.top+0.5f*clip_frame.Height()));
+			DrawString(">");
+		}
+		else if (i.mSourceFrameEnd < i.mMediaSource->GetTotalDuration())
+		{
+			//	Right can be resized right
+			MovePenTo(BPoint(clip_frame.right - (0.5f*text_height.ascent), clip_frame.top+0.5f*clip_frame.Height()));
+			DrawString("*");
+		}
+
 		//	Tag
 		if (fClipTagsVisible && !i.mTag.IsEmpty())
 		{
@@ -318,8 +348,6 @@ void TimelineEdit :: DrawTrack(TimelineTrack *track, BRect frame)
 			BString tag(i.mTag);
 			TruncateString(&tag, B_TRUNCATE_MIDDLE, clip_frame.Width() - 2);
 			float text_width = StringWidth(tag.String());
-			font_height text_height;
-			be_plain_font->GetHeight(&text_height);
 			float text_xpos = mid - 0.5f*text_width;
 			if (text_xpos < 0.0f)
 				text_xpos = 0.0f;

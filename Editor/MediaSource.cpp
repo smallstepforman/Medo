@@ -37,7 +37,7 @@ MediaSource :: MediaSource(const char *filename)
 {
 	assert(filename != nullptr);
 		
-	fFilename.assign(filename);
+	fFilename.SetTo(filename);
 	
 	//	Picture
 	fBitmap = BTranslationUtils::GetBitmap(filename);
@@ -410,7 +410,7 @@ void MediaSource :: CreateSecondaryMediaFile(const char *filename)
 */
 void MediaSource :: CreateFileInfoString(BString *aString)
 {
-	aString->SetTo(fFilename.c_str());
+	aString->SetTo(fFilename);
 
 	if (fVideoTrack)
 	{
@@ -447,4 +447,14 @@ void MediaSource :: CreateFileInfoString(BString *aString)
 		picture_text.SetToFormat("\n\nSize: %d x %d\n", (int32)GetVideoWidth(), (int32)GetVideoHeight());
 		aString->Append(picture_text);
 	}
+}
+
+void MediaSource :: SetLabel(const char *label)
+{
+	fLabel.SetTo(label);
+}
+
+const bigtime_t MediaSource :: GetTotalDuration() const
+{
+	return MAX(fVideoDuration, fAudioDuration);
 }

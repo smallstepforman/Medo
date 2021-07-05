@@ -58,7 +58,7 @@ AudioCache :: ~AudioCache()
 */
 void AudioCache :: AudioCache::AUDIO_ITEM::PrintToStream()
 {
-	DEBUG("[AudioCache] source(%s), audio_start(%ld), audio_end(%ld, buffer(%p), buffer_size(%ld)\n", source->GetFilename(), audio_start, audio_end, buffer, buffer_size);
+	DEBUG("[AudioCache] source(%s), audio_start(%ld), audio_end(%ld, buffer(%p), buffer_size(%ld)\n", source->GetFilename().String(), audio_start, audio_end, buffer, buffer_size);
 }
 
 /*	FUNCTION:		AudioCache :: ReadFile
@@ -105,7 +105,7 @@ status_t AudioCache :: ReadFile(uint8 *destination, const MediaSource *source, i
 	while ((st != B_OK) && (++attempt <= kMaxReadAttempts));
 	if (st != B_OK)
 	{
-		DEBUG("AudioCache::ReadFile() Cannot seek to frame %ld, file=%s\n", requested_start, source->GetFilename());
+		DEBUG("AudioCache::ReadFile() Cannot seek to frame %ld, file=%s\n", requested_start, source->GetFilename().String());
 		gVideoManager->UnlockMediaKit();
 		return st;
 	}
@@ -199,7 +199,7 @@ uint8 * AudioCache :: GetAudioBufferLocked(const MediaSource *source, const int6
 
 	const size_t kSampleSize = source->GetAudioSampleSize();
 
-	DEBUG("AudioCache::GetAudioBufferLocked() source=%s, start=%ld, end=%ld\n", source->GetFilename(), audio_start, audio_end);
+	DEBUG("AudioCache::GetAudioBufferLocked() source=%s, start=%ld, end=%ld\n", source->GetFilename().String(), audio_start, audio_end);
 	for (std::deque<AUDIO_ITEM>::iterator i = fAudioCache.begin(); i != fAudioCache.end(); i++)
 	{
 		if ((*i).source == source)

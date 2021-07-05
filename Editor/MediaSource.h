@@ -30,10 +30,12 @@ public:
 					MediaSource(const char *filename);
 					~MediaSource();
 	void			CreateFileInfoString(BString *aString);
+	void			SetLabel(const char *label);
 					
 private:
 	MEDIA_TYPE		fMediaType;
-	std::string		fFilename;
+	BString			fFilename;
+	BString			fLabel;
 	
 	BBitmap			*fBitmap;
 	BMediaFile		*fMediaFile;
@@ -67,8 +69,10 @@ private:
 	
 //	Media source access functions	
 public:
-	const char			*GetFilename() const			{return fFilename.c_str();}
+	const BString		&GetFilename() const			{return fFilename;}
+	const BString		&GetLabel() const				{return fLabel;}
 	const MEDIA_TYPE	GetMediaType() const			{return fMediaType;}
+	const bigtime_t		GetTotalDuration() const;
 
 	BBitmap				*GetBitmap()					{return fBitmap;}
 	BMediaTrack			*GetVideoTrack() const 			{return fVideoTrack;}

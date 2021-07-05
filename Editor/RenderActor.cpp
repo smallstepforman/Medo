@@ -332,7 +332,7 @@ BBitmap * RenderActor :: GetOutputFrame(int64 frame_idx)
 	{
 		if (i.clip)
 		{
-			DEBUG("   %s (Framebuffer=%d)\n", i.clip->mMediaSource->GetFilename(), i.secondary_framebuffer);
+			DEBUG("   %s (Framebuffer=%d)\n", i.clip->mMediaSource->GetFilename().String(), i.secondary_framebuffer);
 		}
 		else
 		{
@@ -361,7 +361,7 @@ BBitmap * RenderActor :: GetOutputFrame(int64 frame_idx)
 			track_timelines.pop_front();
 		}
 
-		DEBUG("   >>> %s\n", item.clip ? item.clip->mMediaSource->GetFilename() : item.effect->mEffectNode->GetEffectName());
+		DEBUG("   >>> %s\n", item.clip ? item.clip->mMediaSource->GetFilename().String() : item.effect->mEffectNode->GetEffectName());
 
 		if (item.clip)
 		{
@@ -403,7 +403,7 @@ BBitmap * RenderActor :: GetOutputFrame(int64 frame_idx)
 
 			}
 			else
-				printf("RenderActor::GetOutputFrame(%ld) - cannot retrieve frame File: %s\n", frame_idx, item.clip->mMediaSource->GetFilename());
+				printf("RenderActor::GetOutputFrame(%ld) - cannot retrieve frame File: %s\n", frame_idx, item.clip->mMediaSource->GetFilename().String());
 		}
 		else
 		{

@@ -105,7 +105,7 @@ MediaSource	* Project :: AddMediaSource(const char *source_file, bool &is_new)
 	//	Check for duplicates
 	for (auto i : mMediaSources)
 	{
-		if (strcmp(i->GetFilename(), source_file) == 0)
+		if (i->GetFilename().Compare(source_file) == 0)
 		{
 			//printf("Project::AddMediaSource(%s) - duplicate\n", source_file);
 			is_new = false;
@@ -340,7 +340,7 @@ void Project :: DebugClips(const size_t track_index)
 			i.mSourceFrameEnd,
 			i.Duration(),
 			i.GetTimelineEndFrame(),
-			i.mMediaSource->GetFilename());
+			i.mMediaSource->GetFilename().String());
 		clip_idx++;
 	}	
 }

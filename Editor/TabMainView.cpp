@@ -36,7 +36,7 @@ TabMainView :: TabMainView(BRect tab_frame)
 	: BTabView(tab_frame, "TabView", B_WIDTH_FROM_WIDEST, B_FOLLOW_NONE)
 {
 	SetViewColor(B_TRANSPARENT_COLOR);
-	auto text_func = [](BListItem *item){return static_cast<SourceListItem *>(item)->GetMediaSource()->GetFilename();};
+	auto text_func = [](BListItem *item){return static_cast<SourceListItem *>(item)->GetMediaSource()->GetFilename().String();};
 	
 	//	TAB_SOURCE
 	fSourceView = new SourceListView(BRect(tab_frame.left, tab_frame.top, tab_frame.right, tab_frame.bottom - TabHeight()), "SourceTab", text_func);

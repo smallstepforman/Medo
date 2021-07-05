@@ -14,6 +14,7 @@
 #include <interface/GraphicsDefs.h>
 #endif
 
+#include "ClipTagWindow.h"
 #include "ImageUtility.h"
 #include "Language.h"
 #include "MediaSource.h"
@@ -113,7 +114,7 @@ void SourceListItem :: Update(BView *parent, const BFont *font)
 {
 	const float kFontFactor = be_plain_font->Size()/20.0f;
 
-	SetWidth(kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fMediaSource->GetFilename()));
+	SetWidth(kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing() + font->StringWidth(fMediaSource->GetFilename().String()));
 	SetHeight(kThumbnailHeight*kFontFactor + 2*be_control_look->DefaultLabelSpacing());
 	
 	font_height h;
@@ -179,8 +180,17 @@ void SourceListItem :: DrawItem(BView *parent, BRect frame, bool erase_bg)
 	BString aString(fMediaSource->GetFilename());
 	int trunc = aString.FindLast('/') + 1;
 	BString line1(aString.RemoveChars(0, trunc));
-	aString.SetTo(fMediaSource->GetFilename());
-	BString line2(aString.Truncate(trunc));
+
+	BString line2;
+	if (fMediaSource->GetLabel().IsEmpty())
+	{
+		aString.SetTo(fMediaSource->GetFilename());
+		line2.SetTo(aString.Truncate(trunc));
+	}
+	else
+	{
+		line2.SetTo(fMediaSource->GetLabel());
+	}
 	parent->MovePenTo(kThumbnailWidth*kFontFactor + frame.left + 3*offset, frame.top + fBaselineOffset);
 	be_plain_font->TruncateString(&line1, B_TRUNCATE_MIDDLE, frame.Width() - (kThumbnailWidth*kFontFactor + 3*be_control_look->DefaultLabelSpacing()));
 	parent->DrawString(line1);
@@ -208,12 +218,6 @@ public:
 	SourceListView
 **********************************/
 
-enum kSourceListMessages
-{
-	kMsgGetInfo			= 'slvm',
-	kMsgRemoveSource,
-};
-
 /*	FUNCTION:		SourceListView :: SourceListView
 	ARGS:			frame
 					name
@@ -239,6 +243,8 @@ SourceListView :: SourceListView(BRect frame, const char *name, std::function<co
 	//	Source selected message
 	fMsgNotifySourceSelected = new BMessage(MedoWindow::eMsgActionTabSourceSelected);
 	fMsgNotifySourceSelected->AddPointer("MediaSource", nullptr);
+
+	fClipTagWindow = nullptr;
 }
 
 /*	FUNCTION:		SourceListView :: ~SourceListView
@@ -250,6 +256,9 @@ SourceListView :: ~SourceListView()
 {
 	delete fMsgDragDrop;
 	delete fMsgNotifySourceSelected;
+
+	if (fClipTagWindow)
+		fClipTagWindow->Terminate();
 }
 
 /*	FUNCTION:		SourceListView :: SelectionChanged
@@ -277,6 +286,8 @@ void SourceListView :: SelectionChanged()
 */
 void SourceListView :: MouseDown(BPoint point)
 {
+	fMouseDownPoint = point;
+
 	if (!Window()->IsActive())
 		Window()->Activate();
 
@@ -382,16 +393,19 @@ void SourceListView :: ContextMenu(BPoint point)
 	BPopUpMenu *aPopUpMenu = new BPopUpMenu("ContextMenuSourceList", false, false);
 	aPopUpMenu->SetAsyncAutoDestruct(true);
 
-	BMenuItem *aMenuItem_1 = new BMenuItem("File Info", new BMessage(kMsgGetInfo));
-	aPopUpMenu->AddItem(aMenuItem_1);
+	BMenuItem *aMenuItem = new BMenuItem(GetText(TXT_SOURCE_FILE_INFO), new BMessage(SourceListMessages::eMsgGetInfo));
+	aPopUpMenu->AddItem(aMenuItem);
+
+	aMenuItem = new BMenuItem(GetText(TXT_SOURCE_EDIT_LABEL), new BMessage(SourceListMessages::eMsgEditLabel));
+	aPopUpMenu->AddItem(aMenuItem);
 
 	int32 index = CurrentSelection();
 	assert(index >= 0);
 	SourceListItem *item = (SourceListItem *)ItemAt(index);
 	MediaSource *media_source = item->GetMediaSource();
-	BMenuItem *aMenuItem_2 = new BMenuItem(gProject->IsMediaSourceUsed(media_source) ? "Remove Media (including all References)" : "Remove Media",
-										   new BMessage(kMsgRemoveSource));
-	aPopUpMenu->AddItem(aMenuItem_2);
+	aMenuItem = new BMenuItem(gProject->IsMediaSourceUsed(media_source) ? GetText(TXT_SOURCE_REMOVE_MEDIA_AND_REFERENCES) : GetText(TXT_SOURCE_REMOVE_MEDIA),
+										   new BMessage(SourceListMessages::eMsgRemoveSource));
+	aPopUpMenu->AddItem(aMenuItem);
 
 	aPopUpMenu->SetTargetForItems(this);
 	aPopUpMenu->Go(point, true /*notify*/, false /*stay open when mouse away*/, true /*async*/);
@@ -406,7 +420,7 @@ void SourceListView :: MessageReceived(BMessage *msg)
 {
 	switch (msg->what)
 	{
-		case kMsgGetInfo:
+		case SourceListMessages::eMsgGetInfo:
 		{
 			int32 index = CurrentSelection();
 			if (index < 0)
@@ -416,11 +430,46 @@ void SourceListView :: MessageReceived(BMessage *msg)
 
 			BString aString;
 			media_source->CreateFileInfoString(&aString);
-			BAlert *alert = new BAlert("FileInfo", aString.String(), "OK");
+			BAlert *alert = new BAlert("File Info", aString.String(), GetText(TXT_OK));
 			alert->Go();
 			break;
 		}
-		case kMsgRemoveSource:
+		case SourceListMessages::eMsgEditLabel:
+		{
+			BPoint mouse_pos = fMouseDownPoint;
+			ConvertToScreen(&mouse_pos);
+
+			int32 index = CurrentSelection();
+			if (index < 0)
+				return;
+			SourceListItem *item = (SourceListItem *)ItemAt(index);
+			MediaSource *media_source = item->GetMediaSource();
+
+			fClipTagWindow = new ClipTagWindow(mouse_pos, ClipTagWindow::Type::eSourceLabel, this, media_source->GetLabel().String());	//	TODO design mechanism to close window
+			fClipTagWindow->Show();
+			break;
+		}
+		case SourceListMessages::eMsgEditLabelComplete:
+		{
+			const char *aString = nullptr;
+			if (msg->FindString("tag", &aString) == B_OK)
+			{
+				int32 index = CurrentSelection();
+				if (index < 0)
+					return;
+				SourceListItem *item = (SourceListItem *)ItemAt(index);
+				MediaSource *media_source = item->GetMediaSource();
+				media_source->SetLabel(aString);
+			}
+			[[fallthrough]];
+		}
+		case SourceListMessages::eMsgEditLabelCancel:
+			fClipTagWindow->Terminate();
+			fClipTagWindow = nullptr;
+			Invalidate();
+			break;
+
+		case SourceListMessages::eMsgRemoveSource:
 		{
 			int32 index = CurrentSelection();
 			if (index < 0)

@@ -19,6 +19,10 @@ Medo can edit UHD 4K videos, export to any Haiku supported codec, is optimised f
 An SDK allows 3rd party developers to create Addons and Plugins
 
 Changelog in R1.0.0 - Beta 4:
+- media source preview
+- media source label
+- quick zoom with z key
+- show clip boundaries
 - multi chroma key
 - srga/gamm plugin
 - IIR Audio filter

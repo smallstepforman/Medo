@@ -18,6 +18,8 @@
 class BBitmap;
 class MediaSource;
 
+class ClipTagWindow;
+
 #define SOURCE_LIST_VIEW_TOOLTIP		0
 
 //=======================
@@ -47,10 +49,13 @@ class SourceListView : public ListViewToolTip
 class SourceListView : public BListView
 #endif
 {
-	BMessage	*fMsgDragDrop;				//	TODO share with ControlSource
-	BMessage	*fMsgNotifySourceSelected;
-	bool		fInstructionItemVisible;
-	void		ContextMenu(BPoint point);
+	BMessage		*fMsgDragDrop;				//	TODO share with ControlSource
+	BMessage		*fMsgNotifySourceSelected;
+	bool			fInstructionItemVisible;
+	ClipTagWindow	*fClipTagWindow;
+	BPoint			fMouseDownPoint;
+
+	void			ContextMenu(BPoint point);
 
 public:
 				SourceListView(BRect frame, const char *name, std::function<const char *(BListItem *)> func);
@@ -62,6 +67,15 @@ public:
 	bool		InitiateDrag(BPoint point, int32 index, bool wasSelected) override;
 	bool		AddItem(BListItem* item)		override;
 	void		RemoveAllMediaSources();
+
+	enum SourceListMessages
+	{
+		eMsgGetInfo			= 'slvm',
+		eMsgEditLabel,
+		eMsgEditLabelComplete,
+		eMsgEditLabelCancel,
+		eMsgRemoveSource,
+	};
 };
 
 #endif	//#ifndef _SOURCE_LIST_VIEW_H_

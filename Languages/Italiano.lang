@@ -159,6 +159,12 @@
 "Applica",
 "Cancella",
 
+//	Media Source Context
+"Informazioni sul file",
+"Modifica etichetta",
+"Rimuovi supporto",
+"Rimuovi supporto (inclusi tutti i riferimenti)",
+
 //	Font
 "Scegli un Font",
 "Dimensione",

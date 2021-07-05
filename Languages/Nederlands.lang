@@ -159,6 +159,12 @@
 "Toepassen",
 "Annuleer",
 
+//	Media Source Context
+"Bestandsinformatie",
+"Label bewerken",
+"Verwijder media",
+"Media verwijderen (inclusief alle referenties)",
+
 //	Font
 "Kies een Font",
 "Grootte",

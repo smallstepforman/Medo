@@ -85,7 +85,7 @@ BBitmap * Project :: GetOutputFrame(int64 frame_idx, MedoOpenGlView *gl_view)
 	DEBUG("*** Output ***\n");
 	for (auto i : frame_items)
 	{
-		DEBUG("   %s\n", i.clip ? i.clip->mMediaSource->GetFilename() : i.effect->mEffectNode->GetEffectName());
+		DEBUG("   %s\n", i.clip ? i.clip->mMediaSource->GetFilename().String() : i.effect->mEffectNode->GetEffectName());
 	}
 
 	BBitmap *frame_bitmap = bitmap;
@@ -97,7 +97,7 @@ BBitmap * Project :: GetOutputFrame(int64 frame_idx, MedoOpenGlView *gl_view)
 		const FRAME_ITEM &item = frame_items.front();
 		frame_items.pop_front();
 
-		DEBUG("%s\n", item.clip ? item.clip->mMediaSource->GetFilename() : item.effect->mEffectNode->GetEffectName());
+		DEBUG("%s\n", item.clip ? item.clip->mMediaSource->GetFilename().String() : item.effect->mEffectNode->GetEffectName());
 
 		if (item.clip)
 		{

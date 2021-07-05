@@ -159,6 +159,12 @@
 "Aplicar",
 "Cancelar",
 
+//	Media Source Context
+"Informações do arquivo",
+"Editar etiqueta",
+"Remover mídia",
+"Remover mídia (incluindo todas as referências)",
+
 //	Font
 "Selecione um tipo de letra",
 "Tamanho",

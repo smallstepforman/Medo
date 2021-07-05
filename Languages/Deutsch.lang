@@ -158,6 +158,12 @@
 "Zustimmen",
 "Abbrechen",
 
+//	Media Source Context
+"Dateiinformation",
+"Etikett bearbeiten",
+"Medien entfernen",
+"Medien entfernen (einschließlich aller Referenzen)",
+
 //	Font
 "Schriftart auswählen",
 "Größe",

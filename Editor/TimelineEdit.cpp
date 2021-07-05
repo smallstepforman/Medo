@@ -324,7 +324,7 @@ void TimelineEdit :: MessageReceived(BMessage *msg)
 		{
 			BPoint mouse_pos = fMouseDownPoint;
 			ConvertToScreen(&mouse_pos);
-			fClipTagWindow = new ClipTagWindow(mouse_pos, ClipTagWindow::CLIP_TAG, this, fActiveClip.track->mClips[fActiveClip.clip_idx].mTag.String());	//	TODO design mechanism to close window
+			fClipTagWindow = new ClipTagWindow(mouse_pos, ClipTagWindow::Type::eClipTag, this, fActiveClip.track->mClips[fActiveClip.clip_idx].mTag.String());	//	TODO design mechanism to close window
 			fClipTagWindow->Show();
 			gRenderActor->AsyncInvalidateTimelineEdit();
 			break;
@@ -346,7 +346,7 @@ void TimelineEdit :: MessageReceived(BMessage *msg)
 		{
 			BPoint mouse_pos = fMouseDownPoint;
 			ConvertToScreen(&mouse_pos);
-			fClipTagWindow = new ClipTagWindow(mouse_pos, ClipTagWindow::CLIP_NOTE, this, fActiveNote.track->mNotes[fActiveNote.note_idx].mText.String());	//	TODO design mechanism to close window
+			fClipTagWindow = new ClipTagWindow(mouse_pos, ClipTagWindow::Type::eNote, this, fActiveNote.track->mNotes[fActiveNote.note_idx].mText.String());	//	TODO design mechanism to close window
 			fClipTagWindow->Show();
 			gRenderActor->AsyncInvalidateTimelineEdit();
 			break;

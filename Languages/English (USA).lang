@@ -159,6 +159,12 @@
 "Apply",
 "Cancel",
 
+//	Media Source Context
+"File Info",
+"Edit Label",
+"Remove Media",
+"Remove Media (including all References)",
+
 //	Font
 "Choose a Font",
 "Size",
