@@ -42,7 +42,7 @@ static const TAG_WINDOW_DEFINITIONS kTagWindow[] =
 */
 ClipTagWindow :: ClipTagWindow(BPoint pos, Type type, BView *parent, const char *text)
 	: BWindow(BRect(pos.x, pos.y, pos.x + kTagWindow[type].window_width, pos.y+kTagWindow[type].window_height),
-			  kTagWindow[type].window_title, B_FLOATING_WINDOW, B_WILL_ACCEPT_FIRST_CLICK),
+			  kTagWindow[type].window_title, B_FLOATING_WINDOW, B_WILL_ACCEPT_FIRST_CLICK | B_NOT_CLOSABLE | B_NOT_ZOOMABLE),
 	  fClipTagType(type), fParent(parent), fReallyQuit(false)
 {
 

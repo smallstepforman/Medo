@@ -49,6 +49,9 @@ void AudioManager :: PlayPreview(const int64 start_frame, const int64 end_frame,
 			fPreviewStartFrame = start_frame;
 		fPreviewEndFrame = end_frame;
 		fPreviewSource = preview_source;
+
+		//printf("--- AudioManager::PlayPreview(start=%ld, end=%ld), fPreviewStartFrame=%ld\n\n", start_frame, end_frame, fPreviewStartFrame);
+
 		fSoundPlayer->SetHasData(true);
 		release_sem(fCacheSemaphore);
 	}
@@ -143,7 +146,7 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 		preview_clip.mSourceFrameEnd = fPreviewSource->GetAudioDuration();
 		preview_clip.mTimelineFrameStart = 0;
 
-		TRACK_CLIP aClip;
+		TRACK_CLIP aClip = {};
 		aClip.clip = &preview_clip;
 		track_clips.push_back(aClip);
 	}
@@ -197,7 +200,7 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 	int track_clip_index = 0;
 	int processing_buffer = APB_1;
 
-	for (auto c : track_clips)
+	for (auto &c : track_clips)
 	{
 #if DEBUG_TOTAL_OUT
 	size_t total_output = 0;
@@ -292,20 +295,33 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 
 		//  Resampling
 		int64 target_samples_done;
+		int resampler_idx = 0;
 		if (format.frame_rate != media_source->GetAudioFrameRate())
 		{
 			//	Find existing context
 			SwrContext *swr_ctx = nullptr;
-			for (auto &i : fResamplerContext)
+			for (std::deque<ResamplerContext>::iterator i = fResamplerContext.begin(); i != fResamplerContext.end(); i++)
 			{
-				if ((i.input_rate == media_source->GetAudioFrameRate()) &&
-					(i.output_rate == format.frame_rate) &&
-					(i.media_source == media_source))
+				int64 start_delta = (*i).audio_frame - audio_start;
+				if (((*i).input_rate == media_source->GetAudioFrameRate()) &&
+					((*i).output_rate == format.frame_rate) &&
+					((*i).media_source == media_source) &&
+					(start_delta > -4096) && (start_delta < 4096))
 				{
-					swr_ctx = i.context;
+					swr_ctx = (*i).context;
+					if (resampler_idx > 16)
+					{
+						ResamplerContext ctx = *i;
+						fResamplerContext.erase(i);
+						fResamplerContext.push_front(ctx);
+						resampler_idx = 0;
+					}
 					break;
 				}
+				else
+					++resampler_idx;
 			}
+
 			if (swr_ctx == nullptr)
 			{
 				swr_ctx = swr_alloc();
@@ -333,11 +349,20 @@ const int64	AudioManager :: GetOutputBuffer(const int64 start_frame, const int64
 				rc.input_rate = media_source->GetAudioFrameRate();
 				rc.output_rate = format.frame_rate;
 				rc.media_source = media_source;
-				fResamplerContext.push_back(rc);
-				printf("new ResamplerContext: %s (source=%0.2f, target=%0.2f\n", rc.media_source->GetFilename().String(), rc.input_rate, rc.output_rate);
+				fResamplerContext.push_front(rc);
+				resampler_idx = 0;
+				if (fResamplerContext.size() > 128)
+				{
+					swr_free(&fResamplerContext[fResamplerContext.size() - 1].context);
+					fResamplerContext.pop_back();
+				}
+#if 0
+				printf("new ResamplerContext: %s (source=%0.2f, target=%0.2f) audio_start=%ld\n", rc.media_source->GetFilename().String(), rc.input_rate, rc.output_rate, audio_start);
+#endif
 			}
-
 			target_samples_done = swr_convert(swr_ctx, &fProcessingBuffers[processing_buffer], kTargetNumberSamples, (const uint8 **)&audio_buffer, audio_end - audio_start);
+			fResamplerContext[resampler_idx].audio_frame = audio_end;
+
 			if (target_samples_done < 0)
 			{
 				fprintf(stderr, "Error while converting\n");

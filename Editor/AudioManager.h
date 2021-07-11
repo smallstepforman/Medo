@@ -52,8 +52,9 @@ private:
 		float			input_rate;
 		float			output_rate;
 		MediaSource		*media_source;
+		int64_t			audio_frame;
 	};
-	std::vector<ResamplerContext>	fResamplerContext;
+	std::deque<ResamplerContext>	fResamplerContext;
 
 	void			ConvertChannels(const int out_channels, uint8 *destination,
 									const int in_channels, uint8_t *source,
