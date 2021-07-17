@@ -394,7 +394,7 @@ void TimelinePosition :: Draw(BRect frame)
 			SetHighColor(255, 255, 0);
 			SetLowColor(192, 192, 192);
 			SetPenSize(2.0f);
-			float px = (fKeyframeMarkers[i]-visible_left)/fFramesPixel + 4;
+			float px = (fKeyframeMarkers[i]-visible_left)/fFramesPixel;
 			const pattern p = {255, 255, 0, 0, 0, 0, 0, 0};
 			StrokeLine(BPoint(px, 38), BPoint(px, bound.bottom - 2), p);
 			SetPenSize(6.0f);
@@ -409,7 +409,7 @@ void TimelinePosition :: Draw(BRect frame)
 	if ((fCurrentPosition >= visible_left) && (fCurrentPosition <= visible_right))
 	{
 		//	Line
-		float posx = (fCurrentPosition-visible_left)/fFramesPixel + 4;
+		float posx = (fCurrentPosition-visible_left)/fFramesPixel;
 		SetHighColor(212, 32, 32);
 		SetPenSize(2.0f);
 		StrokeLine(BPoint(posx, 0), BPoint(posx, bound.bottom - 2));
@@ -466,7 +466,7 @@ void TimelinePosition :: InitTimelineLabels()
 	int64 xpos = 0;
 	int64 mod = left_frame_idx%kZoomTiming[fZoomTimingIndex].frames_tick;
 	int64 display_time = left_frame_idx - mod;
-	const float dx = (kZoomTiming[fZoomTimingIndex].frames_tick / fFramesPixel) / kZoomTiming[fZoomTimingIndex].number_subticks;
+	const double dx = (kZoomTiming[fZoomTimingIndex].frames_tick / fFramesPixel) / kZoomTiming[fZoomTimingIndex].number_subticks;
 	MARK aMark;
 
 	//	Position left most label
@@ -490,7 +490,7 @@ void TimelinePosition :: InitTimelineLabels()
 	LABEL aLabel;
 	while (xpos < frame.Width())
 	{
-		int64 round_factor = kFramesSecond/(2.0f*gProject->mResolution.frame_rate);
+		int64 round_factor = kFramesSecond/(2.0*gProject->mResolution.frame_rate);
 		gProject->CreateTimeString(display_time + round_factor, aLabel.text, fZoomTimingIndex < 3);	//	0.75 add small offset to round frame time to decimal-like frame numbers
 
 		aLabel.width = StringWidth(aLabel.text);

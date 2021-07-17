@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 
 	MedoApplication *app = new MedoApplication(argc, argv);
 	app->Run();
+	actor_manager.Quit(false);
 	delete app;
 	return 0;	
 }

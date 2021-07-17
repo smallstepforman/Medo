@@ -31,6 +31,12 @@
 #include "TimelineView.h"
 #include "VideoManager.h"
 
+#if 0
+#define DEBUG(...)	do {printf(__VA_ARGS__);} while (0)
+#else
+#define DEBUG(fmt, ...) {}
+#endif
+
 static const uint32 kMessageZoomSlider			= 'mtzs';
 static const uint32 kMessageCheckboxVideo		= 'mtcv';
 static const uint32 kMessageCheckboxAudio		= 'mtca';
@@ -44,6 +50,11 @@ static const float kTimelineOffsetX = 80.0f;
 static const float kTimelineOffsetY = 64.0f;
 static const float kZoomSliderIconWidth = 18.0f;
 static const float kZoomSliderWidth = 140.0f;
+
+/*	HAIKU_BSCROLLBAR_BUG	https://dev.haiku-os.org/ticket/17077, BScrollBar::MouseDown() ignores left arrow when value is zero,
+ *	forcing BScrollBar::SetRange(min, max) to have a min > 0.
+ */
+static const float kScrollBarRange = 10000.0f;
 
 struct ZoomValue
 {
@@ -136,7 +147,7 @@ TimelineView :: TimelineView(BRect frame, MedoWindow *parent)
 	//	TimelinePosition
 	frame_edit.top -= kTimelineOffsetY;
 	frame_edit.left -= 4;
-	frame_edit.right += 4;
+	frame_edit.right = frame.right;
 	frame_edit.bottom += 4;
 	fTimelinePosition = new TimelinePosition(frame_edit, this);
 	fTimelinePosition->SetViewColor(B_TRANSPARENT_COLOR);
@@ -361,7 +372,7 @@ void TimelineView :: MessageReceived(BMessage *msg)
 			uint32 index;
 			if (msg->FindUInt32("index", &index) == B_OK)
 			{
-				printf("kMessageCheckboxVideo(%d)\n", index);
+				DEBUG("kMessageCheckboxVideo(%d)\n", index);
 				assert(index < gProject->mTimelineTracks.size());
 				gProject->mTimelineTracks[index]->mVideoEnabled = fTrackSettings[index].visual->Value();
 				gProject->InvalidatePreview();
@@ -373,7 +384,7 @@ void TimelineView :: MessageReceived(BMessage *msg)
 			uint32 index;
 			if (msg->FindUInt32("index", &index) == B_OK)
 			{
-				printf("kMessageCheckboxAudio(%d)\n", index);
+				DEBUG("kMessageCheckboxAudio(%d)\n", index);
 				assert(index < gProject->mTimelineTracks.size());
 				gProject->mTimelineTracks[index]->mAudioEnabled = fTrackSettings[index].audio->Value();
 			}
@@ -459,7 +470,7 @@ bool TimelineView :: KeyDownMessage(BMessage *msg)
 
 		case 'z':
 		case 'Z':
-			if (fZoomSliderValue != 2)
+			if (fZoomSliderValue > 2)
 			{
 				fZoomKeyRestoreValue = fZoomSliderValue;
 				fZoomSliderValue = 2;
@@ -489,10 +500,13 @@ bool TimelineView :: KeyUpMessage(BMessage *msg)
 	{
 		case 'z':
 		case 'Z':
-			fZoomSliderValue = fZoomKeyRestoreValue;
-			fZoomKeyRestoreValue = -1;
-			fZoomSlider->SetValue(fZoomSliderValue);
-			UpdateZoom();
+			if (fZoomKeyRestoreValue > 2)
+			{
+				fZoomSliderValue = fZoomKeyRestoreValue;
+				fZoomKeyRestoreValue = -1;
+				fZoomSlider->SetValue(fZoomSliderValue);
+				UpdateZoom();
+			}
 			return true;
 
 		default:
@@ -524,8 +538,8 @@ void TimelineView :: SetSession(const SESSION &session)
 	
 	InvalidateItems(-1);
 
-	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(session.horizontal_scroll*100);
-	fVerticalScrollView->ScrollBar(B_VERTICAL)->SetValue(session.vertical_scroll*100);
+	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(session.horizontal_scroll*kScrollBarRange + 1.0f);		//	HAIKU_BSCROLLBAR_BUG
+	fVerticalScrollView->ScrollBar(B_VERTICAL)->SetValue(session.vertical_scroll*kScrollBarRange + 1.0f);			//	HAIKU_BSCROLLBAR_BUG
 }
 
 /*	FUNCTION:		TimelineView :: GetSession
@@ -537,8 +551,8 @@ const TimelineView::SESSION TimelineView :: GetSession()
 {
 	SESSION session;
 	session.zoom_index = fZoomSliderValue;
-	session.horizontal_scroll = fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->Value();
-	session.vertical_scroll = fVerticalScrollView->ScrollBar(B_VERTICAL)->Value();
+	session.horizontal_scroll = (fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->Value() - 1.0f) / kScrollBarRange;	//	HAIKU_BSCROLLBAR_BUG
+	session.vertical_scroll = (fVerticalScrollView->ScrollBar(B_VERTICAL)->Value() - 1.0f) / kScrollBarRange;		//	HAIKU_BSCROLLBAR_BUG
 	session.current_frame = fCurrentFrame;
 	session.marker_a = fTimelinePosition->GetKeyframeMarkerPosition(0);
 	session.marker_b = fTimelinePosition->GetKeyframeMarkerPosition(1);
@@ -590,10 +604,10 @@ void TimelineView :: FrameResized(float width, float height)
 	fVerticalScrollView->ResizeTo(B_V_SCROLL_BAR_WIDTH+6, height - (kTimelineOffsetY + B_H_SCROLL_BAR_HEIGHT + 2));
 	fVerticalScrollView->MoveTo(width - (B_V_SCROLL_BAR_WIDTH+4), kTimelineOffsetY);
 	
-	InvalidateItems(INVALIDATE_VERTICAL_SLIDER | INVALIDATE_HORIZONTAL_SLIDER | INVALIDATE_EDIT_TRACKS | INVALIDATE_POSITION_SLIDER);
-
 	fControlView->ResizeTo(kTimelineOffsetX, height - kTimelineOffsetY);
 	fControlView->MoveTo(0, kTimelineOffsetY);
+
+	InvalidateItems(INVALIDATE_VERTICAL_SLIDER | INVALIDATE_HORIZONTAL_SLIDER | INVALIDATE_EDIT_TRACKS | INVALIDATE_POSITION_SLIDER);
 }
 
 /*	FUNCTION:		TimelineView :: InvalidateItems
@@ -693,6 +707,8 @@ void TimelineView :: UpdateZoom()
 	fTimelinePosition->SetZoomFactor(kZoomValues[fZoomSliderValue].value);
 
 	visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
+
+	DEBUG("current(%ld), left=%ld, visible(%ld), pos(%f) total(%ld) ", current_position, fLeftFrameIndex, visible_frames, pos, total_frames);
 	if (pos_visible)
 	{
 		fLeftFrameIndex = current_position - pos*visible_frames;
@@ -704,15 +720,21 @@ void TimelineView :: UpdateZoom()
 	if (fLeftFrameIndex < 0)
 		fLeftFrameIndex = 0;
 
+	DEBUG("fLeftFrameIndex(%ld\n", fLeftFrameIndex);
+
 	fTimelineEdit->SetScrollViewOrigin(fLeftFrameIndex, fEditViewScrollOffsetY);
 	InvalidateItems(INVALIDATE_EDIT_TRACKS | INVALIDATE_HORIZONTAL_SLIDER | INVALIDATE_POSITION_SLIDER);
 
+#if 0
 	float scroll_pos = fLeftFrameIndex/total_frames;
-	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(scroll_pos*100.0f + 1);
+	fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(scroll_pos*kScrollBarRange + 1);
+#endif
 
 	fZoomSlider->SetToolTip(kZoomValues[fZoomSliderValue].label);
 	fZoomSlider->ToolTip()->SetSticky(true);
 	fZoomSlider->ShowToolTip(fZoomSlider->ToolTip());
+
+	fTimelinePosition->InitTimelineLabels();
 }
 
 /*	FUNCTION:		TimelineView :: UpdateHorizontalScrollBar
@@ -723,13 +745,13 @@ void TimelineView :: UpdateZoom()
 void TimelineView :: UpdateHorizontalScrollBar()
 {
 	BScrollBar *bar = fHorizontalScrollView->ScrollBar(B_HORIZONTAL); 
-	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1s to right (space for append)
+	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1 second to right (space for append)
 	const int64 visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
-	float ratio = (float)visible_frames/(float)total_frames;
+	double ratio = (double)visible_frames/(double)total_frames;
 	
-	if (ratio < 1.0f)
+	if (ratio < 1.0)
 	{
-		bar->SetRange(0.0f, 101.0f);	//	values will be from 1.0 to 101.0
+		bar->SetRange(1.0f, kScrollBarRange + 1.0f);		//	HAIKU_BSCROLLBAR_BUG
 		bar->SetProportion(ratio);
 	}
 	else
@@ -738,6 +760,7 @@ void TimelineView :: UpdateHorizontalScrollBar()
 		fTimelineEdit->SetScrollViewOrigin(fLeftFrameIndex, fEditViewScrollOffsetY);
 		bar->SetRange(0.0f, 0.0f);
 	}
+	DEBUG("UpdateHorizontalScrollBar() visible(%ld) ratio(%f), scroll_value(%f)\n", visible_frames, ratio, bar->Value());
 }
 
 /*	FUNCTION:		TimelineView :: UpdateVerticalScrollBar
@@ -758,7 +781,7 @@ void TimelineView :: UpdateVerticalScrollBar()
 
 	if (ratio < 1.0f)
 	{
-		bar->SetRange(0.0f, 101.0f);
+		bar->SetRange(1.0f, kScrollBarRange + 1.0f);	//	HAIKU_BSCROLLBAR_BUG
 		bar->SetProportion(ratio);
 	}
 	else
@@ -776,9 +799,13 @@ void TimelineView :: UpdateVerticalScrollBar()
 */
 void TimelineView :: ScrollToHorizontal(const float x)
 {
-	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1s to right (space for append)
+	const int64 total_frames = gProject->mTotalDuration + kFramesSecond;	//	add 1 second to right (space for append)
 	const int64 visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
-	fLeftFrameIndex = (total_frames - visible_frames)*(x-1.0f)/100.0f;
+	double percentage = (x - 1.0)/kScrollBarRange;
+	fLeftFrameIndex = (total_frames - visible_frames)*percentage;	//	HAIKU_BSCROLLBAR_BUG
+
+	DEBUG("ScrollToHorizontal(%f) visible(%ld) total(%ld) fLeftFrameIndex(%ld) right(%ld), percentage(%f)\n", x, visible_frames, total_frames, fLeftFrameIndex, fLeftFrameIndex + visible_frames, percentage);
+
 	fTimelineEdit->SetScrollViewOrigin(fLeftFrameIndex, fEditViewScrollOffsetY);
 	fTimelinePosition->InitTimelineLabels();
 	InvalidateItems(INVALIDATE_EDIT_TRACKS | INVALIDATE_POSITION_SLIDER);
@@ -799,7 +826,7 @@ void TimelineView :: ScrollToVertical(const float y)
 	const float kTrackExtraY = 9*6 + 64;	//	kTimelineTrackHeight + kTimelineTrackDeltaY (from TimelineEdit.cpp
 	total_height += kTrackExtraY;
 	float visible_height = fVerticalScrollView->Frame().Height();
-	fEditViewScrollOffsetY = (total_height - visible_height)*(y-1.0f)/100.0f;
+	fEditViewScrollOffsetY = (total_height - visible_height)*(y-1.0f) /kScrollBarRange;	//	HAIKU_BSCROLLBAR_BUG
 	fTimelineEdit->SetScrollViewOrigin(fLeftFrameIndex, fEditViewScrollOffsetY);
 	InvalidateItems(INVALIDATE_EDIT_TRACKS | INVALIDATE_CONTROL_VIEW);
 }
@@ -856,13 +883,13 @@ void TimelineView :: ProjectLoaded()
 	const int64 visible_frames = fViewWidth * fTimelineEdit->GetFramesPixel();
 	if (visible_frames < gProject->mTotalDuration)
 	{
-		double scroll_offset = (fCurrentFrame - 0.5f*visible_frames)/(double)gProject->mTotalDuration;
-		if (scroll_offset < 0)
-			scroll_offset = 0;
-		fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(1.0 + 100.0*scroll_offset);
+		double scroll_offset = (fCurrentFrame - 0.5*visible_frames)/(double)gProject->mTotalDuration;
+		if (scroll_offset < 0.0)
+			scroll_offset = 0.0;
+		fHorizontalScrollView->ScrollBar(B_HORIZONTAL)->SetValue(scroll_offset*kScrollBarRange + 1.0f);	//	HAIKU_BSCROLLBAR_BUG
 		fVerticalScrollView->ScrollBar(B_VERTICAL)->SetValue(0);
-		ScrollToHorizontal(1.0 + 100.0*scroll_offset);
-		ScrollToVertical(0);
+		ScrollToHorizontal(scroll_offset*kScrollBarRange + 1.0f);	//	HAIKU_BSCROLLBAR_BUG
+		ScrollToVertical(0.0f);
 	}
 	else
 	{
@@ -874,7 +901,7 @@ void TimelineView :: ProjectLoaded()
 
 
 	assert(gProject->mTimelineTracks.size() == fTrackSettings.size());
-	for (size_t i=0; i < gProject->mTimelineTracks.size(); i++)
+	for (std::size_t i=0; i < gProject->mTimelineTracks.size(); i++)
 	{
 		fTrackSettings[i].visual->SetValue(gProject->mTimelineTracks[i]->mVideoEnabled);
 		fTrackSettings[i].audio->SetValue(gProject->mTimelineTracks[i]->mAudioEnabled);
@@ -942,7 +969,7 @@ void TimelineView :: UpdateControlView()
 	if (Window())
 	{
 		assert(fTrackSettings.size() == track_offsets.size());
-		for (size_t i=0; i < fTrackSettings.size(); i++)
+		for (std::size_t i=0; i < fTrackSettings.size(); i++)
 		{
 			float posy = track_offsets[i] - fEditViewScrollOffsetY;
 			fTrackSettings[i].visual->MoveTo(BPoint(kTimelineOffsetX - (kIconSize + kPadX), posy));

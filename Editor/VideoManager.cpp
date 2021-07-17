@@ -160,7 +160,12 @@ public:
 	{
 		BBitmap *bitmap = gVideoManager->CreateThumbnailBitmap(source, frame_idx);
 		if (notification)
-			MedoWindow::GetInstance()->PostMessage(fMessage);
+		{
+			//	There is a small window during shutdown where the thumbnail arrives after closing the window
+			MedoWindow *medo_window = MedoWindow::GetInstance();
+			if (medo_window)
+				medo_window->PostMessage(fMessage);
+		}
 	}
 	void ClearPendingThumbnails()
 	{

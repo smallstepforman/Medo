@@ -223,6 +223,7 @@ MedoWindow :: ~MedoWindow()
 
 	//	attached views cleaned up automatically
 	printf("MedoWindow::~MedoWindow()\n");
+	sMedoWindow = nullptr;
 }
 
 /*	FUNCTION:		MedoWindow :: FrameResized
