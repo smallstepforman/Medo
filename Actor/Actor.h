@@ -7,6 +7,7 @@
 #ifndef _YARRA_ACTOR_H_
 #define _YARRA_ACTOR_H_
 
+#include <cstdint>
 #include <functional>
 #include <deque>
 
