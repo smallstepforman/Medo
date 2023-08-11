@@ -53,11 +53,11 @@ public:
 
 		SetFont(be_bold_font);
 		SetHighColor({0, 0, 0, 255});
-		DrawString("Haiku Media Editor R1.0.0 (Beta 4)", BPoint(x_offset, y_offset));							y_offset += 30;
+		DrawString("Haiku Media Editor R1.0.0 (Beta 5)", BPoint(x_offset, y_offset));							y_offset += 30;
 
 		SetFont(be_plain_font);
 		SetHighColor({128, 128, 128, 255});
-		DrawString("Copyright " B_UTF8_COPYRIGHT " Zen Yes Pty Ltd, 2019-2021", BPoint(x_offset, y_offset));	y_offset += 25;
+		DrawString("Copyright " B_UTF8_COPYRIGHT " Zen Yes Pty Ltd, 2019-2023", BPoint(x_offset, y_offset));	y_offset += 25;
 		DrawString("Melbourne, Australia", BPoint(x_offset, y_offset));							y_offset += 25;
 		DrawString("Released under Open Source MIT license", BPoint(x_offset, y_offset));		y_offset += 25;
 

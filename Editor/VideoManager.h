@@ -9,7 +9,7 @@
 
 namespace yarra
 {
-	namespace Platform
+	namespace yplatform
 	{
 		class Semaphore;
 	};
@@ -27,9 +27,9 @@ class VideoManager
 private:
 	VideoBitmapLruCache			*fFrameCache;
 	VideoBitmapLruCache			*fThumbnailCache;
-	yarra::Platform::Semaphore	*fQueueSemaphore;
+	yarra::yplatform::Semaphore	*fQueueSemaphore;
 	VideoThumbnailActor			*fThumbnailActor;
-	yarra::Platform::Semaphore	*fMediaKitSemaphore;
+	yarra::yplatform::Semaphore	*fMediaKitSemaphore;
 	friend class				VideoThumbnailActor;
 
 	BBitmap						*CreateThumbnailBitmap(MediaSource *source, const int64 frame_idx);

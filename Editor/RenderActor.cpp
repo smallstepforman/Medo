@@ -119,7 +119,7 @@ public:
 	DESCRIPTION:	Constructor
 */
 RenderActor :: RenderActor(BRect frame)
-	: yarra::Actor(yarra::Actor::CONFIGURATION_LOCK_TO_THREAD)
+	: yarra::Actor(Actor::ActorConfiguration::eLockToThread)
 {
 	assert(gRenderActor == nullptr);
 	gRenderActor = this;

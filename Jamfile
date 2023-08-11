@@ -11,6 +11,7 @@ else
 }
 C++FLAGS += -I. -IYarra -I/boot/system/develop/headers/private/interface ;
 C++FLAGS += -I/boot/system/develop/headers/freetype2 ;
+C++FLAGS += -Wno-interference-size ;
 
 # Source files needed to build Medo
 # <pe-src>

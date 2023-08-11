@@ -9,6 +9,7 @@
 
 #include <deque>
 #include <thread>
+#include <new>
 
 #ifndef _YARRA_PLATFORM_H_
 #include "Platform.h"
@@ -24,7 +25,7 @@ namespace yarra
 class Thread;
 class ActorManager;
 
-class alignas(kCacheLineAlignment) WorkThread
+class alignas(std::hardware_destructive_interference_size) WorkThread
 {
 public:
 				WorkThread(const int index, const bool spawn_thread = true);
@@ -35,11 +36,12 @@ public:
 
 protected:
 	//	Actual work thread
-	Platform::Thread		*fThread;
-	Platform::Semaphore		fThreadSemaphore;
+	yplatform::Thread		*fThread;
+	yplatform::Semaphore	fThreadSemaphore;
 	std::thread::id			fThreadId;
 
-	const int GetWorkThreadIndex() const	{return fThreadIndex;}
+	const int	GetWorkThreadIndex() const	{return fThreadIndex;}
+	const bool	IsCurrentCallingThread() const;
 
 	const int	fThreadIndex;
 	static int	work_thread(void *);
@@ -50,17 +52,17 @@ protected:
 	friend Actor;
 	std::deque<Actor *>		fWorkQueue;
 
-	enum WORK_THREAD_STATE
+	enum ThreadState : uint32_t
 	{
-		WTS_BUSY			= 1 << 0,	//	Executing work
-		WTS_STOLE_WORK		= 1 << 1,	//	prevent StealWork() from snatching freshly stolen actor
+		eBusy			= 1 << 0,	//	Executing work
+		eStoleWork		= 1 << 1,	//	prevent StealWork() from snatching freshly stolen actor
 	};
 	uint32_t				fWorkThreadState;
 
 #if 1
-	Platform::Semaphore		fWorkQueueLock;
+	yplatform::Semaphore	fWorkQueueLock;
 #else
-	Platform::SpinLock		fWorkQueueLock;
+	yplatform::SpinLock		fWorkQueueLock;
 #endif
 	Actor					*fLastActor;
 	
@@ -82,7 +84,7 @@ protected:
 	The platform event loop is responsible for draining queued messages (eg. after render cycle)
 	The OsLooper is not added to ActorManager and doesn't participate in Work Stealing
 ***********************************************************/
-class alignas(kCacheLineAlignment) OsLooper : public WorkThread
+class alignas(std::hardware_destructive_interference_size) OsLooper : public WorkThread
 {
 public:
 				OsLooper();
@@ -91,8 +93,24 @@ public:
 
 private:
 	friend Actor;
-	void	AddAsyncWork(Actor *actor)		noexcept	override;
-	void	SyncWorkComplete(Actor *actor)	noexcept	override;
+	void		AddAsyncWork(Actor *actor)		noexcept	override;
+	void		SyncWorkComplete(Actor *actor)	noexcept	override;
+
+/****************************************
+	Messages to OsLooper
+*****************************************/
+private:
+	std::deque<std::function<void()> >	fMessageQueue;
+protected:
+	const bool AsyncValidityCheck() const;
+public:
+	template <class F, class ... Args>
+	void Async(F&& fn, Args && ... args) noexcept
+	{
+		fWorkQueueLock.Lock();
+		fMessageQueue.emplace_back(std::bind(std::forward<F>(fn), std::forward<Args>(args)...));
+		fWorkQueueLock.Unlock();
+	}
 };
 
 };	//	namespace yarra

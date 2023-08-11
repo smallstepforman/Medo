@@ -621,6 +621,12 @@ void Effect_Plugin :: RenderEffect(BBitmap *source, MediaEffect *data, int64 fra
 	float t = float(frame_idx - data->mTimelineFrameStart)/float(data->Duration());
 	if (t > 1.0f)
 		t = 1.0f;
+		
+	if (!fRenderNode)
+	{
+		printf("Effect_Plugin(%s) - invalid render node\n", GetEffectName());
+		return;	
+	}	
 
 	PluginFragmentShader *fragment_shader = (PluginFragmentShader *)fRenderNode->mShaderNode;
 	if (!fragment_shader->IsValid())

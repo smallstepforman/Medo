@@ -26,8 +26,8 @@ Timer :: Timer()
 {
 	fKeepAlive = true;
 	fThreadSemaphore.Lock();
-	fTimerThread = new Platform::Thread(TimerThread, this, "TimerThread");
-	fTimeStamp = Platform::GetElapsedTime();
+	fTimerThread = new yplatform::Thread(TimerThread, this, "TimerThread");
+	fTimeStamp = yplatform::GetElapsedTime();
 	fTimerThread->Start();
 
 	assert(sTimerInstance == nullptr);
@@ -75,7 +75,7 @@ int Timer :: TimerThread(void *cookie)
 		t->fQueueLock.Unlock();
 	}
 	t->fKeepAlive = true;
-	Platform::ExitThread();
+	yplatform::ExitThread();
 	return 1;
 }
 
@@ -101,7 +101,7 @@ void Timer :: AddTimer(const int64_t milliseconds, Actor *target, std::function<
 
 	fQueueLock.Lock();
 	//	TimerTickLocked will deduct delta time, cater for this delta 
-	double ts = Platform::GetElapsedTime();
+	double ts = yplatform::GetElapsedTime();
 	int64_t elapsed_time = int64_t(1000.0*(ts - fTimeStamp));
 	fTimerQueue.emplace_back(TimerObject(milliseconds + elapsed_time, target, behaviour));	//	TimerTickLocked() will subtract elapsed_time from all queued objects
 	TimerTickLocked();
@@ -144,7 +144,7 @@ void Timer :: CancelTimersLocked(Actor *target)
 */
 void Timer :: TimerTickLocked()
 {
-	double ts = Platform::GetElapsedTime();
+	double ts = yplatform::GetElapsedTime();
 	int64_t elapsed_time = int64_t(1000.0*(ts - fTimeStamp));
 	for (auto &i : fTimerQueue)
 		i.milliseconds -= elapsed_time;
@@ -158,7 +158,7 @@ void Timer :: TimerTickLocked()
 			if ((*i).milliseconds <= 0)
 			{
 #if ACTOR_DEBUG
-				printf("Timer::TimerTickLocked() AsyncMessage(Wait time = %f)\n", Platform::GetElapsedTime() - (*i).timestamp);
+				printf("Timer::TimerTickLocked() AsyncMessage(Wait time = %f)\n", yplatform::GetElapsedTime() - (*i).timestamp);
 #endif
 				(*i).target->Async((*i).behaviour);
 				fTimerQueue.erase(i);

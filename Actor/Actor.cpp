@@ -25,8 +25,8 @@ Actor :: Actor(const uint32_t config, WorkThread *work_thread)
 	:fState(0)
 {
 	//	Locked to thread?
-	if ((config & CONFIGURATION_LOCK_TO_THREAD) || work_thread)
-		fState |= STATE_LOCKED_TO_THREAD;
+	if ((config & ActorConfiguration::eLockToThread) || work_thread)
+		fState |= State::eLockedToThread;
 
 	//	Attach to scheduler
 	ActorManager *manager = ActorManager::GetInstance();
@@ -63,7 +63,7 @@ Actor :: ~Actor()
 */
 void * Actor :: operator new(size_t sz)
 {
-    void *p = Platform::AlignedAlloc(kCacheLineAlignment, sz);
+    void *p = yplatform::AlignedAlloc(std::hardware_destructive_interference_size, sz);
     if (p == nullptr)
         throw std::bad_alloc();
     return p;
@@ -77,7 +77,7 @@ void * Actor :: operator new(size_t sz)
 void Actor :: operator delete(void *p)
 {
     Actor *pc = static_cast<Actor *>(p);
-    Platform::AlignedFree(pc);
+    yplatform::AlignedFree(pc);
 }
 
 /*	FUNCTION:		Actor :: GetWorkThreadIndex
@@ -139,7 +139,7 @@ void Actor :: Lock() noexcept
 		repeat = false;
 		WorkThread *t = fWorkThread;
 		t->fWorkQueueLock.Lock();
-		if ((t != fWorkThread) || (fState & (STATE_EXECUTING | STATE_SCHEDULAR_LOCK)))
+		if ((t != fWorkThread) || (fState & (State::eExecuting | State::eSchedularLock)))
 		{
 			t->fWorkQueueLock.Unlock();
 			std::this_thread::yield();	//	relieve pressure from cache line
@@ -148,10 +148,10 @@ void Actor :: Lock() noexcept
 	} while (repeat);
 
 	//	Validate that Actor allowed to run on this WorkThread
-	if (fState & STATE_LOCKED_TO_THREAD)
-		assert(fWorkThread->fThread->IsCurrentCallingThread());
+	if (fState & State::eLockedToThread)
+		assert(fWorkThread->IsCurrentCallingThread());
 
-	fState |= STATE_SCHEDULAR_LOCK;
+	fState |= State::eSchedularLock;
 	fWorkThread->fWorkQueueLock.Unlock();
 }
 
@@ -173,7 +173,7 @@ void Actor :: Unlock() noexcept
 */
 const bool Actor :: IsLocked() const
 {
-	return (fState == STATE_SCHEDULAR_LOCK);
+	return (fState & State::eSchedularLock);
 }
 
 /*	FUNCTION:		Actor :: AsyncValidityCheck
@@ -184,15 +184,13 @@ const bool Actor :: IsLocked() const
 */
 const bool Actor :: AsyncValidityCheck() const
 {
-	const bool work_thread = std::this_thread::get_id() == fWorkThread->fThreadId;
-
-	if (fState & (STATE_LOCKED_TO_THREAD | STATE_EXECUTING))
+	if (fState & (State::eLockedToThread | State::eExecuting))
 	{
-		if (work_thread)
+		if (std::this_thread::get_id() == fWorkThread->fThreadId)
 			return true;
 	}
 
-	if (fState & STATE_SCHEDULAR_LOCK)
+	if (fState & State::eSchedularLock)
 		return true;
 
 	assert(0);
@@ -223,10 +221,10 @@ void Actor :: ClearAllMessages()
 	DESCRIPTION:	Check if actor executing work.
 					Caution - a new message/work may start as we/re returning ...
 */
-bool Actor :: IsIdle()
+const bool Actor :: IsIdle()
 {
 	BeginAsyncMessage();
-	bool idle = ((fState & STATE_EXECUTING) == 0) && (fMessageQueue.empty());
+	bool idle = ((fState & State::eExecuting) == 0) && (fMessageQueue.empty());
 	fWorkThread->fWorkQueueLock.Unlock();
 	return idle;
 }

@@ -41,23 +41,30 @@ namespace std
 };
 #endif	//#ifndef __YARRA_STD_INVOKE__
 
+#if defined (__LINUX__)
+	#if !defined (__cpp_lib_hardware_interference_size) || (__cpp_lib_hardware_interference_size < 201603)
+		namespace std
+		{
+			constexpr size_t hardware_destructive_interference_size = 64;
+		};
+	#endif
+#endif
+
 namespace yarra
 {
-
-static const size_t kCacheLineAlignment = 64;	//	Try to keep each object on unique cache line
 
 class WorkThread;
 
 //============
-class alignas(kCacheLineAlignment) Actor
+class alignas(std::hardware_destructive_interference_size) Actor
 {
 public:
-	enum ACTOR_CONFIGURATION
+	enum ActorConfiguration : uint32_t
 	{
-		CONFIGURATION_DEFAULT				= 0,
-		CONFIGURATION_LOCK_TO_THREAD		= 1 << 0,
+		eDefault				= 0,
+		eLockToThread			= 1 << 0,
 	};
-					Actor(const uint32_t config = CONFIGURATION_DEFAULT, WorkThread *work_thread = nullptr);
+					Actor(const uint32_t config = ActorConfiguration::eDefault, WorkThread *work_thread = nullptr);
 	virtual			~Actor();
 
 	void * operator	new(size_t s);
@@ -122,8 +129,8 @@ public:
 		Used to access derived Actor messages
 		Caller responsible for deadlock prevention
 	**************************************************************/
-	void			Lock() noexcept;
-	void			Unlock() noexcept;
+	virtual void	Lock() noexcept;
+	virtual void	Unlock() noexcept;
 	const bool		IsLocked() const;
 
 	//	Convenience functions to work with lock_guard<Actor>
@@ -135,12 +142,11 @@ public:
 		Similar usage to AsyncMessage
 	*****************************************************************/
 	template <class F, class ... Args>
-	auto SyncMessage(F &&fn, Args && ... args)
+	void SyncMessage(F &&fn, Args && ... args)
 	{
 		Lock();
-		auto ret = std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
+		std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
 		Unlock();
-		return ret;
 	}
 
 	template <class M> struct _BehaviourSync;
@@ -150,9 +156,8 @@ public:
 		template <M method> static R SyncMessage2(C *target, Args && ... args)
 		{
 			target->Lock();
-			auto ret = std::invoke(method, target, args...);
+			std::invoke(method, target, args...);
 			target->Unlock();
-			return ret;
 		}
 	};
 	#define SYNC(m) _BehaviourSync<decltype(m)>::SyncMessage2<m>
@@ -169,11 +174,12 @@ private:
 
 	WorkThread		*fWorkThread;
 	
-	enum STATE {
-		STATE_EXECUTING						= 1 << 0,		//	Set by fWorkThread when executing behaviour
-		STATE_SCHEDULAR_LOCK				= 1 << 1,		//	Schedular lock active, prevent fWorkThread from executing commands
-		STATE_LOCKED_TO_THREAD				= 1 << 2,		//	No work stealing allowed
-		STATE_PENDING_SYNC_SIGNAL			= 1 << 3,		//	When Sync work complete, signal work thread
+	enum State : uint32_t 
+	{
+		eExecuting						= 1 << 0,		//	Set by fWorkThread when executing behaviour
+		eSchedularLock					= 1 << 1,		//	Schedular lock active, prevent fWorkThread from executing commands
+		eLockedToThread					= 1 << 2,		//	No work stealing allowed
+		ePendingSyncSignal				= 1 << 3,		//	When Sync work complete, signal work thread
 	};
 	uint32_t		fState;
 
@@ -183,7 +189,36 @@ protected:
 
 	//	Caution - only use the following methods if you really know what you're doing
 	void			ClearAllMessages();
-	bool			IsIdle();
+	const bool		IsIdle();
+};
+
+/********************************
+	Message is a convenience container
+*********************************/
+class ActorMessage
+{
+public:
+	Actor					*mActor;
+	std::function<void ()>	mCallback;
+
+	explicit ActorMessage() : mActor(nullptr), mCallback(0) {}
+	explicit ActorMessage(Actor *actor, std::function<void ()> callback) : mActor(actor), mCallback(callback) {}
+	inline const ActorMessage & operator = (const ActorMessage & actor)		{mActor = actor.mActor;	mCallback = actor.mCallback; return *this;}
+	template <typename... Args>
+	void Invoke(const bool reset = true, Args && ... args)
+	{
+		if (mActor && mCallback)
+		{
+			mActor->Async(mCallback, std::forward<Args>(args)...);
+			if (reset)
+			{
+				mActor = nullptr;
+				mCallback = 0;
+			}
+		}
+	}
+	const bool	IsValid() const {return mActor && mCallback;}
+	void		Clear() {mActor = nullptr; mCallback = 0;}
 };
 
 };	//	namespace yarra

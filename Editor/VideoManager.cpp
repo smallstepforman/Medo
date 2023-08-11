@@ -199,9 +199,9 @@ VideoManager :: VideoManager()
 	fFrameCache = new VideoBitmapLruCache(kFrameCacheSize);
 	fThumbnailCache = new VideoBitmapLruCache(kThumbnailCacheSize);
 
-	fQueueSemaphore = new yarra::Platform::Semaphore;
+	fQueueSemaphore = new yarra::yplatform::Semaphore;
 	fThumbnailActor = new VideoThumbnailActor;
-	fMediaKitSemaphore = new yarra::Platform::Semaphore;
+	fMediaKitSemaphore = new yarra::yplatform::Semaphore;
 }
 
 /*	FUNCTION:		VideoManager :: ~VideoManager

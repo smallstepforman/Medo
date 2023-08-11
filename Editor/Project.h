@@ -57,7 +57,7 @@ public:
 	BString						mTag;
 	
 	//	Operator
-	inline bool operator ==(const MediaClip &a) 
+	inline bool operator ==(const MediaClip &a) const 
 	{
 		return ((a.mMediaSource 		==	mMediaSource) &&
 				(a.mMediaSourceType		==	mMediaSourceType) &&

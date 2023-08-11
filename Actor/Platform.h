@@ -33,7 +33,7 @@
 
 namespace yarra
 {
-	namespace Platform
+	namespace yplatform
 	{
 
 		/*********************************************
@@ -142,7 +142,7 @@ namespace yarra
 #endif
 		};
 
-	};	//	namespace Platform
+	};	//	namespace yplatform
 	
 };	//	namespace yarra
 

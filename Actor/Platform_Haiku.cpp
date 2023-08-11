@@ -14,7 +14,7 @@
 
 namespace yarra
 {
-namespace Platform
+namespace yplatform
 {
 	
 /*************************************************
@@ -404,5 +404,5 @@ void AlignedFree(void *ptr)
 
 
 
-};	//	namespace Platform
+};	//	namespace yplatform
 };	//	namespace yarra

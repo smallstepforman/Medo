@@ -163,7 +163,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	 ${CMAKE_CURRENT_SOURCE_DIR}/Yarra
 )
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -g  -O0")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -g  -O0 -Wno-interference-size")
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0")
 
 target_compile_options(${PROJECT_NAME} PUBLIC -std=c++2a -g -O0)

@@ -23,7 +23,7 @@ namespace yarra
 class WorkThread;
 class Timer;
 
-namespace Platform {class Thread;};
+namespace yplatform {class Thread;};
 
 //================
 class ActorManager
@@ -48,8 +48,8 @@ private:
 		
 	void					WorkThreadIdle();
 	bool					fIdleExit;
-	Platform::Semaphore		fIdleSemaphore;
-	Platform::Semaphore		fThreadPoolLock;
+	yplatform::Semaphore	fIdleSemaphore;
+	yplatform::Semaphore	fThreadPoolLock;
 
 	/************************************
 		Timer sends Async complete messages (shared instance)
@@ -68,7 +68,8 @@ private:
 public:
 	void				EnableLoadBalancer(const bool enable, const uint64_t period_milliseconds = 500);
 private:
-	Platform::Thread	*fLoadBalancerThread;
+	yplatform::Thread	*fLoadBalancerThread;
+	bool				fTerminateLoadBalancerThread;
 	uint64_t			fLoadBalancerPeriod;
 	std::vector<int>	fLoadBalancerThreadCycleCount;
 	static int			LoadBalancerThread(void *);

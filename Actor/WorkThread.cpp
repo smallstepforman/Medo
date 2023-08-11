@@ -23,7 +23,7 @@ namespace yarra
 */
 void * WorkThread :: operator new(size_t size)
 {
-	void *p = Platform::AlignedAlloc(kCacheLineAlignment, size);
+	void *p = yplatform::AlignedAlloc(std::hardware_destructive_interference_size, size);
 	if (p == nullptr)
 		throw std::bad_alloc();
 	return p;
@@ -37,7 +37,7 @@ void * WorkThread :: operator new(size_t size)
 void WorkThread :: operator delete(void *p)
 {
 	WorkThread *pc = static_cast<WorkThread *>(p);
-	Platform::AlignedFree(pc);
+	yplatform::AlignedFree(pc);
 }
 
 /*	FUNCTION:		WorkThread :: WorkThread
@@ -54,7 +54,7 @@ WorkThread :: WorkThread(const int index, const bool spawn_thread)
 	{
 		char buffer[32];
 		sprintf(buffer, "WorkThread_%02d", index);
-		fThread = new Platform::Thread(&WorkThread::work_thread, this, buffer);
+		fThread = new yplatform::Thread(&WorkThread::work_thread, this, buffer);
 	}
 	else
 	{
@@ -102,16 +102,16 @@ void WorkThread :: AddAsyncWork(Actor *actor) noexcept
 	fRequestedMessageCount++;
 
 	bool signal = false;
-	if ((actor->fMessageQueue.size() == 1) && !(actor->fState & Actor::STATE_EXECUTING))
+	if ((actor->fMessageQueue.size() == 1) && !(actor->fState & Actor::State::eExecuting))
 	{
 		fWorkQueue.push_back(actor);
 		signal = true;
 	}
 	
 	const bool can_migrate = (fLastActor &&
-							(fLastActor->fState & (Actor::STATE_EXECUTING | Actor::STATE_SCHEDULAR_LOCK)) &&
+							(fLastActor->fState & (Actor::State::eExecuting | Actor::State::eSchedularLock)) &&
 							(fLastActor != actor) &&
-							!(actor->fState & Actor::STATE_LOCKED_TO_THREAD));
+							!(actor->fState & Actor::State::eLockedToThread));
 	fWorkQueueLock.Unlock();
 	
 	if (can_migrate && ActorManager::GetInstance()->StealWork(nullptr, this))
@@ -129,9 +129,9 @@ void WorkThread :: AddAsyncWork(Actor *actor) noexcept
 void WorkThread :: SyncWorkComplete(Actor *actor) noexcept
 {
 	fWorkQueueLock.Lock();
-	assert(actor->fState & Actor::STATE_SCHEDULAR_LOCK);
-	bool signal = actor->fState & Actor::STATE_PENDING_SYNC_SIGNAL;
-	actor->fState &= ~(Actor::STATE_SCHEDULAR_LOCK | Actor::STATE_PENDING_SYNC_SIGNAL);
+	assert(actor->fState & Actor::State::eSchedularLock);
+	bool signal = actor->fState & Actor::State::ePendingSyncSignal;
+	actor->fState &= ~(Actor::State::eSchedularLock | Actor::State::ePendingSyncSignal);
 	if (signal)
 	{
 		fWorkQueue.push_front(actor);
@@ -182,9 +182,9 @@ int WorkThread :: work_thread(void *arg)
 				wt->fWorkQueue.pop_front();
 
 				//	Check if Schedular lock active, if so then reinsert work to end of queue
-				if (wt->fLastActor->fState & Actor::STATE_SCHEDULAR_LOCK)
+				if (wt->fLastActor->fState & Actor::State::eSchedularLock)
 				{
-					wt->fLastActor->fState |= Actor::STATE_PENDING_SYNC_SIGNAL;
+					wt->fLastActor->fState |= Actor::State::ePendingSyncSignal;
 					wt->fLastActor = nullptr;
 					wt->fWorkQueueLock.Unlock();
 					continue;
@@ -197,9 +197,9 @@ int WorkThread :: work_thread(void *arg)
 					auto msg = std::move(wt->fLastActor->fMessageQueue.front());
 					wt->fLastActor->fMessageQueue.pop_front();
 					
-					wt->fLastActor->fState |= Actor::STATE_EXECUTING;
-					wt->fWorkThreadState |= WTS_BUSY;
-					wt->fWorkThreadState &= ~WTS_STOLE_WORK;
+					wt->fLastActor->fState |= Actor::State::eExecuting;
+					wt->fWorkThreadState |= ThreadState::eBusy;
+					wt->fWorkThreadState &= ~ThreadState::eStoleWork;
 					wt->fWorkQueueLock.Unlock();
 
 					//	Execute message
@@ -207,9 +207,9 @@ int WorkThread :: work_thread(void *arg)
 
 					//	Reset state
 					wt->fWorkQueueLock.Lock();
-					wt->fWorkThreadState &= ~WTS_BUSY;
+					wt->fWorkThreadState &= ~ThreadState::eBusy;
 					++wt->fProcessedMessageCount;
-					wt->fLastActor->fState &= ~Actor::STATE_EXECUTING;
+					wt->fLastActor->fState &= ~Actor::State::eExecuting;
 
 					//	More queued messages?
 					if (!wt->fLastActor->fMessageQueue.empty())
@@ -247,8 +247,13 @@ exit_thread:
 #if ACTOR_DEBUG
 	printf("WorkThread() - Exiting (Thread %d)\n", wt->fThreadIndex);
 #endif
-	Platform::ExitThread();
+	yplatform::ExitThread();
 	return 0;
+}
+
+const bool WorkThread :: IsCurrentCallingThread() const
+{
+	return (fThreadId == std::this_thread::get_id());
 }
 
 /*************************************************************************************
@@ -274,7 +279,7 @@ OsLooper :: OsLooper()
 void OsLooper :: AddAsyncWork(Actor *actor) noexcept
 {
 	fRequestedMessageCount++;
-	if ((actor->fMessageQueue.size() == 1) && !(actor->fState & Actor::STATE_EXECUTING))
+	if ((actor->fMessageQueue.size() == 1) && !(actor->fState & Actor::State::eExecuting))
 	{
 		fWorkQueue.push_back(actor);
 	}
@@ -289,9 +294,9 @@ void OsLooper :: AddAsyncWork(Actor *actor) noexcept
 void OsLooper :: SyncWorkComplete(Actor *actor) noexcept
 {
 	fWorkQueueLock.Lock();
-	assert(actor->fState & Actor::STATE_SCHEDULAR_LOCK);
-	bool queue = actor->fState & Actor::STATE_PENDING_SYNC_SIGNAL;
-	actor->fState &= ~(Actor::STATE_SCHEDULAR_LOCK | Actor::STATE_PENDING_SYNC_SIGNAL);
+	assert(actor->fState & Actor::State::eSchedularLock);
+	bool queue = actor->fState & Actor::State::ePendingSyncSignal;
+	actor->fState &= ~(Actor::State::eSchedularLock | Actor::State::ePendingSyncSignal);
 	if (queue)
 		fWorkQueue.push_front(actor);
 	fWorkQueueLock.Unlock();
@@ -306,19 +311,29 @@ void OsLooper :: ProcessPendingMessages()
 {
 	int tick = 0;	//	prefer to use hot cache
 
-	while (!fWorkQueue.empty())
+	while (!fWorkQueue.empty() || !fMessageQueue.empty())
 	{
 		fWorkQueueLock.Lock();
-		if (!fWorkQueue.empty())
+		if (!fMessageQueue.empty())
+		{
+			auto msg = std::move(fMessageQueue.front());
+			fMessageQueue.pop_front();
+			fWorkQueueLock.Unlock();
+
+			//	Execute message
+			msg();
+			continue;
+		}
+		else if (!fWorkQueue.empty())
 		{
 			//	Pop Actor from work queue
 			fLastActor = std::move(fWorkQueue.front());
 			fWorkQueue.pop_front();
 
 			//	Check if Schedular lock active, if so then reinsert work to end of queue
-			if (fLastActor->fState & Actor::STATE_SCHEDULAR_LOCK)
+			if (fLastActor->fState & Actor::State::eSchedularLock)
 			{
-				fLastActor->fState |= Actor::STATE_PENDING_SYNC_SIGNAL;
+				fLastActor->fState |= Actor::State::ePendingSyncSignal;
 				fLastActor = nullptr;
 				fWorkQueueLock.Unlock();
 				continue;
@@ -331,7 +346,7 @@ void OsLooper :: ProcessPendingMessages()
 				auto msg = std::move(fLastActor->fMessageQueue.front());
 				fLastActor->fMessageQueue.pop_front();
 
-				fLastActor->fState |= Actor::STATE_EXECUTING;
+				fLastActor->fState |= Actor::State::eExecuting;
 				fWorkQueueLock.Unlock();
 
 				//	Execute message
@@ -340,7 +355,7 @@ void OsLooper :: ProcessPendingMessages()
 				//	Reset state
 				fWorkQueueLock.Lock();
 				++fProcessedMessageCount;
-				fLastActor->fState &= ~Actor::STATE_EXECUTING;
+				fLastActor->fState &= ~Actor::State::eExecuting;
 
 				//	More queued messages?
 				if (!fLastActor->fMessageQueue.empty())
@@ -356,6 +371,19 @@ void OsLooper :: ProcessPendingMessages()
 		}
 		fWorkQueueLock.Unlock();
 	}
+}
+
+/*	FUNCTION:		OsLooper :: AsyncValidityCheck
+	ARGUMENTS:		none
+	RETURN:			true if valid
+	DESCRIPTION:	Check if called from OS platform event loop
+*/
+const bool OsLooper:: AsyncValidityCheck() const
+{
+	const bool is_looper_thread = (fThreadId == std::this_thread::get_id());
+	if (!is_looper_thread)
+		assert(0);
+	return is_looper_thread;
 }
 
 };	//	namespace yarra

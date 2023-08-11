@@ -43,6 +43,7 @@ ActorManager :: ActorManager(const unsigned int requested_number_threads,
 	sInstance = this;
 
 	fIdleExit = false;
+	fTerminateLoadBalancerThread = false;
 	fIdleSemaphore.Lock();	//	Start locked
 
 	const unsigned int kNumberPhysicalCpuCores = std::thread::hardware_concurrency();
@@ -54,8 +55,8 @@ ActorManager :: ActorManager(const unsigned int requested_number_threads,
 #endif
 	
 	fThreadPoolLock.Lock();
-	fThreads.reserve(kNumberPhysicalCpuCores * kMaxNumberWorkThreadsFactor);
-	fLoadBalancerThreadCycleCount.reserve(kNumberPhysicalCpuCores * kMaxNumberWorkThreadsFactor);
+	fThreads.reserve(num_threads * kMaxNumberWorkThreadsFactor);
+	fLoadBalancerThreadCycleCount.reserve(num_threads * kMaxNumberWorkThreadsFactor);
 
 	for (unsigned int i=0; i < num_threads; i++)
 	{
@@ -88,6 +89,9 @@ ActorManager :: ~ActorManager()
 #if ACTOR_DEBUG
 		printf("ActorManager::~ActorManager() - destroying %zu WorkThreads\n", fThreads.size());
 #endif
+		fTerminateLoadBalancerThread = true;
+		while (fTerminateLoadBalancerThread)
+			yplatform::Sleep(1);
 		delete fLoadBalancerThread;
 	}
 
@@ -125,7 +129,7 @@ void ActorManager :: RemoveActor(Actor *a)
 
 	if (!a->fWorkThread->fWorkQueueLock.Lock())
 		return;
-	while (a->fState & Actor::STATE_EXECUTING)
+	while (a->fState & Actor::State::eExecuting)
 	{
 		a->fWorkThread->fWorkQueueLock.Unlock();
 		std::this_thread::yield();
@@ -168,8 +172,8 @@ const bool ActorManager :: StealWork(WorkThread *destination_thread, WorkThread 
 			if (actual_thread_idx >= num_threads) actual_thread_idx -= num_threads;
 			const auto t = fThreads[actual_thread_idx];
 			if (!t->fWorkQueue.empty() && !t->fWorkQueueLock.IsLocked() &&
-				(t->fWorkThreadState & WorkThread::WTS_BUSY) &&
-				!(t->fWorkThreadState & WorkThread::WTS_STOLE_WORK))
+				(t->fWorkThreadState & WorkThread::ThreadState::eBusy) &&
+				!(t->fWorkThreadState & WorkThread::ThreadState::eStoleWork))
 			{
 				source_thread = t;
 				break;
@@ -232,7 +236,7 @@ const bool ActorManager :: StealWork(WorkThread *destination_thread, WorkThread 
 		for (std::deque<Actor *>::const_iterator it = source_thread->fWorkQueue.begin(); it != source_thread->fWorkQueue.end(); it++)
 		{
 			if ((*it != source_thread->fLastActor) &&	//	skip fLastActor (preserve thread hot cache)
-				!((*it)->fState & (Actor::STATE_LOCKED_TO_THREAD | Actor::STATE_EXECUTING | Actor::STATE_SCHEDULAR_LOCK)))
+				!((*it)->fState & (Actor::State::eLockedToThread | Actor::State::eExecuting | Actor::State::eSchedularLock)))
 			{
 				//	remove reference to selected Actor from work queue
 				actor = *it;
@@ -255,7 +259,7 @@ const bool ActorManager :: StealWork(WorkThread *destination_thread, WorkThread 
 #endif
 		destination_thread->fWorkQueue.push_back(actor);
 		destination_thread->fRequestedMessageCount += (uint32_t)actor->fMessageQueue.size();
-		destination_thread->fWorkThreadState |= WorkThread::WTS_STOLE_WORK;
+		destination_thread->fWorkThreadState |= WorkThread::ThreadState::eStoleWork;
 #if ACTOR_DEBUG
 		destination_thread->fMigratedToCount += (uint32_t)actor->fMessageQueue.size();
 #endif
@@ -304,7 +308,7 @@ void ActorManager :: Run(const bool idle_exit)
 			count_busy = 0;
 			repeat = false;
 			int count_acquired_thread_locks = 0;
-			std::lock_guard<Platform::Semaphore> aLock(fThreadPoolLock);
+			std::lock_guard<yplatform::Semaphore> aLock(fThreadPoolLock);
 			for (auto i : fThreads)
 			{
 				//	Use TryLock() since we need to avoid potential deadlock
@@ -452,7 +456,7 @@ void ActorManager :: EnableLoadBalancer(const bool enable, const uint64_t millis
 	{
 		assert(fLoadBalancerThread == nullptr);
 		assert(fLoadBalancerThreadCycleCount.empty());
-		fLoadBalancerThread = new Platform::Thread(&ActorManager::LoadBalancerThread, this, "Load Balancer");
+		fLoadBalancerThread = new yplatform::Thread(&ActorManager::LoadBalancerThread, this, "Load Balancer");
 		fLoadBalancerPeriod = milliseconds;
 		for (auto i : fThreads)
 			fLoadBalancerThreadCycleCount.push_back(i->fProcessedMessageCount);
@@ -477,10 +481,10 @@ int ActorManager :: LoadBalancerThread(void *arg)
 	ActorManager *manager = (ActorManager *)arg;
 	assert(manager != nullptr);
 
-	while (1)
+	while (!manager->fTerminateLoadBalancerThread)
 	{
 		//	Sleep for fLoadBalancerPeriod
-		Platform::Sleep(manager->fLoadBalancerPeriod);
+		yplatform::Sleep(manager->fLoadBalancerPeriod);
 
 		//	Check if system 'busy' (no new actor messages are processed within the fLoadBalancerPeriod)   
 		size_t count_busy = 0;
@@ -488,7 +492,7 @@ int ActorManager :: LoadBalancerThread(void *arg)
 		for (size_t i=0; i < num_threads; i++)
 		{
 			WorkThread *t = manager->fThreads[i];
-			if ((t->fWorkThreadState & WorkThread::WTS_BUSY) &&
+			if ((t->fWorkThreadState & WorkThread::ThreadState::eBusy) &&
 				(manager->fLoadBalancerThreadCycleCount[i] == t->fProcessedMessageCount) && !t->fWorkQueue.empty())
 			{
 				++count_busy;
@@ -506,13 +510,14 @@ int ActorManager :: LoadBalancerThread(void *arg)
 			printf("ActorManager::LoadBalancerThread() - spawning new WorkThread\n");
 #endif
 
-			std::lock_guard<Platform::Semaphore> aLock(manager->fThreadPoolLock);
+			std::lock_guard<yplatform::Semaphore> aLock(manager->fThreadPoolLock);
 			manager->fThreads.emplace_back(new WorkThread((int)num_threads));
 			manager->fLoadBalancerThreadCycleCount.push_back(0);
 			manager->fThreads[num_threads]->Start();
 		}
 	}
-	Platform::ExitThread();
+	manager->fTerminateLoadBalancerThread = false;
+	yplatform::ExitThread();
 	return 0;
 }
 

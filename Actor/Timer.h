@@ -13,7 +13,7 @@
 
 #include <deque>
 
-namespace Platform
+namespace yplatform
 {
 class Thread;
 class Semaphore;
@@ -51,7 +51,7 @@ namespace yarra
 				: milliseconds(ms), target(t), behaviour(b)
 			{
 #if ACTOR_DEBUG
-				timestamp = Platform::GetElapsedTime();
+				timestamp = yplatform::GetElapsedTime();
 #endif
 			}
 		};
@@ -59,9 +59,9 @@ namespace yarra
 		double						fTimeStamp;
 		void						TimerTickLocked();
 		
-		Platform::Thread			*fTimerThread;
-		Platform::Semaphore			fQueueLock;
-		Platform::Semaphore			fThreadSemaphore;
+		yplatform::Thread			*fTimerThread;
+		yplatform::Semaphore		fQueueLock;
+		yplatform::Semaphore		fThreadSemaphore;
 		static int					TimerThread(void *);
 		bool						fKeepAlive;
 
