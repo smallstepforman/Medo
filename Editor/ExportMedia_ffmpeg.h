@@ -61,12 +61,12 @@ private:
 	Ffmpeg_Actor		*fWorkActor;
 
 
-	void		add_stream(OutputStream *ost, AVFormatContext *oc, AVCodec **codec, int codec_id);
+	void		add_stream(OutputStream *ost, AVFormatContext *oc, const AVCodec **codec, int codec_id);
 	AVFrame		*alloc_audio_frame(int sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples);
-	void		open_audio(AVFormatContext *oc, AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg);
+	void		open_audio(AVFormatContext *oc, const AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg);
 	AVFrame		*get_audio_frame(OutputStream *ost);
 	int			write_audio_frame(AVFormatContext *oc, OutputStream *ost);
-	void		open_video(AVFormatContext *oc, AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg);
+	void		open_video(AVFormatContext *oc, const AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg);
 	AVFrame		*get_video_frame(OutputStream *ost);
 	int			write_video_frame(AVFormatContext *oc, OutputStream *ost);
 	void		close_stream(AVFormatContext *oc, OutputStream *ost);

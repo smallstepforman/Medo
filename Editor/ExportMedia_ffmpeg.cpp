@@ -493,7 +493,7 @@ static int write_frame(AVFormatContext *fmt_ctx, const AVRational *time_base, AV
 }
 
 /* Add an output stream. */
-void Export_ffmpeg :: add_stream(OutputStream *ost, AVFormatContext *oc, AVCodec **codec, int codec_id)
+void Export_ffmpeg :: add_stream(OutputStream *ost, AVFormatContext *oc, const AVCodec **codec, int codec_id)
 {
 	AVCodecContext *c;
 	int i;
@@ -596,7 +596,7 @@ AVFrame * Export_ffmpeg :: alloc_audio_frame(int sample_fmt, uint64_t channel_la
 	return frame;
 }
 
-void Export_ffmpeg :: open_audio(AVFormatContext *oc, AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg)
+void Export_ffmpeg :: open_audio(AVFormatContext *oc, const AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg)
 {
 	AVCodecContext *c;
 	int nb_samples;
@@ -683,12 +683,11 @@ AVFrame * Export_ffmpeg :: get_audio_frame(OutputStream *ost)
 int Export_ffmpeg :: write_audio_frame(AVFormatContext *oc, OutputStream *ost)
 {
 	AVCodecContext *c;
-	AVPacket pkt = { 0 }; // data and size must be 0;
+	AVPacket *pkt = av_packet_alloc();
 	AVFrame *frame;
 	int ret;
 	int got_packet = 0;
 
-	av_init_packet(&pkt);
 	c = ost->enc;
 
 	frame = get_audio_frame(ost);
@@ -712,7 +711,7 @@ int Export_ffmpeg :: write_audio_frame(AVFormatContext *oc, OutputStream *ost)
 
 	while (ret >= 0)
 	{
-		ret = avcodec_receive_packet(c, &pkt);
+		ret = avcodec_receive_packet(c, pkt);
 		if ((ret == AVERROR(EAGAIN)) || (ret == AVERROR_EOF))
 		{
 			return ((ret==AVERROR(EAGAIN)) && frame) ? 0:1;
@@ -720,11 +719,13 @@ int Export_ffmpeg :: write_audio_frame(AVFormatContext *oc, OutputStream *ost)
 		else if (ret < 0)
 			AlertFfmpegExit(ret, "avcodec_receive_packet (audio)");
 
-		ret = write_frame(oc, &c->time_base, ost->st, &pkt);
+		ret = write_frame(oc, &c->time_base, ost->st, pkt);
 		if (ret < 0)
 			AlertFfmpegExit(ret, "write_frame (audio)");
-		av_packet_unref(&pkt);
+		av_packet_unref(pkt);
 	}
+
+	av_packet_free(&pkt);
 
 	return (frame) ? 0 : 1;
 }
@@ -752,7 +753,7 @@ static AVFrame * alloc_picture(enum AVPixelFormat pix_fmt, int width, int height
 	return picture;
 }
 
-void Export_ffmpeg :: open_video(AVFormatContext *oc, AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg)
+void Export_ffmpeg :: open_video(AVFormatContext *oc, const AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg)
 {
 	int ret;
 	AVCodecContext *c = ost->enc;
@@ -861,13 +862,11 @@ int Export_ffmpeg :: write_video_frame(AVFormatContext *oc, OutputStream *ost)
 	AVCodecContext *c;
 	AVFrame *frame;
 	int got_packet = 0;
-	AVPacket pkt = { 0 };
+	AVPacket *pkt = av_packet_alloc();
 
 	c = ost->enc;
 
 	frame = get_video_frame(ost);
-
-	av_init_packet(&pkt);
 
 	/* encode the image */
 	ret = avcodec_send_frame(c, frame);
@@ -879,7 +878,7 @@ int Export_ffmpeg :: write_video_frame(AVFormatContext *oc, OutputStream *ost)
 
 	while (ret >= 0)
 	{
-		ret = avcodec_receive_packet(c, &pkt);
+		ret = avcodec_receive_packet(c, pkt);
 		if ((ret == AVERROR(EAGAIN)) || (ret == AVERROR_EOF))
 		{
 			return (ret==AVERROR(EAGAIN)) ? 0:1;
@@ -887,11 +886,14 @@ int Export_ffmpeg :: write_video_frame(AVFormatContext *oc, OutputStream *ost)
 		else if (ret < 0)
 			AlertFfmpegExit(ret, "avcodec_receive_packet (video)");
 
-		ret = write_frame(oc, &c->time_base, ost->st, &pkt);
+		ret = write_frame(oc, &c->time_base, ost->st, pkt);
 		if (ret < 0)
 			AlertFfmpegExit(ret, "write_frame (video)");
-		av_packet_unref(&pkt);
+		av_packet_unref(pkt);
 	}
+
+	av_packet_free(&pkt);
+
 	return (frame) ? 0 : 1;
 }
 
@@ -978,7 +980,7 @@ status_t Export_ffmpeg :: WorkThread(void *arg)
 	const char *filename;
 	AVOutputFormat *fmt;
 	AVFormatContext *oc;
-	AVCodec *audio_codec, *video_codec;
+	const AVCodec *audio_codec, *video_codec;
 	int ret;
 	bool have_video = (mParent->fHasVideo && (mParent->fEnableVideo->Value() > 0));
 	bool have_audio = (mParent->fHasAudio && (mParent->fEnableAudio->Value() > 0));
@@ -1002,7 +1004,7 @@ status_t Export_ffmpeg :: WorkThread(void *arg)
 		exit(1);
 	}
 
-	fmt = oc->oformat;
+	fmt = (AVOutputFormat*) oc->oformat;
 
 	//	Video stream + codec
 	int selected_codec_idx = have_video ? mParent->fOptionVideoCodec->SelectedOption() : -1;
