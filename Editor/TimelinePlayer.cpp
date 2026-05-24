@@ -72,7 +72,7 @@ void TimelinePlayer :: AsyncPlay(bigtime_t start, bigtime_t end, const bool repe
 
 	fTimestamp = system_time();
 	std::function<void()> render_complete = std::bind(&TimelinePlayer::AsyncOutputComplete, this);
-	gRenderActor->AsyncPriority(&RenderActor::AsyncPlayFrame, gRenderActor, fCurrentPosition, this, render_complete);
+	gRenderActor->AsyncPriority<&RenderActor::AsyncPlayFrame>(fCurrentPosition, this, render_complete);
 }
 
 /*	FUNCTION:		TimelinePlayer :: AsyncSetFrame
@@ -91,7 +91,7 @@ void TimelinePlayer :: AsyncSetFrame(bigtime_t frame_idx)
 			fStartPosition = fCurrentPosition;
 	}
 	else
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPrepareFrame, gRenderActor, fCurrentPosition);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPrepareFrame>(fCurrentPosition);
 }
 
 /*	FUNCTION:		TimelinePlayer :: AsyncStop
@@ -122,9 +122,9 @@ void TimelinePlayer :: AsyncOutputComplete()
 		duration = frame_time;
 	if (duration < frame_time)
 	{
-		yarra::ActorManager::GetInstance()->AddTimer((frame_time - duration)/1000, this, std::bind(&TimelinePlayer::AsyncOutputComplete, this));
+		yarra::ActorManager::GetInstance()->AddTimer((frame_time - duration)/1000, {this, &TimelinePlayer::AsyncOutputComplete});
 		//	Preload next frame
-		gRenderActor->Async(&RenderActor::AsyncPreloadFrame, gRenderActor, fCurrentPosition + frame_time);
+		gRenderActor->Async<&RenderActor::AsyncPreloadFrame>(fCurrentPosition + frame_time);
 		return;
 	}
 
@@ -141,7 +141,7 @@ void TimelinePlayer :: AsyncOutputComplete()
 	{
 		fTimestamp = system_time();
 		std::function<void()> render_complete = std::bind(&TimelinePlayer::AsyncOutputComplete, this);
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPlayFrame, gRenderActor, fCurrentPosition, this, render_complete);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPlayFrame>(fCurrentPosition, this, render_complete);
 		fTimelinePositionMessage->ReplaceBool("Complete", false);
 	}
 	else

@@ -3,11 +3,11 @@ SubDir Medo ;
 # Compiler flags
 if $(release)
 {
-	C++FLAGS += -std=c++2a -O3 ;
+	C++FLAGS += -std=c++23 -O3 ;
 }
 else
 {
-	C++FLAGS += -std=c++2a -g -O0 -gno-column-info ;
+	C++FLAGS += -std=c++23 -g -O0 -gno-column-info ;
 }
 C++FLAGS += -I. -IYarra -I/boot/system/develop/headers/private/interface ;
 C++FLAGS += -I/boot/system/develop/headers/freetype2 ;
@@ -111,8 +111,8 @@ Main Medo :
 # Actor
 	Actor/Actor.cpp
 	Actor/ActorManager.cpp
+	Actor/ActorTimer.cpp
 	Actor/Platform_Haiku.cpp
-	Actor/Timer.cpp
 	Actor/WorkThread.cpp
 # Yarra
 	Yarra/FileIO/FileManager.cpp

@@ -1,6 +1,6 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Work thread
 */
 
@@ -22,7 +22,6 @@
 
 namespace yarra
 {
-class Thread;
 class ActorManager;
 
 class alignas(std::hardware_destructive_interference_size) WorkThread
@@ -36,7 +35,7 @@ public:
 
 protected:
 	//	Actual work thread
-	yplatform::Thread		*fThread;
+	std::jthread			*fThread;
 	yplatform::Semaphore	fThreadSemaphore;
 	std::thread::id			fThreadId;
 
@@ -44,8 +43,7 @@ protected:
 	const bool	IsCurrentCallingThread() const;
 
 	const int	fThreadIndex;
-	static int	work_thread(void *);
-	void		Start();
+	static void	work_thread(std::stop_token st, void *);
 
 	//	Work queue (actors with pending commands)
 	friend ActorManager;
@@ -71,11 +69,6 @@ protected:
 
 	uint32_t				fRequestedMessageCount;
 	uint32_t				fProcessedMessageCount;
-
-#if ACTOR_DEBUG
-	uint32_t				fMigratedFromCount;
-	uint32_t				fMigratedToCount;
-#endif
 };
 
 /*************************************************************************************
@@ -92,7 +85,7 @@ public:
 	void		ProcessPendingMessages();
 
 private:
-	friend Actor;
+	friend class Actor;
 	void		AddAsyncWork(Actor *actor)		noexcept	override;
 	void		SyncWorkComplete(Actor *actor)	noexcept	override;
 
@@ -100,15 +93,37 @@ private:
 	Messages to OsLooper
 *****************************************/
 private:
-	std::deque<std::function<void()> >	fMessageQueue;
+#if defined(__cpp_lib_move_only_function)
+	std::deque<std::move_only_function<void ()>>	fMessageQueue;
+#else
+	std::deque<std::function<void ()>>				fMessageQueue;
+#endif
 protected:
 	const bool AsyncValidityCheck() const;
 public:
 	template <class F, class ... Args>
-	void Async(F&& fn, Args && ... args) noexcept
+	void Async(F&& fn, Args&& ... args) noexcept
 	{
 		fWorkQueueLock.Lock();
-		fMessageQueue.emplace_back(std::bind(std::forward<F>(fn), std::forward<Args>(args)...));
+		fMessageQueue.emplace_back([this, f = std::forward<F>(fn), ...capturedArgs = std::forward<Args>(args)]() mutable
+			{
+				std::invoke(f, std::move(capturedArgs)...);
+			});
+		fWorkQueueLock.Unlock();
+	}
+
+	/****************************************************************
+		SBO-Optimized Async for Member Function Pointers
+		Intercepts target->Async<&Class::Method>(args)
+	*****************************************************************/
+	template <auto Method, class ... Args>
+	void Async(Args&& ... args) noexcept
+	{
+		fWorkQueueLock.Lock();
+		fMessageQueue.emplace_back([this, ...capturedArgs = std::forward<Args>(args)]() mutable 
+			{
+				[&]<typename C, typename R, typename... MArgs>(R (C::*m)(MArgs...)) {(static_cast<C*>(this)->*m)(std::move(capturedArgs)...);}(Method);
+			});
 		fWorkQueueLock.Unlock();
 	}
 };

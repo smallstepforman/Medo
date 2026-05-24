@@ -441,7 +441,7 @@ BBitmap * VideoManager :: GetThumbnailAsync(MediaSource *source, const int64 fra
 		fThumbnailCache->InvalidateItem(source, video_frame);
 		fQueueSemaphore->Unlock();
 
-		fThumbnailActor->Async(&VideoThumbnailActor::AsyncGenerateThumbnail, fThumbnailActor, source, frame_idx, notification);
+		fThumbnailActor->Async<&VideoThumbnailActor::AsyncGenerateThumbnail>(source, frame_idx, notification);
 		return nullptr;
 	}
 }

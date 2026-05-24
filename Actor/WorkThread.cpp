@@ -1,6 +1,6 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Work thread
 */
 
@@ -46,50 +46,37 @@ void WorkThread :: operator delete(void *p)
 	DESCRIPTION:	Constructor
 */
 WorkThread :: WorkThread(const int index, const bool spawn_thread)
-: fThreadIndex(index), fLastActor(nullptr), fWorkThreadState(0), fRequestedMessageCount(0), fProcessedMessageCount(0)
+: fThread(nullptr), fThreadIndex(index), fLastActor(nullptr), fWorkThreadState(0), fRequestedMessageCount(0), fProcessedMessageCount(0)
 {
 	fThreadSemaphore.Lock();
 	
 	if (spawn_thread)
 	{
-		char buffer[32];
-		sprintf(buffer, "WorkThread_%02d", index);
-		fThread = new yplatform::Thread(&WorkThread::work_thread, this, buffer);
+		fThread = new std::jthread(&WorkThread::work_thread, this);
 	}
 	else
 	{
 		fThread = nullptr;
 		fThreadId = std::this_thread::get_id();
 	}
-
-#if ACTOR_DEBUG
-	fMigratedFromCount = 0;
-	fMigratedToCount = 0;
-#endif
 }
 
 /*	FUNCTION:		WorkThread :: ~WorkThread
 	ARGUMENTS:		n/a
 	RETURN:			n/a
 	DESCRIPTION:	Destructor
-					TODO - dont exit until all messages processed
 */
 WorkThread :: ~WorkThread()
 {
 	fWorkQueueLock.Lock();
 
-	delete fThread;
-}
-
-/*	FUNCTION:		WorkThread :: Start
-	ARGUMENTS:		none
-	RETURN:			n/a
-	DESCRIPTION:	Start thread
-*/
-void WorkThread :: Start()
-{
 	if (fThread)
-		fThread->Start();
+	{
+		fThread->request_stop();
+		fThreadSemaphore.Signal();
+		fThread->join();
+		delete fThread;
+	}
 }
 
 /*	FUNCTION:		WorkThread :: AddAsyncWork
@@ -111,7 +98,7 @@ void WorkThread :: AddAsyncWork(Actor *actor) noexcept
 	const bool can_migrate = (fLastActor &&
 							(fLastActor->fState & (Actor::State::eExecuting | Actor::State::eSchedularLock)) &&
 							(fLastActor != actor) &&
-							!(actor->fState & Actor::State::eLockedToThread));
+							!(actor->fState & Actor::State::ePinnedToThread));
 	fWorkQueueLock.Unlock();
 	
 	if (can_migrate && ActorManager::GetInstance()->StealWork(nullptr, this))
@@ -145,16 +132,19 @@ void WorkThread :: SyncWorkComplete(Actor *actor) noexcept
 
 /*	FUNCTION:		WorkThread :: work_thread
 	ARGUMENTS:		arg
-	RETURN:			thread exit status
+	RETURN:			n/a
 	DESCRIPTION:	Work thread.  Wait for work, then execute Actors's work
 */
-int WorkThread :: work_thread(void *arg)
+void WorkThread :: work_thread(std::stop_token stop_token, void *arg)
 {
 	WorkThread *wt = (WorkThread *) arg;
+	while (wt->fThread == nullptr)
+		std::this_thread::yield();
 	wt->fThreadId = std::this_thread::get_id();
-	ActorManager *actor_manager = ActorManager::GetInstance();
-	int tick = 0;	//	prefer to use hot cache
 	
+	int tick = 0;	//	prefer to use hot cache
+	ActorManager *actor_manager = ActorManager::GetInstance();
+
 	while (1)
 	{
 		//	steal work ?
@@ -167,7 +157,10 @@ int WorkThread :: work_thread(void *arg)
 		//	Wait for some work
 		if (!wt->fThreadSemaphore.Wait())
 			goto exit_thread;
-		
+
+		if (stop_token.stop_requested())
+			goto exit_thread;
+
 		bool work_available = true;		//	process a couple of messages from next actor
 		while (work_available)
 		{
@@ -226,29 +219,19 @@ int WorkThread :: work_thread(void *arg)
 				}
 				else
 				{
-#if ACTOR_DEBUG
-					printf("[%d] WorkThread() - No Actor::Message(%p)\n", wt->fThreadIndex, wt->fLastActor);
-#endif
 					wt->fLastActor = nullptr;
 					wt->fWorkQueueLock.Unlock();
 				}
 			}
 			else
 			{
-#if ACTOR_DEBUG
-				printf("[%d] WorkThread() - Unprocessed signal\n", wt->fThreadIndex);
-#endif
 				wt->fWorkQueueLock.Unlock();
 			}
 		}
 	}
 
 exit_thread:
-#if ACTOR_DEBUG
-	printf("WorkThread() - Exiting (Thread %d)\n", wt->fThreadIndex);
-#endif
-	yplatform::ExitThread();
-	return 0;
+	;
 }
 
 const bool WorkThread :: IsCurrentCallingThread() const

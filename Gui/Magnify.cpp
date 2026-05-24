@@ -684,7 +684,7 @@ TMagnify::FrameResized(float newW, float newH)
 */
 void TMagnify::MouseDown(BPoint where)
 {
-	yarra::ActorManager::GetInstance()->AddTimer(50, this, std::bind(&TMagnify::AsyncColourSelected, this, SelectionColor()));
+	yarra::ActorManager::GetInstance()->AddTimer(50, {this, &TMagnify::AsyncColourSelected, SelectionColor()});
 }
 
 /*	FUNCTION:		TMagnify :: AsyncColourSelected

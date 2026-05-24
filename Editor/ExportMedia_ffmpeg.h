@@ -23,6 +23,7 @@ struct AVCodec;
 struct AVCodecContext;
 struct AVStream;
 struct AVFrame;
+struct AVChannelLayout;
 
 struct SwsContext;
 struct OutputStream;
@@ -62,7 +63,7 @@ private:
 
 
 	void		add_stream(OutputStream *ost, AVFormatContext *oc, const AVCodec **codec, int codec_id);
-	AVFrame		*alloc_audio_frame(int sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples);
+    AVFrame		*alloc_audio_frame(int sample_fmt, const AVChannelLayout *channel_layout, int sample_rate, int nb_samples);
 	void		open_audio(AVFormatContext *oc, const AVCodec *codec, OutputStream *ost, AVDictionary *opt_arg);
 	AVFrame		*get_audio_frame(OutputStream *ost);
 	int			write_audio_frame(AVFormatContext *oc, OutputStream *ost);

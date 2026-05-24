@@ -482,7 +482,7 @@ int32 Export_MediaKit :: WorkThread(void *arg)
 		while ((timeline < gProject->mTotalDuration) && instance->fKeepAlive)
 		{
 			BBitmap *frame;
-			gRenderActor->Async(&RenderActor::AsyncPrepareExportFrame, gRenderActor, timeline, instance->fRenderSemaphore, &frame);
+			gRenderActor->Async<&RenderActor::AsyncPrepareExportFrame>(timeline, instance->fRenderSemaphore, &frame);
 			status_t err;
 			while ((err = acquire_sem(instance->fRenderSemaphore)) == B_INTERRUPTED) ;
 			if (err == B_OK)

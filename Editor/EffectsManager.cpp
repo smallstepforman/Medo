@@ -221,7 +221,7 @@ MediaEffect * EffectsManager :: CreateMediaEffect(const char *vendor_name, const
 
 			if (!i->mRenderObjectsInitialised)
 			{
-				gRenderActor->Async(&RenderActor::AsyncCreateEffectNode, gRenderActor, i);
+				gRenderActor->Async<&RenderActor::AsyncCreateEffectNode>(i);
 				i->mRenderObjectsInitialised = true;
 			}
 			return media_effect;

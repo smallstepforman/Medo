@@ -114,7 +114,7 @@ void MonitorControls :: MessageReceived(BMessage *msg)
 	switch (msg->what)
 	{
 		case kMessageButtonRewind:
-			fTimelinePlayer->Async(&TimelinePlayer::AsyncSetFrame, fTimelinePlayer, 0);
+			fTimelinePlayer->Async<&TimelinePlayer::AsyncSetFrame>(0);
 			break;
 
 		case kMessageButtonPlay:
@@ -122,10 +122,10 @@ void MonitorControls :: MessageReceived(BMessage *msg)
 			{
 				if (fCurrentFrame >= gProject->mTotalDuration)
 					fCurrentFrame = 0;
-				fTimelinePlayer->Async(&TimelinePlayer::AsyncPlay, fTimelinePlayer, fCurrentFrame, -1, false);
+				fTimelinePlayer->Async<&TimelinePlayer::AsyncPlay>(fCurrentFrame, -1, false);
 			}
 			else
-				fTimelinePlayer->Async(&TimelinePlayer::AsyncStop, fTimelinePlayer);
+				fTimelinePlayer->Async<&TimelinePlayer::AsyncStop>();
 			break;
 
 		case B_MOUSE_WHEEL_CHANGED:
@@ -137,7 +137,7 @@ void MonitorControls :: MessageReceived(BMessage *msg)
 				int64 max_time = gProject->mTotalDuration;
 				if (when > max_time)	when = max_time;
 				if (when < 0)			when = 0;
-				fTimelinePlayer->Async(&TimelinePlayer::AsyncSetFrame, fTimelinePlayer, when);
+				fTimelinePlayer->Async<&TimelinePlayer::AsyncSetFrame>(when);
 			}
 			break;
 		}
@@ -168,7 +168,7 @@ void MonitorControls :: MouseDown(BPoint point)
 	if (point.y > bounds.bottom - (kProgressHeight + kProgressOffset))
 	{
 		float p = point.x / bounds.Width();
-		fTimelinePlayer->Async(&TimelinePlayer::AsyncSetFrame, fTimelinePlayer, gProject->mTotalDuration*p);
+		fTimelinePlayer->Async<&TimelinePlayer::AsyncSetFrame>(gProject->mTotalDuration*p);
 	}
 }
 

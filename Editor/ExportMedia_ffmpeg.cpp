@@ -519,19 +519,22 @@ void Export_ffmpeg :: add_stream(OutputStream *ost, AVFormatContext *oc, const A
 		exit(1);
 	}
 	ost->enc = c;
-
+	int channels;
 	switch ((*codec)->type)
 	{
 		case AVMEDIA_TYPE_AUDIO:
+		{
 			c->bit_rate = mParent->GetSelectedAudioBitrate();
-			c->sample_fmt = (*codec)->sample_fmts ? (*codec)->sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
+			const enum AVSampleFormat *sample_fmts = nullptr;
+			avcodec_get_supported_config(nullptr, *codec, AV_CODEC_CONFIG_SAMPLE_FORMAT, 0, (const void **)&sample_fmts, nullptr);
+			c->sample_fmt = sample_fmts ? sample_fmts[0] : AV_SAMPLE_FMT_FLTP;
 			c->sample_rate = (int)mParent->GetSelectedAudioSampleRate();
-			c->channels = (int) mParent->GetSelectedAudioNumberChannels();
-			c->channel_layout = (c->channels == 2) ? AV_CH_LAYOUT_STEREO : AV_CH_LAYOUT_MONO;
+			channels = (int) mParent->GetSelectedAudioNumberChannels();
+			av_channel_layout_default(&c->ch_layout, channels);
 			ost->st->time_base = (AVRational){ 1, c->sample_rate };
 			c->time_base = ost->st->time_base;
 			break;
-
+		}
 		case AVMEDIA_TYPE_VIDEO:
 			c->codec_id = (AVCodecID)codec_id;
 			c->bit_rate = mParent->GetSelectedVideoBitrate();
@@ -572,7 +575,7 @@ void Export_ffmpeg :: add_stream(OutputStream *ost, AVFormatContext *oc, const A
 /**************************************************************/
 /* audio output */
 
-AVFrame * Export_ffmpeg :: alloc_audio_frame(int sample_fmt, uint64_t channel_layout, int sample_rate, int nb_samples)
+AVFrame * Export_ffmpeg :: alloc_audio_frame(int sample_fmt, const AVChannelLayout *channel_layout, int sample_rate, int nb_samples)
 {
 	AVFrame *frame = av_frame_alloc();
 	int ret;
@@ -583,7 +586,7 @@ AVFrame * Export_ffmpeg :: alloc_audio_frame(int sample_fmt, uint64_t channel_la
 	}
 
 	frame->format = (AVSampleFormat) sample_fmt;
-	frame->channel_layout = channel_layout;
+	av_channel_layout_copy(&frame->ch_layout, channel_layout);
 	frame->sample_rate = sample_rate;
 	frame->nb_samples = nb_samples;
 
@@ -617,8 +620,8 @@ void Export_ffmpeg :: open_audio(AVFormatContext *oc, const AVCodec *codec, Outp
 	else
 		nb_samples = c->frame_size;
 
-	ost->frame = alloc_audio_frame(c->sample_fmt, c->channel_layout, c->sample_rate, nb_samples);
-	ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_FLT, c->channel_layout, c->sample_rate, nb_samples);
+	ost->frame = alloc_audio_frame(c->sample_fmt, &c->ch_layout, c->sample_rate, nb_samples);
+	ost->tmp_frame = alloc_audio_frame(AV_SAMPLE_FMT_FLT, &c->ch_layout, c->sample_rate, nb_samples);
 
 	/* copy the stream parameters to the muxer */
 	ret = avcodec_parameters_from_context(ost->st->codecpar, c);
@@ -641,9 +644,9 @@ AVFrame * Export_ffmpeg :: get_audio_frame(OutputStream *ost)
 	media_raw_audio_format format;
 	format.format = media_raw_audio_format::B_AUDIO_FLOAT;
 	format.frame_rate = c->sample_rate;
-	format.channel_count = c->channels;
+	format.channel_count = c->ch_layout.nb_channels;
 	format.buffer_size = frame->linesize[0];
-	assert(format.channel_count == ost->enc->channels);
+	assert(format.channel_count == ost->enc->ch_layout.nb_channels);
 
 	//	codec may be planar instead of interleaved, convert it
 	int64 next_start_frame, samples_done;

@@ -1,11 +1,12 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Actor
 */
 
 #include <cassert>
 #include <thread>
+#include <new>
 
 #include "Platform.h"
 #include "ActorManager.h"
@@ -25,8 +26,8 @@ Actor :: Actor(const uint32_t config, WorkThread *work_thread)
 	:fState(0)
 {
 	//	Locked to thread?
-	if ((config & ActorConfiguration::eLockToThread) || work_thread)
-		fState |= State::eLockedToThread;
+	if ((config & ActorConfiguration::ePinToThread) || work_thread)
+		fState |= State::ePinnedToThread;
 
 	//	Attach to scheduler
 	ActorManager *manager = ActorManager::GetInstance();
@@ -36,10 +37,6 @@ Actor :: Actor(const uint32_t config, WorkThread *work_thread)
 		manager->AddActor(this);
 	else
 		fWorkThread = work_thread;
-	
-#if ACTOR_DEBUG
-	printf("Actor::Constructor(%p) Thread %d\n", this, fWorkThread->fThreadIndex);
-#endif
 }
 
 /*	FUNCTION:		Actor :: ~Actor
@@ -50,9 +47,6 @@ Actor :: Actor(const uint32_t config, WorkThread *work_thread)
 */
 Actor :: ~Actor()
 {
-#if ACTOR_DEBUG
-	printf("Actor::Destructor() %p\n", this);
-#endif
 	ActorManager::GetInstance()->RemoveActor(this);
 }
 
@@ -78,16 +72,6 @@ void Actor :: operator delete(void *p)
 {
     Actor *pc = static_cast<Actor *>(p);
     yplatform::AlignedFree(pc);
-}
-
-/*	FUNCTION:		Actor :: GetWorkThreadIndex
-	ARGUMENTS:		none
-	RETURN:			thread index
-	DESCRIPTION:	Get thread index
-*/
-const int Actor :: GetWorkThreadIndex() const
-{
-	return fWorkThread->GetWorkThreadIndex();
 }
 
 /*	FUNCTION:		Actor :: BeginAsyncMessage
@@ -148,7 +132,7 @@ void Actor :: Lock() noexcept
 	} while (repeat);
 
 	//	Validate that Actor allowed to run on this WorkThread
-	if (fState & State::eLockedToThread)
+	if (fState & State::ePinnedToThread)
 		assert(fWorkThread->IsCurrentCallingThread());
 
 	fState |= State::eSchedularLock;
@@ -184,7 +168,7 @@ const bool Actor :: IsLocked() const
 */
 const bool Actor :: AsyncValidityCheck() const
 {
-	if (fState & (State::eLockedToThread | State::eExecuting))
+	if (fState & (State::ePinnedToThread | State::eExecuting))
 	{
 		if (std::this_thread::get_id() == fWorkThread->fThreadId)
 			return true;
@@ -193,7 +177,6 @@ const bool Actor :: AsyncValidityCheck() const
 	if (fState & State::eSchedularLock)
 		return true;
 
-	assert(0);
 	return false;
 }
 

@@ -221,8 +221,7 @@ BBitmap	* AudioManager :: GetBitmapAsync(MediaSource *source, const int64 start_
 	
 	if (generate_thumbnail)
 	{
-		fAudioThumbnailActor->Async(&AudioThumbnailActor::AsyncGenerateThumbnail, fAudioThumbnailActor,
-									source, audio_start, audio_end, width, height);
+		fAudioThumbnailActor->Async<&AudioThumbnailActor::AsyncGenerateThumbnail>(source, audio_start, audio_end, width, height);
 	}
 	return bitmap;
 }

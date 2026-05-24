@@ -1,6 +1,6 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Actor Manager
 */
 
@@ -17,13 +17,13 @@
 #include "Actor.h"
 #endif
 
+namespace std {class jthread;}
+
 namespace yarra
 {
 
 class WorkThread;
 class Timer;
-
-namespace yplatform {class Thread;};
 
 //================
 class ActorManager
@@ -55,7 +55,7 @@ private:
 		Timer sends Async complete messages (shared instance)
 	*************************************/
 public:
-	void					AddTimer(const int64_t milliseconds, Actor *target, const std::function<void ()> &callback_complete);
+	void					AddTimer(const int64_t milliseconds, yarra::ActorMessage<> message);
 	void					CancelTimers(Actor *target);
 
 private:
@@ -68,11 +68,11 @@ private:
 public:
 	void				EnableLoadBalancer(const bool enable, const uint64_t period_milliseconds = 500);
 private:
-	yplatform::Thread	*fLoadBalancerThread;
+	std::jthread		*fLoadBalancerThread;
 	bool				fTerminateLoadBalancerThread;
 	uint64_t			fLoadBalancerPeriod;
 	std::vector<int>	fLoadBalancerThreadCycleCount;
-	static int			LoadBalancerThread(void *);
+	static void			LoadBalancerThread(void *);
 };
 
 };	//	namespace yarra

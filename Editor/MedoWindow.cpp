@@ -393,7 +393,7 @@ void MedoWindow :: MessageReceived(BMessage *msg)
 			fProjectSettings->Show();
 			break;
 		case eMsgActionProjectSettingsChanged:
-			gRenderActor->Async(&RenderActor::AsyncInvalidateProjectSettings, gRenderActor, 0);
+			gRenderActor->Async<&RenderActor::AsyncInvalidateProjectSettings>(0);
 			break;
 
 		//	Edit menu

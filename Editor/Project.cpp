@@ -89,7 +89,7 @@ Project :: ~Project()
 */
 void Project :: InvalidatePreview()
 {
-	gRenderActor->Async(&RenderActor::AsyncPrepareFrame, gRenderActor, MedoWindow::GetInstance()->fTimelineView->GetCurrrentFrame());
+	gRenderActor->Async<&RenderActor::AsyncPrepareFrame>(MedoWindow::GetInstance()->fTimelineView->GetCurrrentFrame());
 }
 
 /*	FUNCTION:		Project :: AddMediaSource

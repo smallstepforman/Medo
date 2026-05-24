@@ -98,8 +98,8 @@ add_executable(${PROJECT_NAME}
 #Actor
 	"Actor/Actor.cpp"
 	"Actor/ActorManager.cpp"
+	"Actor/ActorTimer.cpp"
 	"Actor/Platform_Haiku.cpp"
-	"Actor/Timer.cpp"
 	"Actor/WorkThread.cpp"
 #Yarra
     "Yarra/FileIO/FileManager.cpp"
@@ -158,14 +158,14 @@ add_executable(${PROJECT_NAME}
 
 include_directories(/boot/system/develop/headers/freetype2)
 include_directories(/boot/system/develop/headers)
-#target_include_directories(${PROJECT_NAME} SYSTEM INTERFACE /boot/system/develop/tools/lib/gcc/x86_64-unknown-haiku/8.3.0/include)
+#target_include_directories(${PROJECT_NAME} SYSTEM INTERFACE /boot/system/develop/tools/lib/gcc/x86_64-unknown-haiku/13.3.0/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	 ${CMAKE_CURRENT_SOURCE_DIR}/Yarra
 )
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -g  -O0 -Wno-interference-size")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23 -g  -O0 -Wno-interference-size")
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0")
 
-target_compile_options(${PROJECT_NAME} PUBLIC -std=c++2a -g -O0)
+target_compile_options(${PROJECT_NAME} PUBLIC -std=c++23 -g -O0)
 target_link_libraries(${PROJECT_NAME} be stdc++ GL tracker translation media freetype avformat avcodec avutil swscale swresample)
 

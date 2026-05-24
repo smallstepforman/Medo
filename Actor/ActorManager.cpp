@@ -1,20 +1,14 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Actor Manager
-					C++20 TODO (when compiler update)
-					- use std::invocable for method pointers (Actor::Async)
-					- use std::stop_token for detecting thread termination
-					- use std::counting_semaphore, also   using binary_semaphore = std::counting_semaphore<1>
-					- std::atomic_flag::test to spinlock
-					- investigate if ticket_mutex required (fairness)
-					- use std::latch for termination processing
 */
 
 #include <cstdio>
 #include <cassert>
 #include <thread>
 #include <mutex>
+#include <chrono>
 
 #include "Platform.h"
 
@@ -43,17 +37,11 @@ ActorManager :: ActorManager(const unsigned int requested_number_threads,
 	sInstance = this;
 
 	fIdleExit = false;
-	fTerminateLoadBalancerThread = false;
 	fIdleSemaphore.Lock();	//	Start locked
 
 	const unsigned int kNumberPhysicalCpuCores = std::thread::hardware_concurrency();
 	const unsigned int num_threads = (requested_number_threads == 0 ? kNumberPhysicalCpuCores : requested_number_threads);
 
-#if ACTOR_DEBUG
-	printf("Number Physical CPU cores = %d\n", kNumberPhysicalCpuCores);
-	printf("sizeof(WorkThread) = %zu\n", sizeof(WorkThread));
-#endif
-	
 	fThreadPoolLock.Lock();
 	fThreads.reserve(num_threads * kMaxNumberWorkThreadsFactor);
 	fLoadBalancerThreadCycleCount.reserve(num_threads * kMaxNumberWorkThreadsFactor);
@@ -62,8 +50,6 @@ ActorManager :: ActorManager(const unsigned int requested_number_threads,
 	{
 		fThreads.emplace_back(new WorkThread(i));
 	}
-	for (auto t : fThreads)
-		t->Start();
 	
 	fThreadPoolLock.Unlock();
 
@@ -81,18 +67,14 @@ ActorManager :: ActorManager(const unsigned int requested_number_threads,
 */
 ActorManager :: ~ActorManager()
 {
-	delete fTimer;
-
 	fThreadPoolLock.Lock();
+	delete fTimer;
 	if (fLoadBalancerThread)
 	{
-#if ACTOR_DEBUG
-		printf("ActorManager::~ActorManager() - destroying %zu WorkThreads\n", fThreads.size());
-#endif
-		fTerminateLoadBalancerThread = true;
-		while (fTerminateLoadBalancerThread)
-			yplatform::Sleep(1);
+		fLoadBalancerThread->request_stop();
+		fLoadBalancerThread->join();
 		delete fLoadBalancerThread;
+		fLoadBalancerThread = nullptr;
 	}
 
 	for (auto i : fThreads)
@@ -128,13 +110,19 @@ void ActorManager :: RemoveActor(Actor *a)
 	CancelTimers(a);
 
 	if (!a->fWorkThread->fWorkQueueLock.Lock())
+	{
+		printf("[ActorManager] RemoveActor() - cannot acquire fWorkQueueLock #1\n");
 		return;
+	}
 	while (a->fState & Actor::State::eExecuting)
 	{
 		a->fWorkThread->fWorkQueueLock.Unlock();
 		std::this_thread::yield();
 		if (!a->fWorkThread->fWorkQueueLock.Lock())
+		{
+			printf("[ActorManager] RemoveActor() - cannot acquire fWorkQueueLock #2\n");
 			return;
+		}
 	}
 	bool repeat = true;
 	while (repeat)
@@ -236,15 +224,12 @@ const bool ActorManager :: StealWork(WorkThread *destination_thread, WorkThread 
 		for (std::deque<Actor *>::const_iterator it = source_thread->fWorkQueue.begin(); it != source_thread->fWorkQueue.end(); it++)
 		{
 			if ((*it != source_thread->fLastActor) &&	//	skip fLastActor (preserve thread hot cache)
-				!((*it)->fState & (Actor::State::eLockedToThread | Actor::State::eExecuting | Actor::State::eSchedularLock)))
+				!((*it)->fState & (Actor::State::ePinnedToThread | Actor::State::eExecuting | Actor::State::eSchedularLock)))
 			{
 				//	remove reference to selected Actor from work queue
 				actor = *it;
 				actor->fWorkThread = destination_thread;
 				source_thread->fRequestedMessageCount -= (uint32_t)actor->fMessageQueue.size();
-#if ACTOR_DEBUG
-				source_thread->fMigratedFromCount += (uint32_t)actor->fMessageQueue.size();
-#endif
 				source_thread->fWorkQueue.erase(it);
 				break;
 			}
@@ -254,15 +239,9 @@ const bool ActorManager :: StealWork(WorkThread *destination_thread, WorkThread 
 	//	Push selected Actor's work to destination_thread
 	if (actor)
 	{
-#if ACTOR_DEBUG
-		printf("*** TransferWork(%p from thread %d to %d).  State=%04x\n", actor, source_thread->fThreadIndex, destination_thread->fThreadIndex, actor->fState);
-#endif
 		destination_thread->fWorkQueue.push_back(actor);
 		destination_thread->fRequestedMessageCount += (uint32_t)actor->fMessageQueue.size();
 		destination_thread->fWorkThreadState |= WorkThread::ThreadState::eStoleWork;
-#if ACTOR_DEBUG
-		destination_thread->fMigratedToCount += (uint32_t)actor->fMessageQueue.size();
-#endif
 	}
 
 	source_thread->fWorkQueueLock.Unlock();
@@ -339,27 +318,7 @@ void ActorManager :: Run(const bool idle_exit)
 
 		//	Exit when no work remaining
 		if (count_busy == 0)
-		{
-#if ACTOR_DEBUG		
-			printf("ActorManager::Run() count_busy == 0\n");
-			uint64_t requested_count = 0;
-			uint64_t process_count = 0;
-			uint64_t total_from = 0;
-			uint64_t total_to = 0;
-			for (auto i : fThreads)
-			{
-				printf("%d %04x fCompleted = %u, fRequestedCount = %u, migrate from=%u, to=%u\n",
-					i->fThreadIndex, i->fWorkThreadState, i->fProcessedMessageCount, i->fRequestedMessageCount, i->fMigratedFromCount, i->fMigratedToCount);
-
-				requested_count += i->fRequestedMessageCount;
-				process_count += i->fProcessedMessageCount;
-				total_from += i->fMigratedFromCount;
-				total_to += i->fMigratedToCount;
-			}
-			printf("Total process count = %lu, total requested count = %lu, total_from=%lu, total_to=%lu\n", process_count, requested_count, total_from, total_to);
-#endif			
 			return;
-		}
 	}
 }
 
@@ -409,19 +368,17 @@ void ActorManager :: WorkThreadIdle()
 
 /*	FUNCTION:		ActorManager :: AddTimer
 	ARGUMENTS:		milliseconds
-					target
-					callback_complete
+					message
 	RETURN:			none
 	DESCRIPTION:	Helper function to add timer (async)
 */
-void ActorManager :: AddTimer(const int64_t milliseconds, Actor *target, const std::function<void ()> &callback_complete)
+void ActorManager :: AddTimer(const int64_t milliseconds, yarra::ActorMessage<> message)
 {
-	assert(target);
-	assert(callback_complete);
+	assert(message.IsValid());
 
 	if (fTimer == nullptr)
 		fTimer = new Timer;
-	fTimer->Async(&yarra::Timer::AddTimer, fTimer, milliseconds, target, callback_complete);
+	fTimer->Async<&Timer::AddTimer>(milliseconds, std::move(message));
 }
 
 /*	FUNCTION:		ActorManager :: CancelTimers
@@ -456,35 +413,41 @@ void ActorManager :: EnableLoadBalancer(const bool enable, const uint64_t millis
 	{
 		assert(fLoadBalancerThread == nullptr);
 		assert(fLoadBalancerThreadCycleCount.empty());
-		fLoadBalancerThread = new yplatform::Thread(&ActorManager::LoadBalancerThread, this, "Load Balancer");
+		fLoadBalancerThread = new std::jthread(&ActorManager::LoadBalancerThread, this);
 		fLoadBalancerPeriod = milliseconds;
 		for (auto i : fThreads)
 			fLoadBalancerThreadCycleCount.push_back(i->fProcessedMessageCount);
-		fLoadBalancerThread->Start();
 	}
 	else
 	{
-		delete fLoadBalancerThread;
-		fLoadBalancerThread = nullptr;
+		if (fLoadBalancerThread)
+		{
+			fLoadBalancerThread->request_stop();
+			fLoadBalancerThread->join();
+			delete fLoadBalancerThread;
+			fLoadBalancerThread = nullptr;
+		}
 		fLoadBalancerThreadCycleCount.clear();
 	}
 }
 
 /*	FUNCTION:		ActorManager :: LoadBalancerThread
 	ARGUMENTS:		arg
-	RETURN:			thread exit status
+	RETURN:			n/a
 	DESCRIPTION:	Load balancer thread periodically determines if system 'busy' and adds new worker threads to prevent Actor starvation.
 					The system is considerd 'busy' when no new actor messages are processed within the fLoadBalancerPeriod.
 */
-int ActorManager :: LoadBalancerThread(void *arg)
+void ActorManager :: LoadBalancerThread(void *arg)
 {
 	ActorManager *manager = (ActorManager *)arg;
 	assert(manager != nullptr);
+	while (manager->fLoadBalancerThread == nullptr)
+		std::this_thread::yield();
 
-	while (!manager->fTerminateLoadBalancerThread)
+	while (!manager->fLoadBalancerThread->get_stop_token().stop_requested())
 	{
 		//	Sleep for fLoadBalancerPeriod
-		yplatform::Sleep(manager->fLoadBalancerPeriod);
+		std::this_thread::sleep_for(std::chrono::milliseconds(manager->fLoadBalancerPeriod));
 
 		//	Check if system 'busy' (no new actor messages are processed within the fLoadBalancerPeriod)   
 		size_t count_busy = 0;
@@ -506,19 +469,11 @@ int ActorManager :: LoadBalancerThread(void *arg)
 		//	Spawn new WorkThread?
 		if ((count_busy == num_threads) && (num_threads < manager->fThreads.capacity()))
 		{
-#if ACTOR_DEBUG
-			printf("ActorManager::LoadBalancerThread() - spawning new WorkThread\n");
-#endif
-
 			std::lock_guard<yplatform::Semaphore> aLock(manager->fThreadPoolLock);
 			manager->fThreads.emplace_back(new WorkThread((int)num_threads));
 			manager->fLoadBalancerThreadCycleCount.push_back(0);
-			manager->fThreads[num_threads]->Start();
 		}
 	}
-	manager->fTerminateLoadBalancerThread = false;
-	yplatform::ExitThread();
-	return 0;
 }
 
 

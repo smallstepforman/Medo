@@ -1,6 +1,6 @@
 /*	PROJECT:		Yarra Actor Model
 	AUTHORS:		Zenja Solaja, Melbourne Australia
-	COPYRIGHT:		2017-2018, ZenYes Pty Ltd
+	COPYRIGHT:		Zen Yes Pty Ltd, 2017-2026, MIT license
 	DESCRIPTION:	Timer
 */
 
@@ -12,15 +12,13 @@
 #endif
 
 #include <deque>
-
-namespace yplatform
-{
-class Thread;
-class Semaphore;
-};
+#include <chrono>
+#include <thread>
 
 namespace yarra
 {
+
+namespace Semaphore {class Semaphore;}
 
 	/******************************
 		yarra::Timer
@@ -32,38 +30,26 @@ namespace yarra
 				~Timer();
 
 		/*	Schedule timer message:
-				Prefer to use yarra::ActorManager::GetInstance()->AddTimer(milliseconds, target, std::bind(&Actor::Behaviour, target, ...));
+				Prefer to use yarra::ActorManager::GetInstance()->AddTimer(milliseconds, message);
 		*/
-		void		AddTimer(const int64_t milliseconds, Actor *target, std::function<void()> behaviour);
+		void		AddTimer(const int64_t milliseconds, ActorMessage<> message);
 		void		CancelTimersLocked(Actor *target);
 
 	private:
 		struct TimerObject
 		{
-			int64_t									milliseconds;
-			Actor									*target;
-			std::function<void()>					behaviour;
-#if ACTOR_DEBUG
-			double									timestamp;
-#endif
+			std::chrono::steady_clock::time_point   fExpiry;
+			ActorMessage<>							fMessage;
 
-			TimerObject(int64_t ms, Actor *t, std::function<void()> b)
-				: milliseconds(ms), target(t), behaviour(b)
-			{
-#if ACTOR_DEBUG
-				timestamp = yplatform::GetElapsedTime();
-#endif
-			}
+			TimerObject(std::chrono::steady_clock::time_point t, ActorMessage<> msg)
+				: fExpiry(t), fMessage(std::move(msg))
+			{ }
 		};
-		std::deque<TimerObject>		fTimerQueue;
-		double						fTimeStamp;
-		void						TimerTickLocked();
-		
-		yplatform::Thread			*fTimerThread;
-		yplatform::Semaphore		fQueueLock;
-		yplatform::Semaphore		fThreadSemaphore;
-		static int					TimerThread(void *);
-		bool						fKeepAlive;
+		std::deque<TimerObject>					fTimerQueue;
+		std::jthread							fTimerThread;
+		yplatform::Semaphore					fQueueLock;
+		yplatform::Semaphore					fThreadSemaphore;
+		static void								TimerThread(std::stop_token stop_token, void *);
 
 		friend class ActorManager;
 		const bool		IsBusy();

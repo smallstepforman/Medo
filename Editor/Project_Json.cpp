@@ -553,7 +553,7 @@ const bool Project :: LoadProject(const char *data, const bool clear_media)
 			printf("Project::LoadProject() Cannot create sem\n");
 			exit(1);
 		}
-		gRenderActor->Async(&RenderActor::AsyncInvalidateProjectSettings, gRenderActor, sem);
+		gRenderActor->Async<&RenderActor::AsyncInvalidateProjectSettings>(sem);
 		acquire_sem(sem);
 		delete_sem(sem);
 	}

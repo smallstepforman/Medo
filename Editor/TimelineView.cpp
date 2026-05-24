@@ -236,7 +236,7 @@ TimelineView :: ~TimelineView()
 {
 	if (fTimelinePlayer->IsPlaying())
 	{
-		fTimelinePlayer->Async(&TimelinePlayer::AsyncStop, fTimelinePlayer);
+		fTimelinePlayer->Async<&TimelinePlayer::AsyncStop>();
 		usleep(1000*1000);
 	}
 	delete fTimelinePlayer;
@@ -295,7 +295,7 @@ void TimelineView :: MessageReceived(BMessage *msg)
 			if (fPlayMode != PLAY_ALL)
 			{
 				fPlayMode = PLAY_ALL;
-				fTimelinePlayer->Async(&TimelinePlayer::AsyncPlay, fTimelinePlayer, fCurrentFrame, -1, false);
+				fTimelinePlayer->Async<&TimelinePlayer::AsyncPlay>(fCurrentFrame, -1, false);
 				fButtonPlay->SetState(true);
 				fButtonPlayAb->SetState(false);
 			}
@@ -312,7 +312,7 @@ void TimelineView :: MessageReceived(BMessage *msg)
 				int64 posB = fTimelinePosition->GetKeyframeMarkerPosition(1);
 				if ((fCurrentFrame < posA) || (fCurrentFrame >= posB))
 					fCurrentFrame = posA;
-				fTimelinePlayer->Async(&TimelinePlayer::AsyncPlay, fTimelinePlayer, posA, posB, true);
+				fTimelinePlayer->Async<&TimelinePlayer::AsyncPlay>(posA, posB, true);
 				fButtonPlayAb->SetState(true);
 				fButtonPlay->SetState(false);
 			}
@@ -407,7 +407,7 @@ void TimelineView :: MessageReceived(BMessage *msg)
 */
 void TimelineView :: PlayComplete()
 {
-	fTimelinePlayer->Async(&TimelinePlayer::AsyncStop, fTimelinePlayer);
+	fTimelinePlayer->Async<&TimelinePlayer::AsyncStop>();
 	fPlayMode = PLAY_OFF;
 	fButtonPlay->SetState(false);
 	fButtonPlayAb->SetState(false);
@@ -648,11 +648,11 @@ void TimelineView :: PositionUpdate(const int64 position, const bool generate_ou
 	//	Invalidate preview
 	if (generate_output_preview)
 	{
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPrepareFrame, gRenderActor, fCurrentFrame);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPrepareFrame>(fCurrentFrame);
 
 		//	If playing, update current position
 		if ((fPlayMode == PLAY_ALL) || (fPlayMode == PLAY_AB))
-			fTimelinePlayer->Async(&TimelinePlayer::AsyncSetFrame, fTimelinePlayer, fCurrentFrame);
+			fTimelinePlayer->Async<&TimelinePlayer::AsyncSetFrame>(fCurrentFrame);
 		else
 			fTimelinePosition->SetPosition(position);
 	}
@@ -682,8 +682,8 @@ void TimelineView :: PositionKeyframeUpdate()
 		int64 posB = fTimelinePosition->GetKeyframeMarkerPosition(1);
 		if ((fCurrentFrame < posA) || (fCurrentFrame >= posB))
 			fCurrentFrame = posA;
-		fTimelinePlayer->Async(&TimelinePlayer::AsyncPlay, fTimelinePlayer, posA, posB, true);
-		fTimelinePlayer->Async(&TimelinePlayer::AsyncSetFrame, fTimelinePlayer, fCurrentFrame);
+		fTimelinePlayer->Async<&TimelinePlayer::AsyncPlay>(posA, posB, true);
+		fTimelinePlayer->Async<&TimelinePlayer::AsyncSetFrame>(fCurrentFrame);
 	}
 	InvalidateItems(INVALIDATE_POSITION_SLIDER);
 }
@@ -840,7 +840,7 @@ void TimelineView :: OutputViewMouseDown(const BPoint &point)
 {
 	if (fTimelineEdit->OutputViewMouseDown(point))
 	{
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPrepareFrame, gRenderActor, fCurrentFrame);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPrepareFrame>(fCurrentFrame);
 	}
 }
 
@@ -853,7 +853,7 @@ void TimelineView :: OutputViewMouseMoved(const BPoint &point)
 {
 	if (fTimelineEdit->OutputViewMouseMoved(point))
 	{
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPrepareFrame, gRenderActor, fCurrentFrame);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPrepareFrame>(fCurrentFrame);
 	}
 }
 
@@ -866,7 +866,7 @@ void TimelineView :: OutputViewZoomed(const float zoom_factor)
 {
 	if (fTimelineEdit->OutputViewZoomed(zoom_factor))
 	{
-		gRenderActor->AsyncPriority(&RenderActor::AsyncPrepareFrame, gRenderActor, fCurrentFrame);
+		gRenderActor->AsyncPriority<&RenderActor::AsyncPrepareFrame>(fCurrentFrame);
 	}
 }
 

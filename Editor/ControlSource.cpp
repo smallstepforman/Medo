@@ -154,7 +154,7 @@ public:
 		if (fButtonPlay->Value())
 		{
 			fButtonPlay->SetValue(0);
-			fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+			fPreviewActor->Async<&PreviewActor::AsyncStop>();
 		}
 	}
 
@@ -174,7 +174,7 @@ public:
 				gAudioManager->PlayPreview(fPreviewTime, next_frame, fMediaSource);
 			else
 			{
-				fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+				fPreviewActor->Async<&PreviewActor::AsyncStop>();
 				fButtonPlay->SetValue(0);
 			}
 		}
@@ -197,19 +197,19 @@ public:
 					{
 						if (fPreviewTime >= fMediaSource->GetVideoDuration())
 							fPreviewTime = 0;
-						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, fMediaSource->GetVideoFrameRate());
+						fPreviewActor->Async<&PreviewActor::AsyncPlay>(fPreviewTime, fMediaSource->GetVideoFrameRate());
 					}
 					else if (fMediaSource->GetAudioTrack())
 					{
 						if (fPreviewTime >= fMediaSource->GetAudioDuration())
 							fPreviewTime = 0;
-						fPreviewActor->Async(&PreviewActor::AsyncPlay, fPreviewActor, fPreviewTime, 30.0f);
+						fPreviewActor->Async<&PreviewActor::AsyncPlay>(fPreviewTime, 30.0f);
 					}
 					else
 						fButtonPlay->SetValue(0);
 				}
 				else
-					fPreviewActor->Async(&PreviewActor::AsyncStop, fPreviewActor);
+					fPreviewActor->Async<&PreviewActor::AsyncStop>();
 				break;
 			}
 
@@ -347,7 +347,7 @@ public:
 		if ((point.y >= fTimelineClipRect.bottom - kClipAdjustRectHeight) && (point.y < fTimelineClipRect.bottom))
 		{
 			fPreviewTime = fDuration * double(point.x - kPlayBUttonWidth)/double(fTimelineClipRect.Width());
-			fPreviewActor->Async(&PreviewActor::AsyncSetTimeline, fPreviewActor, fPreviewTime);
+			fPreviewActor->Async<&PreviewActor::AsyncSetTimeline>(fPreviewTime);
 			((ControlSource *)Parent())->ShowPreview(fPreviewTime);
 		}
 
@@ -506,7 +506,7 @@ void PreviewActor :: AsyncPlay(bigtime_t start_time, float frame_rate)
 {
 	fTimeline = start_time;
 	fFrameRate = frame_rate;
-	yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, this, std::bind(&PreviewActor::AsyncTimerTick, this));
+	yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, {this, &PreviewActor::AsyncTimerTick});
 }
 void PreviewActor :: AsyncStop()
 {
@@ -519,7 +519,7 @@ void PreviewActor :: AsyncTimerTick()
 		fTimeline += kFramesSecond * (1.0f/fFrameRate);
 		fMessage->ReplaceInt64("Position", fTimeline);
 		MedoWindow::GetInstance()->PostMessage(fMessage);
-		yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, this, std::bind(&PreviewActor::AsyncTimerTick, this));
+		yarra::ActorManager::GetInstance()->AddTimer(1000/fFrameRate, {this, &PreviewActor::AsyncTimerTick});
 	}
 }
 
